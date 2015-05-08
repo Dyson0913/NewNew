@@ -13,6 +13,7 @@ package Res
 		
 		//swc res
 		public static const Text:String = "finalPoint";
+		public static const Poker:String = "poker";
 		public static const playerInfo:String = "playerinfo";
 		public static const Timer:String = "countDowntimer";
 		public static const Hint:String = "HintMsg";

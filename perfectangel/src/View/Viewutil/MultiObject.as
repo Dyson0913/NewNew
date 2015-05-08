@@ -75,6 +75,35 @@ package View.Viewutil
 			}
 			_Container = Container;
 			Listen();
+		}
+		
+		public function Create_by_list(ItemNum:int,ItemNameList:Array,StartX:Number,StartY:Number,RowCnt:int,Xdiff:Number,Ydiff:Number,ItemName:String,Container:MovieClip):void
+		{			
+			var diff:int = ItemNum - ItemNameList.length;
+			if ( diff >0)
+			{
+				var lastItem:String = ItemNameList[ ItemNameList.length - 1];
+				for ( var j:int = 0; j < diff ;j++) ItemNameList.push(lastItem);
+			}
+			
+			for (var i:int = 0 ; i < ItemNum; i++)
+			{
+				var mc:MovieClip = utilFun.GetClassByString(ItemNameList[i]);
+				mc.x = StartX + (i % RowCnt * Xdiff);
+				mc.y = StartY + ( Math.floor(i / RowCnt) * Ydiff);
+				
+				if (CustomizedFun != null)
+				{
+					CustomizedFun(mc, i,CustomizedData);
+				}
+				
+				mc.name = ItemName + i;
+				_ItemName = ItemName;
+				ItemList.push(mc);
+				Container.addChild(mc);
+			}
+			_Container = Container;
+			Listen();
 		}		
 		
 		public function FlushObject():void
@@ -86,6 +115,15 @@ package View.Viewutil
 				{
 					CustomizedFun(ItemList[i], i,CustomizedData);
 				}
+			}
+		}
+		
+		public function exclusive(idx:int):void
+		{
+			for (var i:int = 0; i < _ItemList.length; i++)
+			{
+				if ( i == idx ) continue;
+				else _ItemList[i].gotoAndStop(1);
 			}
 		}
 		

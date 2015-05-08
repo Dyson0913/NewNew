@@ -3,6 +3,7 @@ package
 	import com.hexagonstar.util.debug.Debug;
 	import Command.BetCommand;
 	import Command.DataOperation;
+	import Command.RegularSetting;
 	import Command.ViewCommand;
 	import flash.display.MovieClip;
 	import Model.*;
@@ -38,6 +39,7 @@ package
 		public var _viewcom:ViewCommand = new ViewCommand();
 		public var _dataoperation:DataOperation = new DataOperation();
 		public var _betcom:BetCommand = new BetCommand();
+		public var _regular:RegularSetting = new RegularSetting();
 		
 		
 		//[ProcessSuperclass]

@@ -57,43 +57,18 @@ package View.GameView
 			var playerCon:MovieClip = prepare("playerpokerCon", new MovieClip() , this);
 			playerCon.x = 480;
 			playerCon.y = 240;
-			prepare(modelName.PLAYER_POKER, new MultiObject());
-			var pokerlist:MultiObject = Get(modelName.PLAYER_POKER)
-			pokerlist.CleanList();			
-			pokerlist.CustomizedFun = newpoker;
+			prepare(modelName.PLAYER_POKER, new MultiObject());		
+			pokerlist.CleanList();
+			pokerlist.CustomizedFun = pokerUtil.showPoker;
 			pokerlist.CustomizedData = playerpoker;
-			pokerlist.Create(playerpoker.length, "poker", 0 , 0, playerpoker.length, 163, 123, "Bet_", Get("playerpokerCon"));
+			pokerlist.Create_by_list(playerpoker.length,  [ResName.Poker], 0 , 0, playerpoker.length, 163, 123, "Bet_", Get("playerpokerCon"));
 			
 			
 			var best3:Array = pokerUtil.newnew_judge( playerpoker);
 			var pokerlist:MultiObject = Get(modelName.PLAYER_POKER)
 			pokerUtil.poer_shift(pokerlist.ItemList, best3);
 			
-		}
-		
-		public function newpoker(mc:MovieClip, idx:int, poker:Array):void
-		{
-			var strin:String =  poker[idx];
-			var arr:Array = strin.match((/(\w|d)+(\w)+/));				
-			var myidx:int = 0;
-			if( arr.length != 0)
-			{
-				var numb:String = arr[1];
-				var color:String = arr[2];					
-				if ( color == "d") myidx = 1;
-				if ( color == "h") myidx = 2;
-				if ( color == "s") myidx = 3;
-				if ( color == "c") myidx = 4;
-				
-				if ( numb == "i") myidx += (9*4);
-				else if ( numb == "j") myidx += (10*4);
-				else if ( numb == "q") myidx += (11*4);
-				else if ( numb == "k") myidx += (12*4);
-				else 	myidx +=  (parseInt(numb)-1)*4;					
-			}
-			utilFun.scaleXY(mc, 0.8, 0.8);
-			mc.gotoAndStop(myidx);
-		}	
+		}		
 		
 		private function connet():void
 		{	

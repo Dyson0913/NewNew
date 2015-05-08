@@ -193,7 +193,7 @@ package util
                 }
             }
             return result;
-        }
+        }		
 		
 		//條件 0 base (flash為1base 影格 , CurFrame -1和 Frame + 1在於調整為0 base 
 		//FrameCycle = 有幾格在循環

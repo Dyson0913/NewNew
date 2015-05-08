@@ -22,16 +22,12 @@ package View.GameView
 	 * @author hhg
 	 */
 	public class betView extends ViewBase
-	{
-	
+	{	
 		[Inject]
 		public var _betCommand:BetCommand;
 		
-		private var _betcoin:SingleObject = new SingleObject();
-		private var _betcoin2:SingleObject = new SingleObject();
-		private var _betcoin3:SingleObject = new SingleObject();
-		private var _betcoin4:SingleObject = new SingleObject();
-		private var _betcoin5:SingleObject = new SingleObject();		
+		[Inject]
+		public var _regular:RegularSetting;
 		
 		public function betView()  
 		{
@@ -55,7 +51,7 @@ package View.GameView
 			playerCon.x = 70;
 			playerCon.y = 240;
 			prepare(modelName.PLAYER_POKER, new MultiObject());
-			_tool.SetControlMc(playerCon);
+			//_tool.SetControlMc(playerCon);
 			
 			var bankerCon:MovieClip = prepare("bankerpokerCon", new MovieClip() , this);
 			bankerCon.x = 1100;
@@ -69,9 +65,9 @@ package View.GameView
 			
 			//元件事件及畫面更新
 			var zone:MultiObject = prepare("zone", new MultiObject() );
-			zone.CustomizedFun = mypoker;
+			zone.CustomizedFun = _regular.textSetting;
 			zone.CustomizedData = ["閒","莊"];
-			zone.Create(2, ResName.Text, 0 , 0, 2, 500, 0, "Bet_", zoneCon);
+			zone.Create_by_list(2, [ResName.Text], 0 , 0, 2, 500, 0, "Bet_", zoneCon);
 			
 			
 			addChild(_tool);
@@ -97,36 +93,13 @@ package View.GameView
 			coinzone.x = 640;
 			coinzone.y = 730;
 			
-			var coin:MovieClip = prepare("coin_1", utilFun.GetClassByString(ResName.coin1) , coinzone);
-			coin.gotoAndStop(3);
-			_betcoin.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
-			_betcoin.Create(coin );
-			_betcoin.mousedown = coindown;
-			
-			
-			var coin2:MovieClip = prepare("coin_2", utilFun.GetClassByString(ResName.coin2) , coinzone);
-			coin2.x = 130;			
-			_betcoin2.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
-			_betcoin2.Create(coin2 );
-			_betcoin2.mousedown = coindown;
-			//
-			var coin3:MovieClip = prepare("coin_3", utilFun.GetClassByString(ResName.coin3) , coinzone);
-			coin3.x = 260;
-			_betcoin3.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
-			_betcoin3.Create(coin3 );
-			_betcoin3.mousedown = coindown;
-			//
-			var coin4:MovieClip = prepare("coin_4", utilFun.GetClassByString(ResName.coin4) , coinzone);
-			coin4.x = 390;			
-			_betcoin4.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
-			_betcoin4.Create(coin4 );
-			_betcoin4.mousedown = coindown;
-			//
-			var coin5:MovieClip = prepare("coin_5", utilFun.GetClassByString(ResName.coin5) , coinzone);
-			coin5.x = 520;			
-			_betcoin5.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
-			_betcoin5.Create(coin5 );
-			_betcoin5.mousedown = coindown;
+			var coinob:MultiObject = prepare("CoinOb", new MultiObject());			
+			coinob.CleanList();
+			coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
+			coinob.CustomizedFun = _regular.FrameSetting;
+			coinob.CustomizedData = [3,1,1,1,1];
+			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 130, 0, "Coin_", coinzone);
+			coinob.mousedown = betSelect;
 			
 			//下注區容器
 			var betzone:MovieClip = prepare("betzone",  new MovieClip() , this);
@@ -160,50 +133,16 @@ package View.GameView
 			
 			update_remain_time();			
 				
-		}
-		
-		public function newpoker(mc:MovieClip, idx:int, poker:Array):void
-		{
-			var strin:String =  poker[idx];
-			var arr:Array = strin.match((/(\w|d)+(\w)+/));				
-			var myidx:int = 0;
-			if( arr.length != 0)
-			{
-				var numb:String = arr[1];
-				var color:String = arr[2];					
-				if ( color == "d") myidx = 1;
-				if ( color == "h") myidx = 2;
-				if ( color == "s") myidx = 3;
-				if ( color == "c") myidx = 4;
-				
-				if ( numb == "i") myidx += (9*4);
-				else if ( numb == "j") myidx += (10*4);
-				else if ( numb == "q") myidx += (11*4);
-				else if ( numb == "k") myidx += (12*4);
-				else 	myidx +=  (parseInt(numb)-1)*4;					
-			}
-			utilFun.scaleXY(mc, 0.8, 0.8);
-			mc.gotoAndStop(myidx);
 		}	
 		
-		public function coindown(e:Event):Boolean
+		public function betSelect(e:Event, idx:int):Boolean
 		{
-			var s:String = utilFun.Regex_CutPatten(e.currentTarget.name, new RegExp("coin_", "i"));
+			//seperate from _viewDI
+			var coinob:MultiObject = Get("CoinOb");			
+			coinob.exclusive(idx);
 			
-			for (var i:int = 1; i < 6; i++)
-			{
-				if ( i == parseInt(s)) continue;
-				else Get("coin_"+(i)).gotoAndStop(1);
-			}
-			
-			_model.putValue("coin_selectIdx", parseInt(s) - 1);
+			_model.putValue("coin_selectIdx", idx);
 			return true;
-		}				
-		
-		
-		public function mypoker(mc:MovieClip, idx:int, poker:Array):void
-		{			
-			utilFun.SetText(mc["_Text"],poker[idx])
 		}
 		
 		[MessageHandler(type= "Model.ModelEvent",selector = "playerpoker")]
@@ -212,9 +151,9 @@ package View.GameView
 			var playerpoker:Array =   _model.getValue(modelName.PLAYER_POKER);
 			var pokerlist:MultiObject = Get(modelName.PLAYER_POKER)
 			pokerlist.CleanList();			
-			pokerlist.CustomizedFun = newpoker;
+			pokerlist.CustomizedFun = pokerUtil.showPoker;
 			pokerlist.CustomizedData = playerpoker;
-			pokerlist.Create(playerpoker.length, "poker", 0 , 0, playerpoker.length, 163, 123, "Bet_", Get("playerpokerCon"));
+			pokerlist.Create_by_list(playerpoker.length, [ResName.Poker], 0 , 0, playerpoker.length, 163, 123, "Bet_", Get("playerpokerCon"));
 		}
 		
 		[MessageHandler(type= "Model.ModelEvent",selector = "bankerpoker")]
@@ -223,9 +162,9 @@ package View.GameView
 			var bankerpoker:Array =   _model.getValue(modelName.BANKER_POKER);
 			var pokerlist:MultiObject = Get(modelName.BANKER_POKER)
 			pokerlist.CleanList();
-			pokerlist.CustomizedFun = newpoker;
+			pokerlist.CustomizedFun = pokerUtil.showPoker;
 			pokerlist.CustomizedData =  bankerpoker;
-			pokerlist.Create(bankerpoker.length,"poker", 0 , 0, bankerpoker.length, 163, 123, "Bet_", Get("bankerpokerCon"));		
+			pokerlist.Create_by_list(bankerpoker.length, [ResName.Poker], 0 , 0, bankerpoker.length, 163, 123, "Bet_", Get("bankerpokerCon"));		
 		}		
 		
 		
@@ -237,8 +176,8 @@ package View.GameView
 			//player win
 			if ( betresult % 2 ==0) 
 			{		     
-			   Get("playerbetzone").gotoAndStop(2);			   
-			  Tweener.addCaller(this, { time:3 , count: 10 , transition:"linear", onUpdateParams:["playerbetzone"], onUpdate: this.flank } );
+			   //Get("playerbetzone").gotoAndStop(2);	
+			   _regular.Twinkle(Get("playerbetzone"), 3, 10,2);			
 			  
 			  if ( betresult == CardType.WINTYPE_PLAYER_FIVE_WAWA_WIN )
 			  {
@@ -264,9 +203,9 @@ package View.GameView
 			
 			var finresult:MultiObject = Get("finalresult");
 			finresult.CleanList();
-			finresult.CustomizedFun = finresu;
+			finresult.CustomizedFun = _regular.textSetting;
 			finresult.CustomizedData = customizedData;
-			finresult.Create(customizedData.length, ResName.Text, 0 , 0, customizedData.length, 610, 0, "Bet_", Get("finalresultCon"));
+			finresult.Create_by_list(customizedData.length, [ResName.Text], 0 , 0, customizedData.length, 610, 0, "Bet_", Get("finalresultCon"));
 			
 			//poker ani
 			var playerpoker:Array =   _model.getValue(modelName.PLAYER_POKER);
@@ -288,43 +227,10 @@ package View.GameView
 			dispatcher(new BoolObject(true, "Msgqueue"));
 			Tweener.addCaller(this, { time:4 , count: 1, onUpdate: this.clearn } );
 		}				
-		
-		public function finresu(mc:MovieClip, idx:int, poker:Array):void
-		{		
-			utilFun.SetText(mc["_Text"],poker[idx])
-		}
-		
-		private function countPoint(poke:Array):int
-		{
-			var total:int = 0;
-			for (var i:int = 0; i < poke.length ; i++)
-			{
-				var strin:String =  poke[i];
-				var arr:Array = strin.match((/(\w|d)+(\w)+/));					
-				var numb:String = arr[1];				
-				
-				var point:int = 0;
-				if ( numb == "i" || numb == "j" || numb == "q" || numb == "k" ) 				
-				{
-					point = 10;
-				}				
-				else 	point = parseInt(numb);
-				
-				total += point;
-			}	
 			
-			return total %= 10;
-		}
-		
-		private function flank2(name:String):void
-		{
-			var mc:MovieClip = Get(name);			   
-			mc.gotoAndStop( utilFun.cycleFrame(mc.currentFrame,2) )			   
-		}	
-		
 		private function flank(name:String):void
 		{
-			var mc:MovieClip = Get(name);			   
+			var mc:MovieClip = Get(name);
 			mc.gotoAndStop( utilFun.cycleFrame(mc.currentFrame,2) )			   
 		}	
 		
@@ -392,7 +298,7 @@ package View.GameView
 				utilFun.SetText(Get(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));
 				Tweener.addCaller(this, { time:time , count: time, onUpdate:TimeCount , transition:"linear" } );	
 				
-				Tweener.addTween(Get(modelName.HINT_MSG), { alpha:1, time:2, onComplete:FadeIn } );
+				_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);				
 				Get(modelName.HINT_MSG).visible = true;
 				Get(modelName.HINT_MSG).gotoAndStop(1);
 				Get(modelName.HINT_MSG).alpha = 0;
@@ -402,8 +308,8 @@ package View.GameView
 				Get(modelName.REMAIN_TIME).visible = false;
 					
 				Get(modelName.HINT_MSG).alpha = 0;
-				Get(modelName.HINT_MSG).gotoAndStop(2);				
-				Tweener.addTween(Get(modelName.HINT_MSG), { alpha:1, time:2, onComplete:FadeIn } );
+				Get(modelName.HINT_MSG).gotoAndStop(2);
+				_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
 			}
 			else if ( state == gameState.START_OPEN)
 			{
@@ -414,11 +320,6 @@ package View.GameView
 				
 			}
 		}				
-		
-		private function FadeIn():void
-		{
-			Tweener.addTween(Get(modelName.HINT_MSG), {alpha:0, time:2});
-		}	
 		
 		private function TimeCount():void
 		{			

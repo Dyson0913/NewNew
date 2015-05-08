@@ -46,6 +46,8 @@ package Command
 				return false;
 			}
 			
+			if ( _Actionmodel.length() > 0) return false;
+			
 			var bet:Object = { "betType": CardType.MAIN_BET, 
 			                               "bet_amount":  get_total_bet(CardType.MAIN_BET) + _opration.array_idx("coin_list", "coin_selectIdx")
 			};
@@ -63,6 +65,9 @@ package Command
 			{
 				return false;
 			}
+			
+			if ( _Actionmodel.length() > 0) return false;
+			
 			var bet:Object = { "betType": CardType.SIDE_BET,
 			                               "bet_amount":  get_total_bet(CardType.SIDE_BET) +_opration.array_idx("coin_list", "coin_selectIdx")
 			};
