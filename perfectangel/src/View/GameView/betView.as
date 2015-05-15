@@ -27,7 +27,7 @@ package View.GameView
 		public var _betCommand:BetCommand;
 		
 		[Inject]
-		public var _regular:RegularSetting;
+		public var _regular:RegularSetting;		
 		
 		public function betView()  
 		{
@@ -40,18 +40,18 @@ package View.GameView
 			if (View.Value != modelName.Bet) return;
 			
 			//清除前一畫面
-			utilFun.Log("in to EnterBetview=");			
+			utilFun.Log("in to EnterBetview=");
 			_tool = new AdjustTool();
 			
 			_betCommand.bet_init();
 			
-			prepare("_view",utilFun.GetClassByString(ResName.Bet_Scene) , this);
+			prepare("_view",utilFun.GetClassByString(ResName.Bet_Scene) , this);			
 			
 			var playerCon:MovieClip = prepare("playerpokerCon", new MovieClip() , this);
 			playerCon.x = 70;
 			playerCon.y = 240;
 			prepare(modelName.PLAYER_POKER, new MultiObject());
-			//_tool.SetControlMc(playerCon);
+			
 			
 			var bankerCon:MovieClip = prepare("bankerpokerCon", new MovieClip() , this);
 			bankerCon.x = 1100;
@@ -82,9 +82,10 @@ package View.GameView
 			countDown.visible = false;
 			countDown.x = 300;
 			countDown.y = 400;
-			
+			//utilFun.GetClassByString(ResName.Hint) ,
+			//new HintMsg(850,430)
 			var hintmsg:MovieClip = prepare(modelName.HINT_MSG, utilFun.GetClassByString(ResName.Hint) , this);
-			hintmsg.visible = false;
+			hintmsg.alpha = 0;
 			hintmsg.x = 850;
 			hintmsg.y = 430;
 			
@@ -111,7 +112,7 @@ package View.GameView
 			prepare("playercoinstack",  utilFun.GetClassByString(ResName.emptymc) , playerzone);
 			var _playerzone:SingleObject = prepare("_playerzone", new SingleObject());
 			_playerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			_playerzone.mousedown = _betCommand.betTypePlayer;
+			_playerzone.mousedown = _betCommand.betTypeMain;
 			_playerzone.Create(playerzone );
 			
 			
@@ -138,7 +139,7 @@ package View.GameView
 		public function betSelect(e:Event, idx:int):Boolean
 		{
 			//seperate from _viewDI
-			var coinob:MultiObject = Get("CoinOb");			
+			var coinob:MultiObject = Get("CoinOb");
 			coinob.exclusive(idx);
 			
 			_model.putValue("coin_selectIdx", idx);
@@ -150,7 +151,7 @@ package View.GameView
 		{
 			var playerpoker:Array =   _model.getValue(modelName.PLAYER_POKER);
 			var pokerlist:MultiObject = Get(modelName.PLAYER_POKER)
-			pokerlist.CleanList();			
+			pokerlist.CleanList();
 			pokerlist.CustomizedFun = pokerUtil.showPoker;
 			pokerlist.CustomizedData = playerpoker;
 			pokerlist.Create_by_list(playerpoker.length, [ResName.Poker], 0 , 0, playerpoker.length, 163, 123, "Bet_", Get("playerpokerCon"));
@@ -226,13 +227,7 @@ package View.GameView
 			
 			dispatcher(new BoolObject(true, "Msgqueue"));
 			Tweener.addCaller(this, { time:4 , count: 1, onUpdate: this.clearn } );
-		}				
-			
-		private function flank(name:String):void
-		{
-			var mc:MovieClip = Get(name);
-			mc.gotoAndStop( utilFun.cycleFrame(mc.currentFrame,2) )			   
-		}	
+		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "updateCredit")]
 		public function updateCredit():void
@@ -298,16 +293,13 @@ package View.GameView
 				utilFun.SetText(Get(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));
 				Tweener.addCaller(this, { time:time , count: time, onUpdate:TimeCount , transition:"linear" } );	
 				
-				_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);				
-				Get(modelName.HINT_MSG).visible = true;
-				Get(modelName.HINT_MSG).gotoAndStop(1);
-				Get(modelName.HINT_MSG).alpha = 0;
+				Get(modelName.HINT_MSG).gotoAndStop(1);	
+				_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);							
 			}
 			else if ( state == gameState.END_BET)
 			{
 				Get(modelName.REMAIN_TIME).visible = false;
-					
-				Get(modelName.HINT_MSG).alpha = 0;
+				
 				Get(modelName.HINT_MSG).gotoAndStop(2);
 				_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
 			}
@@ -320,6 +312,13 @@ package View.GameView
 				
 			}
 		}				
+		
+		[MessageHandler(type = "ConnectModule.websocket.WebSoketInternalMsg", selector = "CreditNotEnough")]
+		public function no_credit():void
+		{
+			Get(modelName.HINT_MSG).gotoAndStop(3);
+			_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);	
+		}
 		
 		private function TimeCount():void
 		{			

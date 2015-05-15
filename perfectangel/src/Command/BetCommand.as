@@ -38,7 +38,7 @@ package Command
 			_model.putValue("after_bet_credit", 0);
 		}
 		
-		public function betTypePlayer(e:Event):Boolean
+		public function betTypeMain(e:Event):Boolean
 		{			
 			//擋狀態
 			if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )
@@ -47,6 +47,12 @@ package Command
 			}
 			
 			if ( _Actionmodel.length() > 0) return false;
+			
+			if ( get_total_bet(CardType.MAIN_BET) + _opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
+			{
+				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.NO_CREDIT));
+				return false;
+			}
 			
 			var bet:Object = { "betType": CardType.MAIN_BET, 
 			                               "bet_amount":  get_total_bet(CardType.MAIN_BET) + _opration.array_idx("coin_list", "coin_selectIdx")
@@ -58,7 +64,7 @@ package Command
 			return true;
 		}		
 		
-		public function betTypebanker(e:Event):Boolean
+		public function betTypeSide(e:Event):Boolean
 		{
 			//擋狀態
 			if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )
