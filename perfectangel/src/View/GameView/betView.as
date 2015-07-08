@@ -2,6 +2,7 @@ package View.GameView
 {
 	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.display.Bitmap;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -38,102 +39,83 @@ package View.GameView
 		override public function EnterView (View:Intobject):void
 		{
 			if (View.Value != modelName.Bet) return;
-			
+			super.EnterView(View);
 			//清除前一畫面
 			utilFun.Log("in to EnterBetview=");
 			_tool = new AdjustTool();
 			
 			_betCommand.bet_init();
 			
-			prepare("_view",utilFun.GetClassByString(ResName.Bet_Scene) , this);			
+			var view:MultiObject = prepare("_view", new MultiObject() , this);
+			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
 			
-			var playerCon:MovieClip = prepare("playerpokerCon", new MovieClip() , this);
-			playerCon.x = 70;
-			playerCon.y = 240;
-			prepare(modelName.PLAYER_POKER, new MultiObject());
+			var playerCon:MultiObject = prepare(modelName.PLAYER_POKER, new MultiObject(), this);
+			playerCon.autoClean = true;
+			playerCon.container.x = 70;
+			playerCon.container.y = 240;
+				
+			var bankerCon:MultiObject =  prepare(modelName.BANKER_POKER, new MultiObject(), this);
+			bankerCon.autoClean = true;
+			bankerCon.container.x = 1100;
+			bankerCon.container.y = 240;
 			
-			
-			var bankerCon:MovieClip = prepare("bankerpokerCon", new MovieClip() , this);
-			bankerCon.x = 1100;
-			bankerCon.y = 240;
-			prepare(modelName.BANKER_POKER, new MultiObject());
-			
-			var zoneCon:MovieClip = prepare("ZoneContainer", new MovieClip() , this);
-			zoneCon.x = 610;
-			
-			
-			
-			//元件事件及畫面更新
-			var zone:MultiObject = prepare("zone", new MultiObject() );
+			var zone:MultiObject = prepare("zone", new MultiObject() ,this);
+			zone.container.x = 610;
 			zone.CustomizedFun = _regular.textSetting;
 			zone.CustomizedData = ["閒","莊"];
-			zone.Create_by_list(2, [ResName.Text], 0 , 0, 2, 500, 0, "Bet_", zoneCon);
+			zone.Create_by_list(2, [ResName.Text], 0 , 0, 2, 500, 0, "Bet_");
+						
+			//addChild(_tool);
+			 
+			var info:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
+			info.Create_by_list(1, [ResName.playerInfo], 0, 0, 1, 0, 0, "info_");
+			info.container.y = 830;
+			utilFun.SetText(info.ItemList[0]["_Account"], _model.getValue(modelName.UUID) );
+			utilFun.SetText(info.ItemList[0]["nickname"], _model.getValue(modelName.NICKNAME) );			
+			utilFun.SetText(info.ItemList[0]["credit"], _model.getValue(modelName.CREDIT).toString());
 			
+		   var countDown:MultiObject = prepare(modelName.REMAIN_TIME,new MultiObject()  , this);
+		   countDown.Create_by_list(1, [ResName.Timer], 0, 0, 1, 0, 0, "time_");
+		   countDown.container.x = 300;
+		   countDown.container.y = 400;
+		   countDown.container.visible = false;
+		   		
+			var hintmsg:MultiObject = prepare(modelName.HINT_MSG, new MultiObject()  , this);
+			hintmsg.Create_by_list(1, [ResName.Hint], 0, 0, 1, 0, 0, "time_");
+			hintmsg.container.x = 850;			
+			hintmsg.container.y = 430;			
 			
-			addChild(_tool);
-			
-			var info:MovieClip = prepare(modelName.CREDIT, utilFun.GetClassByString(ResName.playerInfo) , this);			
-			info.y = 830;
-			utilFun.SetText(info["_Account"], _model.getValue(modelName.UUID) );
-			utilFun.SetText(info["nickname"], _model.getValue(modelName.NICKNAME) );			
-			utilFun.SetText(info["credit"], _model.getValue(modelName.CREDIT).toString());
-			
-		   var countDown:MovieClip = prepare(modelName.REMAIN_TIME, utilFun.GetClassByString(ResName.Timer) , this);
-			countDown.visible = false;
-			countDown.x = 300;
-			countDown.y = 400;
-			//utilFun.GetClassByString(ResName.Hint) ,
-			//new HintMsg(850,430)
-			var hintmsg:MovieClip = prepare(modelName.HINT_MSG, utilFun.GetClassByString(ResName.Hint) , this);
-			hintmsg.alpha = 0;
-			hintmsg.x = 850;
-			hintmsg.y = 430;
-			
-			//bet區容器
-			var coinzone:MovieClip = prepare("coinzone",  new MovieClip() , this);
-			coinzone.x = 640;
-			coinzone.y = 730;
-			
-			var coinob:MultiObject = prepare("CoinOb", new MultiObject());			
-			coinob.CleanList();
+			//coin
+			var coinob:MultiObject = prepare("CoinOb", new MultiObject(), this);
+			coinob.container.x = 640;
+			coinob.container.y = 730;
 			coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
 			coinob.CustomizedFun = _regular.FrameSetting;
 			coinob.CustomizedData = [3,1,1,1,1];
-			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 130, 0, "Coin_", coinzone);
-			coinob.mousedown = betSelect;
+			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 130, 0, "Coin_");
+			coinob.mousedown = betSelect;			
 			
-			//下注區容器
-			var betzone:MovieClip = prepare("betzone",  new MovieClip() , this);
-			betzone.x = 540;
-			betzone.y = 490;
+			//下注區
+			var playerzone:MultiObject = prepare("playerbetzone", new MultiObject() , this);
+			playerzone.Create_by_list(1, [ResName.betzone_player], 0, 0, 1, 0, 0, "time_");
+			playerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			playerzone.mousedown = _betCommand.betTypeMain;
+			playerzone.container.x = 840;
+			playerzone.container.y = 490;
 			
-			var playerzone:MovieClip = prepare("playerbetzone",  utilFun.GetClassByString(ResName.betzone_player) , betzone);
-			playerzone.x = 300;
-			prepare("playercoinstack",  utilFun.GetClassByString(ResName.emptymc) , playerzone);
-			var _playerzone:SingleObject = prepare("_playerzone", new SingleObject());
-			_playerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			_playerzone.mousedown = _betCommand.betTypeMain;
-			_playerzone.Create(playerzone );
+			//stick cotainer
+			var coinstack:MultiObject = prepare("playercoinstack", new MultiObject(), playerzone.container);
+			coinstack.autoClean = true;
+			coinstack.Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "time_");
 			
+			var finacon:MultiObject = prepare("finalresult", new MultiObject(), this);
+			finacon.autoClean = true;
+			finacon.container.x = 820;
+			finacon.container.y = 140;
 			
-			
-			//var bankzone:MovieClip = prepare("bankerbetzone",  utilFun.GetClassByString(ResName.betzone_banker) , betzone);
-			//bankzone.x = 580;
-			//prepare("bankcoinstack",  utilFun.GetClassByString(ResName.emptymc) , bankzone);			
-			//var _bankerzone:SingleObject = prepare("_bankerzone", new SingleObject());
-			//_bankerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			//_bankerzone.mousedown = _betCommand.betTypebanker;
-			//_bankerzone.Create(bankzone );
-			
-			
-			var finacon:MovieClip = prepare("finalresultCon", new MovieClip() , this);
-			finacon.x = 820;
-			finacon.y = 140;
-			
-			prepare("finalresult", new MultiObject());
-			
-			update_remain_time();			
-				
+			update_remain_time();
+			//utilFun.Log("bet view enter currtn view lien = " + _viewcom.currentViewDI.length());
+			//utilFun.Log("bet enter currtn view lien = "+_viewcom.nextViewDI.length());
 		}	
 		
 		public function betSelect(e:Event, idx:int):Boolean
@@ -150,22 +132,20 @@ package View.GameView
 		public function playerpokerupdate():void
 		{
 			var playerpoker:Array =   _model.getValue(modelName.PLAYER_POKER);
-			var pokerlist:MultiObject = Get(modelName.PLAYER_POKER)
-			pokerlist.CleanList();
+			var pokerlist:MultiObject = Get(modelName.PLAYER_POKER);
 			pokerlist.CustomizedFun = pokerUtil.showPoker;
 			pokerlist.CustomizedData = playerpoker;
-			pokerlist.Create_by_list(playerpoker.length, [ResName.Poker], 0 , 0, playerpoker.length, 163, 123, "Bet_", Get("playerpokerCon"));
+			pokerlist.Create_by_list(playerpoker.length, [ResName.Poker], 0 , 0, playerpoker.length, 163, 123, "Bet_");
 		}
 		
 		[MessageHandler(type= "Model.ModelEvent",selector = "bankerpoker")]
 		public function pokerupdate():void
 		{
 			var bankerpoker:Array =   _model.getValue(modelName.BANKER_POKER);
-			var pokerlist:MultiObject = Get(modelName.BANKER_POKER)
-			pokerlist.CleanList();
+			var pokerlist:MultiObject = Get(modelName.BANKER_POKER)			
 			pokerlist.CustomizedFun = pokerUtil.showPoker;
 			pokerlist.CustomizedData =  bankerpoker;
-			pokerlist.Create_by_list(bankerpoker.length, [ResName.Poker], 0 , 0, bankerpoker.length, 163, 123, "Bet_", Get("bankerpokerCon"));		
+			pokerlist.Create_by_list(bankerpoker.length, [ResName.Poker], 0 , 0, bankerpoker.length, 163, 123, "Bet_");		
 		}		
 		
 		
@@ -176,9 +156,8 @@ package View.GameView
 			var betresult:int = _model.getValue(modelName.ROUND_RESULT);
 			//player win
 			if ( betresult % 2 ==0) 
-			{		     
-			   //Get("playerbetzone").gotoAndStop(2);	
-			   _regular.Twinkle(Get("playerbetzone"), 3, 10,2);			
+			{			   
+			   _regular.Twinkle(GetSingleItem("playerbetzone"), 3, 10,2);			
 			  
 			  if ( betresult == CardType.WINTYPE_PLAYER_FIVE_WAWA_WIN )
 			  {
@@ -203,10 +182,9 @@ package View.GameView
 			}			
 			
 			var finresult:MultiObject = Get("finalresult");
-			finresult.CleanList();
 			finresult.CustomizedFun = _regular.textSetting;
 			finresult.CustomizedData = customizedData;
-			finresult.Create_by_list(customizedData.length, [ResName.Text], 0 , 0, customizedData.length, 610, 0, "Bet_", Get("finalresultCon"));
+			finresult.Create_by_list(customizedData.length, [ResName.Text], 0 , 0, customizedData.length, 610, 0, "Bet_");
 			
 			//poker ani
 			var playerpoker:Array =   _model.getValue(modelName.PLAYER_POKER);
@@ -221,7 +199,7 @@ package View.GameView
 			pokerUtil.poer_shift(bpokerlist.ItemList.concat(), best2);
 			
 			//採用這種方式,呼叫與事件,包成control?
-			utilFun.SetText(Get(modelName.CREDIT)["credit"],_model.getValue(modelName.CREDIT).toString());
+			utilFun.SetText(GetSingleItem(modelName.CREDIT)["credit"],_model.getValue(modelName.CREDIT).toString());
 			
 			//updateCredit();
 			
@@ -232,12 +210,12 @@ package View.GameView
 		[MessageHandler(type = "Model.ModelEvent", selector = "updateCredit")]
 		public function updateCredit():void
 		{
-			utilFun.SetText(Get(modelName.CREDIT)["credit"], _model.getValue("after_bet_credit").toString());
+			utilFun.SetText(GetSingleItem(modelName.CREDIT)["credit"], _model.getValue("after_bet_credit").toString());
 			
 			//coin動畫
 			if (_betCommand.has_Bet_type(CardType.MAIN_BET ))
-			{				
-				stack(_betCommand.Bet_type_betlist(CardType.MAIN_BET), Get("playercoinstack"));
+			{			    
+				stack(_betCommand.Bet_type_betlist(CardType.MAIN_BET), GetSingleItem("playercoinstack"));
 			}
 			
 			if ( _betCommand.has_Bet_type(CardType.SIDE_BET ) )
@@ -246,7 +224,7 @@ package View.GameView
 			}			
 		}
 		
-		public function stack(coinarr:Array,contain:MovieClip):void
+		public function stack(coinarr:Array,contain:DisplayObjectContainer):void
 		{
 			var coin:Array = [];			
 			for (var i:int = 0; i < 5; i++)
@@ -256,7 +234,7 @@ package View.GameView
 			}			
 		}
 		
-		public function createcoin(cointype:int, coin:Array, coinstack:Array, contain:MovieClip ):void
+		public function createcoin(cointype:int, coin:Array, coinstack:Array, contain:DisplayObjectContainer ):void
 		{			
 			coin.length = 0;
 			while (coinstack.indexOf(_model.getValue("coin_list")[cointype]) != -1)
@@ -266,15 +244,12 @@ package View.GameView
 				coinstack.splice(idx, 1);
 			}
 			
-			
 			var shifty:int = 0;
 			var shiftx:int = 0;			
-			var secoin:MultiObject = new MultiObject()
-			secoin.CleanList();
+			var secoin:MultiObject = new MultiObject()			
 			secoin.CustomizedFun = coinput;
-			secoin.CustomizedData = coin;
-			secoin.Create( coin.length, "coin_" + (cointype + 1), -25 +shiftx + (cointype * 60), -10 + shifty, 1, 0, -10, "Bet_",  contain);			
-			
+			secoin.CustomizedData = coin;			
+			secoin.Create( coin.length, "coin_" + (cointype + 1), -25 +shiftx + (cointype * 60), -10 + shifty, 1, 0, -10, "Bet_", contain);			
 		}
 		
 		public function coinput(mc:MovieClip, idx:int, coinstack:Array):void
@@ -284,24 +259,27 @@ package View.GameView
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "update_remain_time")]
 		public function update_remain_time():void
-		{
-			var state:int = _model.getValue(modelName.GAMES_STATE);
+		{			
+			var state:int = _model.getValue(modelName.GAMES_STATE);		
 			if ( state  == gameState.NEW_ROUND)
 			{
-				Get(modelName.REMAIN_TIME).visible = true;
+				Get(modelName.REMAIN_TIME).container.visible = true;
 				var time:int = _model.getValue(modelName.REMAIN_TIME);
-				utilFun.SetText(Get(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));
+				utilFun.SetText(GetSingleItem(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));
 				Tweener.addCaller(this, { time:time , count: time, onUpdate:TimeCount , transition:"linear" } );	
 				
-				Get(modelName.HINT_MSG).gotoAndStop(1);	
-				_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);							
+				GetSingleItem(modelName.HINT_MSG).gotoAndStop(1);	
+				_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
+				
+				//new round create
+				Get("playercoinstack").Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "time_");				
 			}
 			else if ( state == gameState.END_BET)
 			{
-				Get(modelName.REMAIN_TIME).visible = false;
+				Get(modelName.REMAIN_TIME).container.visible = false;
 				
-				Get(modelName.HINT_MSG).gotoAndStop(2);
-				_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
+				GetSingleItem(modelName.HINT_MSG).gotoAndStop(2);
+				_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);				
 			}
 			else if ( state == gameState.START_OPEN)
 			{
@@ -316,8 +294,8 @@ package View.GameView
 		[MessageHandler(type = "ConnectModule.websocket.WebSoketInternalMsg", selector = "CreditNotEnough")]
 		public function no_credit():void
 		{
-			Get(modelName.HINT_MSG).gotoAndStop(3);
-			_regular.FadeIn( Get(modelName.HINT_MSG), 2, 2, _regular.Fadeout);	
+			GetSingleItem(modelName.HINT_MSG).gotoAndStop(3);
+			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);	
 		}
 		
 		private function TimeCount():void
@@ -325,24 +303,24 @@ package View.GameView
 			var time:int  = _opration.operator(modelName.REMAIN_TIME, DataOperation.sub);
 			if ( time < 0) 
 			{
-				Get(modelName.REMAIN_TIME).visible = false;
+				GetSingleItem(modelName.REMAIN_TIME).visible = false;
 				return;
 			}
 			
-			utilFun.SetText(Get(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));			
+			utilFun.SetText(GetSingleItem(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));			
 		}
 		
 		private function clearn():void
 		{				
 			dispatcher(new ModelEvent("clearn"));
 			
+			//handle auto clean
+			
 			Get(modelName.PLAYER_POKER).CleanList();
 			Get(modelName.BANKER_POKER).CleanList();
-			Get("finalresult").CleanList();
 			
-			utilFun.ClearContainerChildren( Get("playercoinstack"));
-			//utilFun.ClearContainerChildren( Get("bankcoinstack"));
-			
+			Get("finalresult").CleanList();			
+			Get("playercoinstack").CleanList();
 			
 			dispatcher(new BoolObject(false, "Msgqueue"));
 		}

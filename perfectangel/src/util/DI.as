@@ -1,11 +1,12 @@
 package util 
 {
 	import flash.utils.Dictionary;
+	import Interface.CollectionsInterface;
 	/**
 	 * DI
 	 * @author hhg
 	 */
-	public class DI 
+	public class DI implements CollectionsInterface
 	{
 		private var _dic:Dictionary = new Dictionary();
 		
@@ -33,6 +34,15 @@ package util
 			_dic = new Dictionary();
 		}
 		
+		public function length():int
+		{
+			var n:int = 0;
+			for (var ke:* in _dic)
+			{
+			    n++;
+			}
+			return n;
+		}
 		
 	}
 

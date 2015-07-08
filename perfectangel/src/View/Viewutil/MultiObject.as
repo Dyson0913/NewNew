@@ -3,6 +3,8 @@ package View.Viewutil
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.display.DisplayObjectContainer;
+	import Interface.ViewComponentInterface;
 	
 	import util.utilFun;
 	
@@ -11,9 +13,11 @@ package View.Viewutil
 	 * 一次生成多個有規則排列的元件 
 	 * @author hhg4092
 	 */
-	public class MultiObject 
+	public class MultiObject implements ViewComponentInterface
 	{
-		private var _Container:MovieClip;
+		private var _Container:DisplayObjectContainer;
+		
+		private var _autoClean:Boolean;
 		
 		//元件列表
 		private var _ItemList:Array = [];		
@@ -40,7 +44,28 @@ package View.Viewutil
 		
 		public function MultiObject() 
 		{
-			
+			_autoClean =  false;
+		}
+		
+		public function set autoClean(value:Boolean):void
+		{
+			_autoClean =  value;
+		}
+		
+		
+		public function get container():DisplayObjectContainer
+		{
+			return _Container;
+		}
+		
+		public function getContainer():DisplayObjectContainer
+		{
+			return _Container;
+		}
+		
+		public function setContainer(contain:DisplayObjectContainer):void
+		{
+			_Container = contain;
 		}
 		
 		/**
@@ -55,8 +80,10 @@ package View.Viewutil
 		 * @param	ItemName	元件命名 XXX_id(判定事件為那個元件觸發,會取其ID做判斷)
 		 * @param	Container		父節點
 		 */
-		public function Create(ItemNum:int,LinkName:String,StartX:Number,StartY:Number,RowCnt:int,Xdiff:Number,Ydiff:Number,ItemName:String,Container:MovieClip):void
-		{			
+		public function Create(ItemNum:int,LinkName:String,StartX:Number,StartY:Number,RowCnt:int,Xdiff:Number,Ydiff:Number,ItemName:String,Container:DisplayObjectContainer):void
+		{
+			CleanList();
+			_Container = Container;			
 			for (var i:int = 0 ; i < ItemNum; i++)
 			{
 				var mc:MovieClip = utilFun.GetClassByString(LinkName);
@@ -66,19 +93,18 @@ package View.Viewutil
 				if (CustomizedFun != null)
 				{
 					CustomizedFun(mc, i,CustomizedData);
-				}
-				
+				}			
 				mc.name = ItemName + i;
 				_ItemName = ItemName;
 				ItemList.push(mc);
-				Container.addChild(mc);
-			}
-			_Container = Container;
+				_Container.addChild(mc);
+			}			
 			Listen();
 		}
 		
-		public function Create_by_list(ItemNum:int,ItemNameList:Array,StartX:Number,StartY:Number,RowCnt:int,Xdiff:Number,Ydiff:Number,ItemName:String,Container:MovieClip):void
-		{			
+		public function Create_by_list(ItemNum:int,ItemNameList:Array,StartX:Number,StartY:Number,RowCnt:int,Xdiff:Number,Ydiff:Number,ItemName:String):void
+		{
+			CleanList();
 			var diff:int = ItemNum - ItemNameList.length;
 			if ( diff >0)
 			{
@@ -100,9 +126,8 @@ package View.Viewutil
 				mc.name = ItemName + i;
 				_ItemName = ItemName;
 				ItemList.push(mc);
-				Container.addChild(mc);
+				_Container.addChild(mc);
 			}
-			_Container = Container;
 			Listen();
 		}		
 		
@@ -129,7 +154,7 @@ package View.Viewutil
 		
 		public function CleanList():void
 		{
-			//removeListen();
+			removeListen();
 			var cnt:int = ItemList.length;
 			for ( var i:int = 0; i < cnt; i++)
 			{
@@ -137,6 +162,11 @@ package View.Viewutil
 			}
 			
 			ItemList.length = 0;
+		}
+		
+		public function OnExit():void
+		{
+			if( _autoClean ) CleanList();
 		}
 		
 		public function Getidx(name:String):int 
@@ -159,9 +189,12 @@ package View.Viewutil
 		
 		public function removeListen():void
 		{
+			if ( MouseFrame.length == 0 ) return;
+			
 			var N:int =  ItemList.length;
 			for (var i:int = 0 ;  i < N ;  i++)
 			{
+				
 				if ( MouseFrame[0] != 0) ItemList[i].removeEventListener(MouseEvent.ROLL_OUT, eventListen);
 				if ( MouseFrame[1] != 0) ItemList[i].removeEventListener(MouseEvent.ROLL_OVER, eventListen);
 				if ( MouseFrame[2] != 0) ItemList[i].removeEventListener(MouseEvent.MOUSE_DOWN, eventListen);

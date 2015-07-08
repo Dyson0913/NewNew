@@ -2,6 +2,7 @@ package Command
 {
 	import Model.valueObject.Intobject;
 	import Model.valueObject.StringObject;
+	import util.DI;
 	import util.utilFun;
 	/**
 	 * view control
@@ -19,6 +20,12 @@ package Command
 		public static const VIEW_ENTER:String = "EnterView";
 		public static const VIEW_LEAVE:String  = "LeaveView";
 		
+		public var _curViewDi:DI = new DI();
+		public var _nextViewDi:DI = new DI();
+		
+		public var currentViewDI:DI;
+		public var nextViewDI:DI;
+		
 		public var _preView:int = -1;
 		public function get preview():int
 		{
@@ -33,7 +40,8 @@ package Command
 		
 		public function ViewCommand() 
 		{
-		    
+		    currentViewDI = _curViewDi;
+			nextViewDI = _nextViewDi;
 		}		
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="Switch")]

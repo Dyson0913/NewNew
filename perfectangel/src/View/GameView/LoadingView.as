@@ -22,7 +22,6 @@ package View.GameView
 	 * ...
 	 * @author hhg
 	 */
-
 	 
 	public class LoadingView extends ViewBase
 	{			
@@ -41,34 +40,18 @@ package View.GameView
 		override public function EnterView (View:Intobject):void
 		{
 			if (View.Value != modelName.Loading) return;
+			super.EnterView(View);
 			utilFun.Log("loading view enter");
-			prepare("_view",utilFun.GetClassByString(ResName.Loading_Scene) , this);
-			utilFun.SetTime(connet, 2);
-			//test();
 			
+			var view:MultiObject = prepare("_view", new MultiObject() , this);
+			view.Create_by_list(1, [ResName.Loading_Scene], 0, 0, 1, 0, 0, "a_");
+			
+			//utilFun.Log("LoadingView enter currtn view lien currentViewDI= " + _viewcom.currentViewDI.length());
+			//utilFun.Log("LoadingView enter currtn view lien _curViewDi = " + _viewcom._curViewDi.length());
+			//utilFun.Log("LoadingView enter currtn view lien = "+_viewcom.nextViewDI.length());
+			utilFun.SetTime(connet, 2);
 			
 		}
-		
-		public function test():void
-		{
-			prepare(modelName.PLAYER_POKER, new MultiObject());
-			var playerpoker:Array =   ["3c", "7h", "kd", "3h", "1h"];
-			
-			var playerCon:MovieClip = prepare("playerpokerCon", new MovieClip() , this);
-			playerCon.x = 480;
-			playerCon.y = 240;
-			prepare(modelName.PLAYER_POKER, new MultiObject());		
-			pokerlist.CleanList();
-			pokerlist.CustomizedFun = pokerUtil.showPoker;
-			pokerlist.CustomizedData = playerpoker;
-			pokerlist.Create_by_list(playerpoker.length,  [ResName.Poker], 0 , 0, playerpoker.length, 163, 123, "Bet_", Get("playerpokerCon"));
-			
-			
-			var best3:Array = pokerUtil.newnew_judge( playerpoker);
-			var pokerlist:MultiObject = Get(modelName.PLAYER_POKER)
-			pokerUtil.poer_shift(pokerlist.ItemList, best3);
-			
-		}		
 		
 		private function connet():void
 		{	
@@ -80,6 +63,9 @@ package View.GameView
 		{
 			if (View.Value != modelName.Loading) return;
 			super.ExitView(View);
+			//utilFun.Log("LoadingView exit currtn view lien = " + _viewcom.currentViewDI.length());
+			//utilFun.Log("LoadingView exit currtn view lien = " + _viewcom.nextViewDI.length());
+			
 			utilFun.Log("LoadingView ExitView");
 		}
 		

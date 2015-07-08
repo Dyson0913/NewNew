@@ -1,6 +1,8 @@
 package Command 
 {
-	import Model.Model;
+	import View.Viewutil.MultiObject;
+	import util.*;
+	import Model.*;
 	/**
 	 * data operation
 	 * @author hhg
@@ -56,6 +58,7 @@ package Command
 			
 			return data[idx];
 		}
+		
 	}
 
 }

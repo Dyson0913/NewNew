@@ -10,6 +10,8 @@ package View.ViewBase
 	import util.DI;
 	import util.utilFun;	
 	import View.Viewutil.AdjustTool;
+	import Interface.ViewComponentInterface;
+	import Command.ViewCommand;
 	
 	/**
 	 * ...
@@ -29,36 +31,53 @@ package View.ViewBase
 		[Inject]
 		public var _opration:DataOperation;
 		
+		[Inject]
+		public var _viewcom:ViewCommand;
+		
 		public var _tool:AdjustTool;
 		
 		public var _ViewDI:DI;
 		
 		public function ViewBase() 
 		{
-			_ViewDI = new DI();
+			//_ViewDI = new DI();
 		}
 		
-		//[MessageHandler]
 		public function EnterView (View:Intobject):void
 		{
+			_viewcom.nextViewDI.clean();
+			
+			//move to viewcommand ~~
+			_ViewDI = _viewcom.currentViewDI;
+			_viewcom.currentViewDI = _viewcom.nextViewDI;
+			_viewcom.nextViewDI = _ViewDI;
 			
 		}
 		
 		
 		public function ExitView(View:Intobject):void
-		{
+		{			
+			_viewcom.currentViewDI.clean();			
+			
 			utilFun.ClearContainerChildren(Get("_view"));			
-			_ViewDI.clean();
+			//_ViewDI.clean();
 		}
 		
 		protected function Get(name:*):*
 		{
-			return _ViewDI.getValue(name);
+			return _viewcom.currentViewDI.getValue(name);
 		}
 		
-		protected function prepare(name:*, ob:*, container:DisplayObjectContainer = null):*
+		protected function GetSingleItem(name:*,idx:int = 0):*
 		{
-			return utilFun.prepare(name,ob , _ViewDI, container);
+			var ob:* = _viewcom.currentViewDI .getValue(name);
+			return ob.ItemList[idx];
+		}
+		
+		protected function prepare(name:*, ob:ViewComponentInterface, container:DisplayObjectContainer = null):*
+		{
+			ob.setContainer(new Sprite());
+			return utilFun.prepare(name,ob , _viewcom.currentViewDI , container);
 		}
 		
 	}

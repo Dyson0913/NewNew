@@ -46,7 +46,7 @@ package ConnectModule.websocket
 		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="connect")]
 		public function Connect():void
 		{
-			websocket = new WebSocket("ws://106.186.116.216:5000/gamesocket", "");
+			websocket = new WebSocket("ws://106.186.116.216:9000/gamesocket", "");
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
@@ -155,7 +155,7 @@ package ConnectModule.websocket
 					{					  
 					  
 					  dispatcher(new ValueObject(  result.games_state, modelName.GAMES_STATE) );
-					  dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );
+					  dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );					  
 					  dispatcher(new ModelEvent("update_remain_time"));
 					   break;
 					}

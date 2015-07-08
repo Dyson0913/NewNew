@@ -42,12 +42,12 @@ package util
 		{		
 			//var pok:Array = ["kc", "1h", "jd", "9h", "jh"];
 			//var pok:Array = ["3c", "4h", "kd", "3h", "1h"];
-			var po:Array = ["0", "1", "2", "3", "4"];
+			var po:Array = [0, 1, 2, 3, 4];
 			
 			var point:Array = pokerUtil.get_Point(pok);
-			var totalPoint:int = pokerUtil.Get_Mapping_Value(po, pok);			
+			var totalPoint:int = pokerUtil.Get_Mapping_Value(po, point);
 			
-			var arr:Array = utilFun.combinations(po, 3);
+			var arr:Array = utilFun.easy_combination(po, 3);
 			var answer:Array = [];
 			var restmax:int = 0;
 			for (var i:int = 0; i < arr.length; i++)
@@ -58,9 +58,10 @@ package util
 				//utilFun.Log("conbi=" + cobination) ;
 				total = Get_Mapping_Value(cobination, point);
 				rest = totalPoint - total;
-                //utilFun.Log( "list:" + cobination + " = " + total  +" rest ="+ rest);
+				
 				total %= 10;
 				rest %= 10;
+				//utilFun.Log( "list:" + cobination + " = " + total  +" rest ="+ rest);
 				if ( total == 0)
 				{
 					if ( rest >= restmax )
@@ -74,11 +75,11 @@ package util
 			
 			//utilFun.Log( "answer:" + answer);
 			
-			if ( answer.length !=0)
-			{				
-				answer.push.apply(answer, pokerUtil.Get_restItem(po, answer));
+			if ( answer.length != 0)
+			{
+				answer.push.apply(answer,utilFun.Get_restItem(po, answer));
 			}
-			else answer = ["0", "1", "2", "3", "4"];
+			else answer = po;
 			
 			//utilFun.Log( "final answer:" + answer);
 			return answer;
@@ -117,24 +118,7 @@ package util
 				total += mapping[idxList[i]];
 			}
 			return total;
-		}
-		
-		/**
-		 * @param	origi [10,11,12,13,14]
-		 * @param	own  [0,1,3]
-		 * @return   [12,14]
-		 */
-		public static function Get_restItem(origi:Array,own:Array):Array
-		{
-			var rest_item:Array = [];
-			var n:int = origi.length
-		  	for (var i:int = 0; i < n; i++)
-			{
-				if (  own.indexOf(origi[i]) == -1 ) rest_item.push(i);
-			}
-			
-			return rest_item;
-		}
+		}		
 		
 		public static function get_Point(poke:Array):Array
 		{

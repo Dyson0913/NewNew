@@ -38,7 +38,7 @@ package Command
 			_model.putValue("after_bet_credit", 0);
 		}
 		
-		public function betTypeMain(e:Event):Boolean
+		public function betTypeMain(e:Event,idx:int):Boolean
 		{			
 			//擋狀態
 			if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )

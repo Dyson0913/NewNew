@@ -6,7 +6,7 @@ package View.GameView
 	import Model.valueObject.Intobject;
 	import util.DI;
 	import View.ViewBase.ViewBase;
-	import View.Viewutil.SingleObject;
+	import View.Viewutil.MultiObject;	
 	import View.Viewutil.MouseBehavior;;
 	import Model.modelName;
 	import util.utilFun;
@@ -28,29 +28,28 @@ package View.GameView
 		{
 			if (View.Value != modelName.Hud) return;
 			
+			var back_btn:MultiObject = prepare("back_to_lobby", new MultiObject() , this);
+			back_btn.Create_by_list(1, ["Back_to_lobby"], 0, 0, 1, 0, 0, "a");
+			back_btn.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			back_btn.mousedown = LeaveGame;
+			back_btn.container.x = 1840;
 			
-			var back_btn:MovieClip = prepare("back_to_lobby",utilFun.GetClassByString("Back_to_lobby") , this);
-			back_btn.x = 1840;
+			var hint:MultiObject = prepare("leavehint",new MultiObject() , this);
+			hint.Create_by_list(1, ["LeaveHint"], 0, 0, 1, 0, 0, "a");
+			hint.container.visible = false;			
+			hint.container.x = 520;
+			hint.container.y = 390;
 			
-			var back_Lobby:SingleObject  = prepare("back_lobby", new SingleObject());
-			back_Lobby.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			back_Lobby.Create(back_btn);
-			back_Lobby.mousedown = LeaveGame;
-			
-			var hint:MovieClip = prepare("leavehint", utilFun.GetClassByString("LeaveHint") , this);
-			hint.visible = false;
-			hint.x = 520;
-			hint.y = 390;
-			
-			var back_game:SingleObject  = prepare("back_game", new SingleObject());
-			back_game.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			back_game.Create(hint["_back"]);
-			back_game.mousedown = backGame;
-			
-			var back_Leave:SingleObject  = prepare("back_Leave", new SingleObject());
-			back_Leave.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			back_Leave.Create(hint["_leave"]);
-			back_Leave.mousedown = backLobby;
+			// 1ob ,inside ob
+			//var back_game:SingleObject  = prepare("back_game", new SingleObject());
+			//back_game.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			//back_game.Create(hint["_back"]);
+			//back_game.mousedown = backGame;
+			//
+			//var back_Leave:SingleObject  = prepare("back_Leave", new SingleObject());
+			//back_Leave.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			//back_Leave.Create(hint["_leave"]);
+			//back_Leave.mousedown = backLobby;
 			
 			
 			//addChild(_tool);

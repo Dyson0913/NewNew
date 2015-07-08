@@ -9,6 +9,7 @@ package
 	import Model.*;
 	import org.spicefactory.parsley.asconfig.processor.ActionScriptConfigurationProcessor;
 	import org.spicefactory.parsley.core.registry.ObjectDefinition;
+	import util.DI;
 	import View.ViewBase.ViewBase;
 	import ConnectModule.websocket.WebSoketComponent;
 	
@@ -19,9 +20,7 @@ package
 	 */
 	public class appConfig 
 	{
-		//要unit test 就切enter來達成
 		
-		//singleton="false"
 		[ObjectDefinition(id="Enter")]
 		public var _LoadingView:LoadingView = new LoadingView();		
 		public var _betView:betView = new betView();
