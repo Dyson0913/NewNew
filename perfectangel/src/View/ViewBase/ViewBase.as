@@ -36,31 +36,20 @@ package View.ViewBase
 		
 		public var _tool:AdjustTool;
 		
-		public var _ViewDI:DI;
-		
 		public function ViewBase() 
 		{
-			//_ViewDI = new DI();
+		
 		}
 		
 		public function EnterView (View:Intobject):void
 		{
-			_viewcom.nextViewDI.clean();
-			
-			//move to viewcommand ~~
-			_ViewDI = _viewcom.currentViewDI;
-			_viewcom.currentViewDI = _viewcom.nextViewDI;
-			_viewcom.nextViewDI = _ViewDI;
 			
 		}
 		
 		
 		public function ExitView(View:Intobject):void
 		{			
-			_viewcom.currentViewDI.clean();			
 			
-			utilFun.ClearContainerChildren(Get("_view"));			
-			//_ViewDI.clean();
 		}
 		
 		protected function Get(name:*):*

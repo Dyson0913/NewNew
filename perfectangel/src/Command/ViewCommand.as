@@ -20,11 +20,16 @@ package Command
 		public static const VIEW_ENTER:String = "EnterView";
 		public static const VIEW_LEAVE:String  = "LeaveView";
 		
+		public var _preViewDi:DI = new DI();
 		public var _curViewDi:DI = new DI();
 		public var _nextViewDi:DI = new DI();
 		
+		public var _HudViewDi:DI = new DI();
+		
+		public var preViewDI:DI;
 		public var currentViewDI:DI;
-		public var nextViewDI:DI;
+		public var nextViewDI:DI;		
+		public var HudViewDI:DI = new DI();
 		
 		public var _preView:int = -1;
 		public function get preview():int
@@ -40,9 +45,21 @@ package Command
 		
 		public function ViewCommand() 
 		{
+			preViewDI = _preViewDi;
 		    currentViewDI = _curViewDi;
-			nextViewDI = _nextViewDi;
+			nextViewDI = _nextViewDi;	
+			HudViewDI = _HudViewDi
 		}		
+		
+		public function all_clean():void
+		{
+			preViewDI.clean();
+			currentViewDI.clean();
+			nextViewDI.clean();
+			HudViewDI.clean();
+			_preView = -1;
+			_CurrentView = -1;
+		}
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="Switch")]
 		public function ViewSwitch(enterView:Intobject):void
@@ -51,12 +68,13 @@ package Command
 			else _preView = _CurrentView;
 			_CurrentView = enterView.Value;
 			
-			
+			viewDISwitch();
 			dispatcher(new Intobject(_CurrentView,VIEW_ENTER));
-			//utilFun.Log("enter preivew" +_CurrentView);
+			//utilFun.Log("enter vew = " +_CurrentView);
 			if ( _preView != _CurrentView) 
 			{
-				//utilFun.Log("leave preivew"+_preView);
+				//utilFun.Log("leave preivew = " + _preView);
+				preView_clean();
 				dispatcher(new Intobject(_preView,VIEW_LEAVE ));
 			}			
 		}
@@ -65,15 +83,48 @@ package Command
 		public function Viewadd(enterView:Intobject):void
 		{
 			dispatcher(new Intobject(enterView.Value,VIEW_ENTER));
-			//utilFun.Log("view add" +enterView.Value);			
+		//	utilFun.Log("view add = " +enterView.Value);			
 		}
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="hide")]
 		public function ViewHide(enterView:Intobject):void
 		{
 			dispatcher(new Intobject(enterView.Value,VIEW_LEAVE));
-			//utilFun.Log("view hide" +enterView.Value);
+			hudView_clean();
+			//utilFun.Log("view hide = " +enterView.Value);
 		}	
+		
+		private function viewDISwitch():void
+		{
+			nextViewDI.clean();
+			
+			//switch ptr
+			var temp:DI;
+			temp = currentViewDI;
+			currentViewDI = nextViewDI;			
+			nextViewDI = preViewDI;
+			preViewDI = temp;			
+		}
+		
+		public function Get(name:*):*
+		{
+			return currentViewDI.getValue(name);
+		}
+		
+		private function preView_clean():void
+		{			
+			preViewDI.clean();
+		}
+		
+		public function GetHud(name:*):*
+		{
+			return HudViewDI.getValue(name);
+		}
+		
+		private function hudView_clean():void
+		{			
+			HudViewDI.clean();
+		}
 		
 	}
 

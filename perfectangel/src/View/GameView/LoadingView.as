@@ -46,9 +46,6 @@ package View.GameView
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Loading_Scene], 0, 0, 1, 0, 0, "a_");
 			
-			//utilFun.Log("LoadingView enter currtn view lien currentViewDI= " + _viewcom.currentViewDI.length());
-			//utilFun.Log("LoadingView enter currtn view lien _curViewDi = " + _viewcom._curViewDi.length());
-			//utilFun.Log("LoadingView enter currtn view lien = "+_viewcom.nextViewDI.length());
 			utilFun.SetTime(connet, 2);
 			
 		}
@@ -62,10 +59,7 @@ package View.GameView
 		override public function ExitView(View:Intobject):void
 		{
 			if (View.Value != modelName.Loading) return;
-			super.ExitView(View);
-			//utilFun.Log("LoadingView exit currtn view lien = " + _viewcom.currentViewDI.length());
-			//utilFun.Log("LoadingView exit currtn view lien = " + _viewcom.nextViewDI.length());
-			
+			super.ExitView(View);			
 			utilFun.Log("LoadingView ExitView");
 		}
 		
