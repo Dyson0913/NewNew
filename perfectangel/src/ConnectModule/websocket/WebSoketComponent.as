@@ -36,6 +36,9 @@ package ConnectModule.websocket
 		[Inject]
 		public var _actionqueue:ActionQueue;
 		
+		[Inject]
+		public var _model:Model;	
+		
 		private var websocket:WebSocket;
 		
 		public function WebSoketComponent() 
@@ -46,7 +49,9 @@ package ConnectModule.websocket
 		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="connect")]
 		public function Connect():void
 		{
-			websocket = new WebSocket("ws://106.186.116.216:9000/gamesocket", "");
+			var object:Object = _model.getValue(modelName.LOGIN_INFO);			
+			//websocket = new WebSocket("ws://106.186.116.216:9003/gamesocket/token/" + object.accessToken, "");
+			websocket = new WebSocket("ws://106.186.116.216:9003/gamesocket/token/123", "");
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
@@ -92,7 +97,8 @@ package ConnectModule.websocket
 				{
 					case Message.MSG_TYPE_LOGIN:
 					{					
-						var msg:Object = {"message_type":Message.MSG_TYPE_LOGIN, "session_id":Message.DEMO_SESSION};
+						//server 要求login 資料
+						var msg:Object = {"message_type":Message.MSG_TYPE_LOGIN, "login_info":_model.getValue(modelName.LOGIN_INFO)};
 						SendMsg(msg);
 						
 						break;
@@ -138,6 +144,7 @@ package ConnectModule.websocket
 						
 						dispatcher(new ValueObject(  result.inside_game_info.remain_time,modelName.REMAIN_TIME) );						
 						dispatcher(new ValueObject(  result.inside_game_info.games_state, modelName.GAMES_STATE) );						
+						dispatcher(new ValueObject(  result.inside_game_info.split_symbol, modelName.SPLIT_SYMBOL) );						
 						
 						dispatcher( new ValueObject(result.inside_game_info.game_info["player_card_list"], modelName.PLAYER_POKER) );
                         dispatcher( new ValueObject(result.inside_game_info.game_info["banker_card_list"], modelName.BANKER_POKER) );                        
@@ -145,8 +152,9 @@ package ConnectModule.websocket
 						dispatcher(new Intobject(modelName.Bet, ViewCommand.SWITCH) );
 						//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
 						
-						dispatcher(new ModelEvent("playerpoker"));
-						dispatcher(new ModelEvent("bankerpoker"));						
+						dispatcher(new ModelEvent("update_state"));
+						dispatcher(new Intobject(modelName.PLAYER_POKER, "pokerupdate"));
+						dispatcher(new Intobject(modelName.BANKER_POKER, "pokerupdate"));
 						
 						break;
 					}
@@ -156,7 +164,8 @@ package ConnectModule.websocket
 					  
 					  dispatcher(new ValueObject(  result.games_state, modelName.GAMES_STATE) );
 					  dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );					  
-					  dispatcher(new ModelEvent("update_remain_time"));
+					  //dispatcher(new ModelEvent("update_remain_time"));
+					   dispatcher(new ModelEvent("update_state"));
 					   break;
 					}
 					
@@ -165,17 +174,17 @@ package ConnectModule.websocket
 						dispatcher(new ValueObject(  result.games_state, modelName.GAMES_STATE) );
                         var card:Array = result.card_info["card_list"];
                         var card_type:int = result.card_info["card_type"];
+						
 						if ( card_type == CardType.PLAYER)
 						{
 							dispatcher( new ValueObject( card, modelName.PLAYER_POKER) );
-							dispatcher(new ModelEvent("playerpoker"));
+							dispatcher(new Intobject(modelName.PLAYER_POKER, "pokerupdate"));
 						}
 						else if ( card_type == CardType.BANKER)
 						{							
 						    dispatcher( new ValueObject(card, modelName.BANKER_POKER) );
-							dispatcher(new ModelEvent("bankerpoker"));
+							dispatcher(new Intobject(modelName.BANKER_POKER, "pokerupdate"));
 						}					
-						
 						
 						break;
 					}					
@@ -200,7 +209,7 @@ package ConnectModule.websocket
 						
 						dispatcher(new ValueObject( result.player_info.credit,modelName.CREDIT) );
 						
-						dispatcher( new ValueObject(result.bet_type, modelName.ROUND_RESULT));
+						dispatcher( new ValueObject(result.win_type, modelName.ROUND_RESULT));
 						dispatcher(new ModelEvent("round_result"));
 						
 						break;

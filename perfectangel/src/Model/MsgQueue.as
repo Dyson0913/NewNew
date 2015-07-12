@@ -16,7 +16,7 @@ package Model
 		
 		private var _isqueueing:Boolean;
 		
-		[MessageBinding(type="Model.valueObject.BoolObject",messageProperty="Value",selector="Msgqueue")]
+		//[MessageBinding(type="Model.valueObject.BoolObject",messageProperty="Value",selector="Msgqueue")]
 		public function set Isqueueing(value:Boolean):void
 		{
 			_isqueueing = value;

@@ -22,12 +22,19 @@ package
 	{
 		private var _context:Context;
 		
+		public var result:Object ;
+		
 		private var _appconfig:appConfig = new appConfig();
 		
 		public function Main():void 
 		{
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
+		}
+		
+		public function pass(pass:Object):void
+		{
+			result = pass;
 		}
 		
 		private function init(e:Event = null):void 
@@ -48,7 +55,7 @@ package
 			
 			var Enter:LoadingView = _context.getObject("Enter") as LoadingView;
 			utilFun.Log("Enter = "+Enter);
-			Enter.FirstLoad();			
+			Enter.FirstLoad(result);			
 		}
 	}
 	

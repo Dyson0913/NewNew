@@ -1,4 +1,4 @@
-package View.component.Marquee 
+package View.ViewComponent 
 {
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;

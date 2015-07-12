@@ -88,7 +88,15 @@ package util
 		public static function ClearContainerChildren(Container:ViewComponentInterface):void
 		{	
 			Container.OnExit();			
-		}
+		}		
+		
+		public static function Clear_ItemChildren(Container:DisplayObjectContainer):void
+		{
+			while (Container.numChildren > 0)
+			{	
+				Container.removeChildAt(0);
+			}		
+		}	
 		
 		public static function SetText(Container:TextField,Text:String):void
 		{			
@@ -178,7 +186,7 @@ package util
 			{
 				
 				//one set conbination
-				for (var i:int = 0; i < rest.length; i++)
+				for (i = 0; i < rest.length; i++)
 				{
 					var temp:Array = [];
 					temp = fixelemnt.concat();
@@ -199,9 +207,9 @@ package util
 			}
 			
 			//last combi
-			for (var i:int = 0; i < rest.length; i++)
+			for (i = 0; i < rest.length; i++)
 			{
-				var temp:Array = [];
+				temp.length = 0;
 				temp = fixelemnt.concat();
 				if ( rest[i] <= fixelemnt[fixelemnt.length - 1]) continue;
 				temp.push (rest[i]);

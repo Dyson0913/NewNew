@@ -93,7 +93,8 @@ package View.Viewutil
 				if (CustomizedFun != null)
 				{
 					CustomizedFun(mc, i,CustomizedData);
-				}			
+				}
+				
 				mc.name = ItemName + i;
 				_ItemName = ItemName;
 				ItemList.push(mc);
@@ -154,7 +155,7 @@ package View.Viewutil
 		
 		public function CleanList():void
 		{
-			removeListen();
+			//removeListen();
 			var cnt:int = ItemList.length;
 			for ( var i:int = 0; i < cnt; i++)
 			{
@@ -167,6 +168,18 @@ package View.Viewutil
 		public function OnExit():void
 		{
 			if( _autoClean ) CleanList();
+		}
+		
+		public function Clear_ItemChildren():void
+		{
+			//removeListen();
+			var cnt:int = ItemList.length;
+			utilFun.Log("cnt[i] = "+cnt);
+			for ( var i:int = 0; i < cnt; i++)
+			{
+			
+				utilFun.Clear_ItemChildren(ItemList[i]);
+			}			
 		}
 		
 		public function Getidx(name:String):int 
@@ -194,7 +207,6 @@ package View.Viewutil
 			var N:int =  ItemList.length;
 			for (var i:int = 0 ;  i < N ;  i++)
 			{
-				
 				if ( MouseFrame[0] != 0) ItemList[i].removeEventListener(MouseEvent.ROLL_OUT, eventListen);
 				if ( MouseFrame[1] != 0) ItemList[i].removeEventListener(MouseEvent.ROLL_OVER, eventListen);
 				if ( MouseFrame[2] != 0) ItemList[i].removeEventListener(MouseEvent.MOUSE_DOWN, eventListen);

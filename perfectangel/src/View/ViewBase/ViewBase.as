@@ -29,9 +29,6 @@ package View.ViewBase
 		public var _model:Model;
 		
 		[Inject]
-		public var _opration:DataOperation;
-		
-		[Inject]
 		public var _viewcom:ViewCommand;
 		
 		public var _tool:AdjustTool;
@@ -41,6 +38,7 @@ package View.ViewBase
 		
 		}
 		
+		//[MessageHandler]
 		public function EnterView (View:Intobject):void
 		{
 			
@@ -53,7 +51,7 @@ package View.ViewBase
 		}
 		
 		protected function Get(name:*):*
-		{
+		{			
 			return _viewcom.currentViewDI.getValue(name);
 		}
 		

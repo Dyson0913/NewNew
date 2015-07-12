@@ -1,17 +1,14 @@
 package  
 {
 	import com.hexagonstar.util.debug.Debug;
-	import Command.BetCommand;
-	import Command.DataOperation;
-	import Command.RegularSetting;
-	import Command.ViewCommand;
+	import Command.*;
 	import flash.display.MovieClip;
 	import Model.*;
 	import org.spicefactory.parsley.asconfig.processor.ActionScriptConfigurationProcessor;
 	import org.spicefactory.parsley.core.registry.ObjectDefinition;
-	import util.DI;
 	import View.ViewBase.ViewBase;
 	import ConnectModule.websocket.WebSoketComponent;
+	import View.ViewComponent.*;
 	
 	import View.GameView.*;
 	/**
@@ -20,7 +17,9 @@ package
 	 */
 	public class appConfig 
 	{
+		//要unit test 就切enter來達成
 		
+		//singleton="false"
 		[ObjectDefinition(id="Enter")]
 		public var _LoadingView:LoadingView = new LoadingView();		
 		public var _betView:betView = new betView();
@@ -36,10 +35,15 @@ package
 		
 		//command 
 		public var _viewcom:ViewCommand = new ViewCommand();
+		public var _state:StateCommand = new StateCommand();
 		public var _dataoperation:DataOperation = new DataOperation();
 		public var _betcom:BetCommand = new BetCommand();
 		public var _regular:RegularSetting = new RegularSetting();
 		
+		//visual
+		public var _pokerhandler:Visual_poker = new Visual_poker();
+		public var _timer:Visual_timer = new Visual_timer();
+		public var _hint:Visual_Hintmsg = new Visual_Hintmsg();
 		
 		//[ProcessSuperclass]
 		//public var _vibase:ViewBase = new ViewBase();

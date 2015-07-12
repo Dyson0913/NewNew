@@ -3,8 +3,8 @@ package Command
 	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.events.Event;
 	import Model.*;
-	import util.DI;
-	import util.utilFun;
+	
+	import util.*;
 	import View.GameView.*;
 	/**
 	 * user bet action
@@ -40,6 +40,7 @@ package Command
 		
 		public function betTypeMain(e:Event,idx:int):Boolean
 		{			
+			idx += 1;			
 			//擋狀態
 			if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )
 			{				
@@ -48,14 +49,15 @@ package Command
 			
 			if ( _Actionmodel.length() > 0) return false;
 			
-			if ( get_total_bet(CardType.MAIN_BET) + _opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
+			//TODO all bet
+			if ( get_total_bet(idx) + get_total_bet(idx) +_opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
 			{
 				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.NO_CREDIT));
 				return false;
 			}
 			
-			var bet:Object = { "betType": CardType.MAIN_BET, 
-			                               "bet_amount":  get_total_bet(CardType.MAIN_BET) + _opration.array_idx("coin_list", "coin_selectIdx")
+			var bet:Object = { "betType": idx, 
+			                               "bet_amount":  get_total_bet(idx) + _opration.array_idx("coin_list", "coin_selectIdx")
 			};
 			
 			dispatcher( new ActionEvent(bet, "bet_action"));
@@ -63,26 +65,6 @@ package Command
 			
 			return true;
 		}		
-		
-		public function betTypeSide(e:Event):Boolean
-		{
-			//擋狀態
-			if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )
-			{
-				return false;
-			}
-			
-			if ( _Actionmodel.length() > 0) return false;
-			
-			var bet:Object = { "betType": CardType.SIDE_BET,
-			                               "bet_amount":  get_total_bet(CardType.SIDE_BET) +_opration.array_idx("coin_list", "coin_selectIdx")
-			};
-			
-			dispatcher( new ActionEvent(bet, "bet_action"));
-			dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BET));
-			return true;
-		}
-		
 		
 		[MessageHandler(type = "ConnectModule.websocket.WebSoketInternalMsg", selector = "Betresult")]
 		public function accept_bet():void
@@ -171,6 +153,7 @@ package Command
 		{
 			_Bet_info.clean();
 		}
+		
 	}
 
 }

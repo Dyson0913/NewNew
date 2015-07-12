@@ -12,7 +12,7 @@ package Res
 		
 		
 		//swc res
-		public static const Text:String = "finalPoint";
+		public static const Text:String = "finalPoint";   //delete
 		public static const Poker:String = "poker";
 		public static const playerInfo:String = "playerinfo";
 		public static const Timer:String = "countDowntimer";
@@ -22,8 +22,8 @@ package Res
 		public static const coin3:String = "coin_3";
 		public static const coin4:String = "coin_4";
 		public static const coin5:String = "coin_5";
-		public static const betzone_player:String = "MainZone";
-		public static const betzone_banker:String = "sidebetZone";
+		public static const betzone_player:String = "playerZone";
+		public static const betzone_banker:String = "bankerZone";
 		
 		public static const emptymc:String = "Emptymc";
 		
