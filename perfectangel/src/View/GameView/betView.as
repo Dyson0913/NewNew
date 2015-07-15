@@ -110,6 +110,14 @@ package View.GameView
 			playerzone.container.x = 225;
 			playerzone.container.y = 756;
 			
+			//stick cotainer  
+			var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), playerzone.container);
+			//coinstack.container.x = 250;
+			//coinstack.container.y = 140;
+			coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			coinstack.Post_CustomizedData = [ [0, 0],[710,-40]];
+			coinstack.Create_by_list(2, [ResName.emptymc], 0, 0, 2, 0, 0, "time_");
+			
 			//side bet		   	
 			var sidebet:MultiObject = prepare("side_betzone", new MultiObject() , this);
 			sidebet.container.x = 317;
@@ -120,14 +128,13 @@ package View.GameView
 			sidebet.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
 			sidebet.mousedown = _betCommand.fake_test_fun;			
 			
-			//stick cotainer  
-			var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), playerzone.container);
-			coinstack.container.x = 250;
-			coinstack.container.y = 140;
-			coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			coinstack.Post_CustomizedData = [ [0, 0],[710,-40]];
-			coinstack.Create_by_list(2, [ResName.emptymc], 0, 0, 2, 0, 0, "time_");
-			
+			//side bet coint
+			var side_coinstack:MultiObject = prepare("side_coinstakeZone", new MultiObject(), sidebet.container);
+			side_coinstack.container.x = 250;
+			side_coinstack.container.y = 140;
+			side_coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			side_coinstack.Post_CustomizedData = [ [0, 0],[710,-40]];
+			side_coinstack.Create_by_list(2, [ResName.emptymc], 0, 0, 2, 0, 0, "time_");
 			
 			//paytable
 			var paytable:MultiObject = prepare("paytable", new MultiObject() , this);

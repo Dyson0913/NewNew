@@ -83,6 +83,7 @@ import flash.utils.setInterval;
 			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
 			_tool = new AdjustTool();
 			
+			_betCommand.bet_init();
 			//coin
 			var coinob:MultiObject = prepare("CoinOb", new MultiObject(), this);
 			coinob.container.x = 708;
@@ -95,18 +96,25 @@ import flash.utils.setInterval;
 			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 100, 0, "Coin_");
 			coinob.mousedown = _visual_coin.betSelect;
 			
+			//side bet		   	
+			var sidebet:MultiObject = prepare("side_betzone", new MultiObject() , this);
+			sidebet.container.x = 317;
+			sidebet.container.y = 732;
+			sidebet.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			sidebet.Post_CustomizedData = [ [0, 0],[1044,0],[244,-34],[808,-31]];
+			sidebet.Create_by_list(4, [ResName.angel_small,ResName.evil_small,ResName.angel_per,ResName.evil_per], 0, 0, 4, 0, 0, "time_");
+			sidebet.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			sidebet.mousedown = _betCommand.betTypeMain;			
 			
-			var playerzone:MultiObject = prepare("betzone", new MultiObject() , this);
-			playerzone.Create_by_list(2, [ResName.angelZone,ResName.evilZone], 0, 0, 2, 803, 0, "time_");
-			playerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			playerzone.mousedown = _betCommand.betTypeMain;
-			playerzone.container.x = 225;
-			playerzone.container.y = 756;
-			
-			
-			//_tool.SetControlMc(sidebet.container);			
+			//side bet coint
+			var side_coinstack:MultiObject = prepare("side_coinstakeZone", new MultiObject(), sidebet.container);
+			side_coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			side_coinstack.Post_CustomizedData = [ [0, 0],[0,0],[0,0],[0,0]];
+			side_coinstack.Create_by_list(4, [ResName.emptymc], 0, 0, 4, 0, 0, "time_");
+			//
+			_tool.SetControlMc(side_coinstack.container);			
 			//_tool.SetControlMc(sidebet.ItemList[3]);			
-			//addChild(_tool);						
+			addChild(_tool);						
 			
 			//rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
 			// streamID  = "mp4:BigBuckBunny_115k.mov";

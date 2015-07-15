@@ -45,7 +45,8 @@ package Command
 		
 		public function betTypeMain(e:Event,idx:int):Boolean
 		{			
-			idx += 1;			
+			idx += 3;
+			utilFun.Log("idx ="+idx);
 			//擋狀態
 			//if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )
 			//{				
@@ -68,7 +69,7 @@ package Command
 			dispatcher( new ActionEvent(bet, "bet_action"));
 			//fake bet
 			dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));
-			dispatcher(new ModelEvent("updateCredit"));
+			//sdispatcher(new ModelEvent("updateCredit"));
 			dispatcher(new ModelEvent("updateCoin"));
 			
 			//dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BET));
