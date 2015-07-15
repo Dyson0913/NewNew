@@ -48,7 +48,7 @@
   </build>
   <!-- SWC Include Libraries -->
   <includeLibraries>
-    <element path="lib\baccarat.swc" />
+    <element path="lib\angel.swc" />
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>

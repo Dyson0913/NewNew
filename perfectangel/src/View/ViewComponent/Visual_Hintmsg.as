@@ -11,7 +11,7 @@ package View.ViewComponent
 	import caurina.transitions.Tweener;
 	
 	/**
-	 * poker present way
+	 * hintmsg present way
 	 * @author ...
 	 */
 	public class Visual_Hintmsg  extends VisualHandler
@@ -38,6 +38,12 @@ package View.ViewComponent
 			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);		
 		}
 		
+		[MessageHandler(type = "ConnectModule.websocket.WebSoketInternalMsg", selector = "CreditNotEnough")]
+		public function no_credit():void
+		{
+			GetSingleItem(modelName.HINT_MSG).gotoAndStop(3);
+			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);	
+		}
 		
 	}
 

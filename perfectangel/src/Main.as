@@ -17,7 +17,7 @@ package
 	 * ...
 	 * @author hhg
 	 */
-	[SWF(backgroundColor = "#CCCC99")]
+	[SWF(backgroundColor = "#000000")]
 	public class Main extends MovieClip 
 	{
 		private var _context:Context;

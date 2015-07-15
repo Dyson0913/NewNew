@@ -1,6 +1,7 @@
 package Command 
 {
 	import flash.display.MovieClip;
+	import flash.text.TextField;
 	import util.utilFun;
 	import caurina.transitions.Tweener;
 	
@@ -14,6 +15,24 @@ package Command
 		public function RegularSetting() 
 		{
 			
+		}
+		
+		//relative position adjust
+		public function Posi_x_Setting(mc:MovieClip, idx:int, data:Array):void
+		{		
+			mc.x += data[idx];
+		}
+		
+		public function Posi_y_Setting(mc:MovieClip, idx:int, data:Array):void
+		{			
+			mc.y += data[idx];
+		}
+		
+		public function Posi_xy_Setting(mc:MovieClip, idx:int, data:Array):void
+		{
+			var po:Array = data[idx]
+			mc.x = po[0];
+			mc.y = po[1];
 		}
 		
 		public function FrameSetting(mc:MovieClip, idx:int, data:Array):void
@@ -46,6 +65,24 @@ package Command
 			mc.gotoAndStop( utilFun.cycleFrame(mc.currentFrame,frameNum) )	
 		}	
 		
+		public function strdotloop(s:TextField,Mytime:int ,Mycount:int):void
+		{
+			Tweener.addCaller( s.text, { time:Mytime , count: Mycount , transition:"linear", onUpdateParams:[ s,s.length,4], onUpdate: this.dotloop } );
+		}
+		
+		public function dotloop(s:TextField, orlength:int, limit:int):void
+		{
+			var str:String = s.text;
+			var len:int = str.length;
+			str = str.substr(0, len) + ".";
+			if ( str.length > orlength + limit) str = str.substr(0, len - limit) + ".";			
+			s.text = str;
+		}	
+			
+		public function sliding(mc:MovieClip,t:Number, x:Number =0, y:Number = 0):void
+		{
+			Tweener.addTween(mc, { x:x ,y:y,time:t, transition:"easeOutCubic"} );
+		}
 		
 	}
 

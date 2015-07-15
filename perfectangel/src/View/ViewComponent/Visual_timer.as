@@ -11,7 +11,7 @@ package View.ViewComponent
 	import caurina.transitions.Tweener;
 	
 	/**
-	 * poker present way
+	 * timer present way
 	 * @author ...
 	 */
 	public class Visual_timer  extends VisualHandler
@@ -29,21 +29,29 @@ package View.ViewComponent
 		public function display():void
 		{
 			Get(modelName.REMAIN_TIME).container.visible = true;
-			var time:int = _model.getValue(modelName.REMAIN_TIME);
-			utilFun.SetText(GetSingleItem(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));
-			Tweener.addCaller(this, { time:time , count: time, onUpdate:TimeCount , transition:"linear" } );	
+			var time:int = _model.getValue(modelName.REMAIN_TIME);			
+    		var arr:Array = utilFun.arrFormat(time, 2);
+			if ( arr[0] == 0 ) arr[0] = 10;
+			if ( arr[1] == 0 ) arr[1] = 10;
+			GetSingleItem(modelName.REMAIN_TIME)["_num0"].gotoAndStop(arr[0]);
+			GetSingleItem(modelName.REMAIN_TIME)["_num1"].gotoAndStop(arr[1]);		
+			Tweener.addCaller(this, { time:time , count: time, onUpdate:TimeCount , transition:"linear" } );
 		}
 		
 		private function TimeCount():void
 		{			
-			var time:int  = _opration.operator(modelName.REMAIN_TIME, DataOperation.sub);
+		var time:int  = _opration.operator(modelName.REMAIN_TIME, DataOperation.sub);
 			if ( time < 0) 
 			{
 				GetSingleItem(modelName.REMAIN_TIME).visible = false;
 				return;
 			}
 			
-			utilFun.SetText(GetSingleItem(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2));			
+			var arr:Array = utilFun.arrFormat(time, 2);			
+			if ( arr[0] == 0 ) arr[0] = 10;
+			if ( arr[1] == 0 ) arr[1] = 10;		
+			GetSingleItem(modelName.REMAIN_TIME)["_num0"].gotoAndStop(arr[0]);
+			GetSingleItem(modelName.REMAIN_TIME)["_num1"].gotoAndStop(arr[1]);	
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]

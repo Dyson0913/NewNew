@@ -11,6 +11,7 @@ package View.GameView
 	import Model.*;
 	import Res.ResName;
 	import util.DI;
+	import View.ViewComponent.Visual_Coin;
 	import View.Viewutil.*;
 	import View.ViewBase.ViewBase;
 
@@ -30,6 +31,9 @@ package View.GameView
 		[Inject]
 		public var _regular:RegularSetting;		
 		
+		[Inject]
+		public var _visual_coin:Visual_Coin;
+		
 		public function betView()  
 		{
 			utilFun.Log("betView");
@@ -42,87 +46,110 @@ package View.GameView
 			super.EnterView(View);
 			//清除前一畫面
 			utilFun.Log("in to EnterBetview=");
-			_tool = new AdjustTool();
+			
 			
 			_betCommand.bet_init();
 			
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");			
 			
-			var playerCon:MultiObject = prepare(modelName.PLAYER_POKER, new MultiObject(), this);
-			playerCon.autoClean = true;
-			playerCon.container.x = 70;
-			playerCon.container.y = 240;
-			
-			var bankerCon:MultiObject =  prepare(modelName.BANKER_POKER, new MultiObject(), this);
-			bankerCon.autoClean = true;
-			bankerCon.container.x = 1100;
-			bankerCon.container.y = 240;
+			//var playerCon:MultiObject = prepare(modelName.PLAYER_POKER, new MultiObject(), this);
+			//playerCon.autoClean = true;
+			//playerCon.container.x = 70;
+			//playerCon.container.y = 240;
+			//
+			//var bankerCon:MultiObject =  prepare(modelName.BANKER_POKER, new MultiObject(), this);
+			//bankerCon.autoClean = true;
+			//bankerCon.container.x = 1100;
+			//bankerCon.container.y = 240;
 			
 			var zone:MultiObject = prepare("zone", new MultiObject() ,this);
-			zone.container.x = 610;
-			zone.CustomizedFun = _regular.textSetting;
-			zone.CustomizedData = ["閒","莊"];
-			zone.Create_by_list(2, [ResName.Text], 0 , 0, 2, 500, 0, "Bet_");		
+			zone.container.x = 520;
+			zone.container.y = 450;			
+			zone.Create_by_list(2, [ResName.state_angel, ResName.state_evil], 0 , 0, 2, 750, 0, "Bet_");
+			zone.container.visible = false;
 			
 			//addChild(_tool);
 			
-			var info:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
-			info.Create_by_list(1, [ResName.playerInfo], 0, 0, 1, 0, 0, "info_");
-			info.container.y = 830;
-			utilFun.SetText(info.ItemList[0]["_Account"], _model.getValue(modelName.UUID) );
-			utilFun.SetText(info.ItemList[0]["nickname"], _model.getValue(modelName.NICKNAME) );			
-			utilFun.SetText(info.ItemList[0]["credit"], _model.getValue(modelName.CREDIT).toString());
+			//var info:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
+			//info.Create_by_list(1, [ResName.playerInfo], 0, 0, 1, 0, 0, "info_");
+			//info.container.y = 830;
+			//utilFun.SetText(info.ItemList[0]["_Account"], _model.getValue(modelName.UUID) );
+			//utilFun.SetText(info.ItemList[0]["nickname"], _model.getValue(modelName.NICKNAME) );			
+			//utilFun.SetText(info.ItemList[0]["credit"], _model.getValue(modelName.CREDIT).toString());
 			
 			var countDown:MultiObject = prepare(modelName.REMAIN_TIME,new MultiObject()  , this);
 		   countDown.Create_by_list(1, [ResName.Timer], 0, 0, 1, 0, 0, "time_");
-		   countDown.container.x = 300;
-		   countDown.container.y = 400;
+		   countDown.container.x = 894;
+		   countDown.container.y = 653;
 		   countDown.container.visible = false;
 		   
-			var hintmsg:MultiObject = prepare(modelName.HINT_MSG, new MultiObject()  , this);
-			hintmsg.Create_by_list(1, [ResName.Hint], 0, 0, 1, 0, 0, "time_");
-			hintmsg.container.x = 850;			
-			hintmsg.container.y = 430;
+			//var hintmsg:MultiObject = prepare(modelName.HINT_MSG, new MultiObject()  , this);
+			//hintmsg.Create_by_list(1, [ResName.Hint], 0, 0, 1, 0, 0, "time_");
+			//hintmsg.container.x = 850;			
+			//hintmsg.container.y = 430;
 			
 			//bet區容器
 			//coin
 			var coinob:MultiObject = prepare("CoinOb", new MultiObject(), this);
-			coinob.container.x = 640;
-			coinob.container.y = 730;
-			coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
+			coinob.container.x = 708;
+			coinob.container.y = 904;
+			coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,2,0]);
 			coinob.CustomizedFun = _regular.FrameSetting;
-			coinob.CustomizedData = [3,1,1,1,1];
-			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 130, 0, "Coin_");
-			coinob.mousedown = betSelect;		
+			coinob.CustomizedData = [2, 1, 1, 1, 1];
+			coinob.Posi_CustzmiedFun = _regular.Posi_y_Setting;
+			coinob.Post_CustomizedData = [0,-20,-30,-20,0];
+			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 100, 0, "Coin_");
+			coinob.mousedown = _visual_coin.betSelect;
 			
-			//下注區容器
+			//main bet
 			var playerzone:MultiObject = prepare("betzone", new MultiObject() , this);
-			playerzone.Create_by_list(2, [ResName.betzone_player,ResName.betzone_banker], 0, 0, 2, 570, 0, "time_");
+			playerzone.Create_by_list(2, [ResName.angelZone,ResName.evilZone], 0, 0, 2, 803, 0, "time_");
 			playerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
 			playerzone.mousedown = _betCommand.betTypeMain;
-			playerzone.container.x = 540;
-			playerzone.container.y = 490;
+			playerzone.container.x = 225;
+			playerzone.container.y = 756;
+			
+			//side bet		   	
+			var sidebet:MultiObject = prepare("side_betzone", new MultiObject() , this);
+			sidebet.container.x = 317;
+			sidebet.container.y = 732;
+			sidebet.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			sidebet.Post_CustomizedData = [ [0, 0],[1044,0],[808,-31],[244,-34]];
+			sidebet.Create_by_list(4, [ResName.angel_small,ResName.evil_small,ResName.evil_per,ResName.angel_per], 0, 0, 4, 0, 0, "time_");
+			sidebet.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			sidebet.mousedown = _betCommand.fake_test_fun;			
 			
 			//stick cotainer  
-			var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), playerzone.container);	
-			//coinstack.autoClean = true;
-			coinstack.Create_by_list(2, [ResName.emptymc, ResName.emptymc], 0, 0, 2, 570, 0, "time_");
+			var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), playerzone.container);
+			coinstack.container.x = 250;
+			coinstack.container.y = 140;
+			coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			coinstack.Post_CustomizedData = [ [0, 0],[710,-40]];
+			coinstack.Create_by_list(2, [ResName.emptymc], 0, 0, 2, 0, 0, "time_");
 			
-			_tool.SetControlMc(GetSingleItem("coinstakeZone",1));
-			addChild(_tool);		
 			
-			//_tool.SetControlMc(bankzone)			
-			//update_remain_time();			
+			//paytable
+			var paytable:MultiObject = prepare("paytable", new MultiObject() , this);
+			paytable.CustomizedData = [[-240,0],[240,0]]		 
+			paytable.container.y = 110;		
+			paytable.Create_by_list(2, [ResName.main_paytable,ResName.side_paytable], 0, 0, 2, 1670, 0, "time_");
+			paytable.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 1, 0]);
+			//paytable.mousedown = sliding;
 			
-		}	
+			//_tool.SetControlMc(paytable.ItemList[1]);
+			_tool.SetControlMc(paytable.container);
+			
+			addChild(_tool);			
+			
+		}
 		
-		public function betSelect(e:Event, idx:int):Boolean
+		public function sliding(e:Event, idx:int):Boolean
 		{
-			var coinob:MultiObject = Get("CoinOb");
-			coinob.exclusive(idx);
-			
-			_model.putValue("coin_selectIdx", idx);
+			var paytable:MultiObject = Get("paytable");
+			//paytable.ItemList[idx]
+			var data:Array = paytable.CustomizedData[idx];
+			_regular.sliding(paytable.ItemList[idx],1, data[0]);
 			return true;
 		}
 		
@@ -136,8 +163,8 @@ package View.GameView
 			var betresult:int = parseInt( result[0])
 			//player win
 			if ( betresult % 2 ==0) 
-			{				
-			   _regular.Twinkle(GetSingleItem("betzone"), 3, 10, 2);	
+			{
+				_regular.Twinkle(GetSingleItem("betzone", 1), 3, 10, 2);
 			   utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",1));
 			    
 			  if ( betresult == CardType.WINTYPE_PLAYER_FIVE_WAWA_WIN )
@@ -152,7 +179,8 @@ package View.GameView
 			  {
 				customizedData =  ["閒 perfect angel win"];
 			  }
-			   else if ( betresult == CardType.WINTYPE_PLAYER_NORMAL_WIN)
+			   //else if ( betresult == CardType.WINTYPE_PLAYER_NORMAL_WIN)
+			   else //if ( betresult == CardType.WINTYPE_PLAYER_NORMAL_WIN)
 			  {
 				customizedData =  ["閒 贏"];
 			  }
@@ -176,96 +204,16 @@ package View.GameView
 						  {
 							customizedData =  ["莊 perfect angel win"];
 						  }
-						   else if ( betresult == CardType.WINTYPE_BANKER_NORMAL_WIN)
+						//   else if ( betresult == CardType.WINTYPE_BANKER_NORMAL_WIN)
+						   else //if ( betresult == CardType.WINTYPE_BANKER_NORMAL_WIN)
 						  {
 							customizedData =  ["莊 贏"];
 						  }			
-							_regular.Twinkle(GetSingleItem("betzone", 1), 3, 10, 2);							
+							_regular.Twinkle(GetSingleItem("betzone"), 3, 10, 2);
 							utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone"));
 				  }
-				
-				
-				
-			}			
+			}		
 			
-			//採用這種方式,呼叫與事件,包成control?
-			utilFun.SetText(GetSingleItem(modelName.CREDIT)["credit"],_model.getValue(modelName.CREDIT).toString());
-			
-			//updateCredit();
-			
-			//dispatcher(new BoolObject(true, "Msgqueue"));
-			//Tweener.addCaller(this, { time:4 , count: 1, onUpdate: this.clearn } );
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "updateCredit")]
-		public function updateCredit():void
-		{
-			utilFun.SetText(GetSingleItem(modelName.CREDIT)["credit"], _model.getValue("after_bet_credit").toString());
-			
-			//coin動畫
-			if (_betCommand.has_Bet_type(CardType.BANKER ))
-			{							
-				stack(_betCommand.Bet_type_betlist(CardType.BANKER), GetSingleItem("coinstakeZone"));
-			}
-			
-			if ( _betCommand.has_Bet_type(CardType.PLAYER ) )
-			{					
-				stack(_betCommand.Bet_type_betlist(CardType.PLAYER), GetSingleItem("coinstakeZone",1));
-			}			
-		}
-		
-		public function stack(coinarr:Array,contain:DisplayObjectContainer):void
-		{			
-			var coin:Array = [];			
-			for (var i:int = 0; i < 5; i++)
-			{
-				coin.length = 0;				
-				createcoin(i, coin, coinarr.concat(), contain);
-			}			
-		}
-		
-		public function createcoin(cointype:int, coin:Array, coinstack:Array, contain:DisplayObjectContainer ):void
-		{			
-			coin.length = 0;
-			while (coinstack.indexOf(_model.getValue("coin_list")[cointype]) != -1)
-			{
-				var idx:int = coinstack.indexOf( _model.getValue("coin_list")[cointype]);
-				coin.push(coinstack[idx]);
-				coinstack.splice(idx, 1);
-			}
-			
-			
-			var shifty:int = 0;
-			var shiftx:int = 0;			
-			var secoin:MultiObject = new MultiObject()
-			secoin.CleanList();
-			secoin.CustomizedFun = coinput;
-			secoin.CustomizedData = coin;
-			secoin.Create( coin.length, "coin_" + (cointype + 1), -25 +shiftx + (cointype * 60), -10 + shifty, 1, 0, -10, "Bet_",  contain);			
-			
-		}
-		
-		public function coinput(mc:MovieClip, idx:int, coinstack:Array):void
-		{
-			utilFun.scaleXY(mc, 0.5, 0.5);
-		}
-		
-		[MessageHandler(type = "ConnectModule.websocket.WebSoketInternalMsg", selector = "CreditNotEnough")]
-		public function no_credit():void
-		{
-			GetSingleItem(modelName.HINT_MSG).gotoAndStop(3);
-			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);	
-		}
-		
-		private function clearn():void
-		{				
-			dispatcher(new ModelEvent("clearn"));
-			//TODO why not 
-			//Get("coinstakeZone").Clear_itemChildren();		
-			utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone"));
-			utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",1));
-			
-			//dispatcher(new BoolObject(false, "Msgqueue"));
 		}
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="LeaveView")]

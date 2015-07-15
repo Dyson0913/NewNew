@@ -32,6 +32,8 @@ package View.Viewutil
 		public var CustomizedData:Array = null;
 		public var MouseFrame:Array = [];
 		
+		public var Posi_CustzmiedFun:Function = null;
+		public var Post_CustomizedData:Array = null;
 		//各事件接口
 		public var rollout:Function;
 		public var rollover:Function;
@@ -88,18 +90,15 @@ package View.Viewutil
 			{
 				var mc:MovieClip = utilFun.GetClassByString(LinkName);
 				mc.x = StartX + (i % RowCnt * Xdiff);
-				mc.y = StartY + ( Math.floor(i / RowCnt) * Ydiff);
-				
-				if (CustomizedFun != null)
-				{
-					CustomizedFun(mc, i,CustomizedData);
-				}
+				mc.y = StartY + ( Math.floor(i / RowCnt) * Ydiff);	
 				
 				mc.name = ItemName + i;
 				_ItemName = ItemName;
 				ItemList.push(mc);
 				_Container.addChild(mc);
-			}			
+			}		
+			customized();
+			_Container = Container;
 			Listen();
 		}
 		
@@ -116,21 +115,39 @@ package View.Viewutil
 			for (var i:int = 0 ; i < ItemNum; i++)
 			{
 				var mc:MovieClip = utilFun.GetClassByString(ItemNameList[i]);
-				mc.x = StartX + (i % RowCnt * Xdiff);
-				mc.y = StartY + ( Math.floor(i / RowCnt) * Ydiff);
 				
-				if (CustomizedFun != null)
-				{
-					CustomizedFun(mc, i,CustomizedData);
-				}
+				//TODO position customized
+				mc.x = StartX + (i % RowCnt * Xdiff);
+				mc.y = StartY + ( Math.floor(i / RowCnt) * Ydiff);			
 				
 				mc.name = ItemName + i;
 				_ItemName = ItemName;
 				ItemList.push(mc);
 				_Container.addChild(mc);
 			}
+			
+			//customized area		
+			customized();			
 			Listen();
 		}		
+		
+		private function customized():void
+		{
+			var ItemNum:int = ItemList.length;
+			for (var i:int = 0 ; i < ItemNum; i++)
+			{			
+				if (CustomizedFun != null)
+				{
+					CustomizedFun(ItemList[i], i,CustomizedData);
+				}
+				
+				if (Posi_CustzmiedFun != null)
+				{
+					Posi_CustzmiedFun(ItemList[i], i,Post_CustomizedData);
+				}
+				
+			}
+		}
 		
 		public function FlushObject():void
 		{
@@ -144,12 +161,12 @@ package View.Viewutil
 			}
 		}
 		
-		public function exclusive(idx:int):void
+		public function exclusive(idx:int,gotoFrame:int):void
 		{
 			for (var i:int = 0; i < _ItemList.length; i++)
 			{
 				if ( i == idx ) continue;
-				else _ItemList[i].gotoAndStop(1);
+				else _ItemList[i].gotoAndStop(gotoFrame);
 			}
 		}
 		

@@ -1,5 +1,7 @@
 package View.GameView
 {	
+	import Command.BetCommand;
+	import Command.RegularSetting;
 	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
@@ -11,8 +13,9 @@ package View.GameView
 	import Res.ResName;
 	import View.ViewBase.ViewBase;
 	import Model.modelName;
-	import Command.ViewCommand;	
-	import View.Viewutil.MultiObject;
+	import Command.ViewCommand;		
+	import View.ViewComponent.Visual_Coin;
+	import View.Viewutil.*;
 	
 	import caurina.transitions.Tweener;
 	
@@ -47,6 +50,15 @@ import flash.utils.setInterval;
     public var intervalID:uint;
     public var counter:int;
 
+		[Inject]
+		public var _regular:RegularSetting;
+		
+		[Inject]
+		public var _betCommand:BetCommand;
+		
+		[Inject]
+		public var _visual_coin:Visual_Coin;
+		
 		
 		public function LoadingView()  
 		{
@@ -68,9 +80,33 @@ import flash.utils.setInterval;
 			super.EnterView(View);
 			utilFun.Log("loading view enter");
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
-			view.Create_by_list(1, [ResName.Loading_Scene], 0, 0, 1, 0, 0, "a_");
+			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
+			_tool = new AdjustTool();
 			
-			//prepare("_view", utilFun.GetClassByString(ResName.Loading_Scene) , this);
+			//coin
+			var coinob:MultiObject = prepare("CoinOb", new MultiObject(), this);
+			coinob.container.x = 708;
+			coinob.container.y = 904;
+			coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,2,0]);
+			coinob.CustomizedFun = _regular.FrameSetting;
+			coinob.CustomizedData = [2, 1, 1, 1, 1];
+			coinob.Posi_CustzmiedFun = _regular.Posi_y_Setting;
+			coinob.Post_CustomizedData = [0,-20,-30,-20,0];
+			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 100, 0, "Coin_");
+			coinob.mousedown = _visual_coin.betSelect;
+			
+			
+			var playerzone:MultiObject = prepare("betzone", new MultiObject() , this);
+			playerzone.Create_by_list(2, [ResName.angelZone,ResName.evilZone], 0, 0, 2, 803, 0, "time_");
+			playerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			playerzone.mousedown = _betCommand.betTypeMain;
+			playerzone.container.x = 225;
+			playerzone.container.y = 756;
+			
+			
+			//_tool.SetControlMc(sidebet.container);			
+			//_tool.SetControlMc(sidebet.ItemList[3]);			
+			//addChild(_tool);						
 			
 			//rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov
 			// streamID  = "mp4:BigBuckBunny_115k.mov";
@@ -91,7 +127,7 @@ import flash.utils.setInterval;
             //nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler);
             //nc.connect(videoURL);          
 			
-			utilFun.SetTime(connet, 2);
+			//utilFun.SetTime(connet, 2);
 			
 		}
 		

@@ -322,6 +322,14 @@ package util
 			return str + digit.toString();
 		}
 		
+		//補零回傳陣列
+		public static function arrFormat(digit:int,lenth:int):Array
+		{
+			var str:String = utilFun.Format(digit, lenth)
+			// or string.charAt(index)
+			return str.split("");
+		}
+		
 		//將數字轉成會計符號計法  12345 -> 12,345
 		public static function Accounting_Num(digit:int):String
 		{

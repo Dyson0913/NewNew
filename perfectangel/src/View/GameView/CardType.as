@@ -18,7 +18,10 @@ package View.GameView
 		public static const WINTYPE_BANKER_NORMAL_WIN:int = 7;
 		public static const WINTYPE_PLAYER_NORMAL_WIN:int = 8;
 		public static const WINTYPE_NO_NEW:int = 9;
-
+		public static const WINTYPE_BANKER_TWO_WIN:int = 10;
+		public static const WINTYPE_PLAYER_TWO_WIN:int = 11;
+		public static const WINTYPE_BANKER_ONE_WIN:int = 12;
+		public static const WINTYPE_PLAYER_ONE_WIN:int = 13;
 		
 		public function CardType() 
 		{

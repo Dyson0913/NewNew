@@ -37,7 +37,7 @@ package ConnectModule.websocket
 		public var _actionqueue:ActionQueue;
 		
 		[Inject]
-		public var _model:Model;	
+		public var _model:Model;		
 		
 		private var websocket:WebSocket;
 		
@@ -194,6 +194,7 @@ package ConnectModule.websocket
 						{
 							dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));
 							dispatcher(new ModelEvent("updateCredit"));
+							dispatcher(new ModelEvent("updateCoin"));
 						}
 						else
 						{
@@ -211,6 +212,7 @@ package ConnectModule.websocket
 						
 						dispatcher( new ValueObject(result.win_type, modelName.ROUND_RESULT));
 						dispatcher(new ModelEvent("round_result"));
+						dispatcher(new ModelEvent("update_result_Credit"));
 						
 						break;
 					}
