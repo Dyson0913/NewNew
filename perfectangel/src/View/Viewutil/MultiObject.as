@@ -102,6 +102,30 @@ package View.Viewutil
 			Listen();
 		}
 		
+		public function Create_by_bitmap(ItemNum:int, Item:*, StartX:Number, StartY:Number, RowCnt:int, Xdiff:Number, Ydiff:Number, ItemName:String):void
+		{
+			CleanList();
+			
+			for (var i:int = 0 ; i < ItemNum; i++)
+			{			
+				var mc:* = new SpriteSheet(Item, Xdiff, Ydiff);				
+				//TODO position customized
+				mc.x = StartX + (i % RowCnt * Xdiff);
+				mc.y = StartY + ( Math.floor(i / RowCnt) * Ydiff);			
+				
+				mc.drawTile(2);
+				mc.name = ItemName + i;
+				_ItemName = ItemName;
+				ItemList.push(mc);
+				_Container.addChild(mc);
+			}
+			
+			//customized area		
+			customized();			
+			Listen();
+			
+		}
+		
 		public function Create_by_list(ItemNum:int,ItemNameList:Array,StartX:Number,StartY:Number,RowCnt:int,Xdiff:Number,Ydiff:Number,ItemName:String):void
 		{
 			CleanList();
@@ -238,26 +262,40 @@ package View.Viewutil
 			{
 				case MouseEvent.ROLL_OUT:
 				{
-					if ( rollout != null) _contido = rollout(e,idx);
-					if( _contido ) utilFun.GotoAndStop(e, MouseFrame[0]);					
+					if ( rollout != null) 
+					{
+						_contido = rollout(e,idx);
+					    if( _contido ) utilFun.GotoAndStop(e, MouseFrame[0]);					
+					}
 				}
 				break;
 				case MouseEvent.ROLL_OVER:
 				{
-					if ( rollover != null) _contido = rollover(e,idx);
-					if( _contido ) utilFun.GotoAndStop(e, MouseFrame[1]);
+					if ( rollover != null)
+					{
+						_contido = rollover(e, idx);
+						if( _contido ) utilFun.GotoAndStop(e, MouseFrame[1]);
+					}
+					
 				}
 				break;
 				case MouseEvent.MOUSE_DOWN:
 				{
-					if ( mousedown != null) _contido = mousedown(e,idx);
-					if( _contido ) utilFun.GotoAndStop(e, MouseFrame[2]);					
+					if ( mousedown != null) 
+					{
+						_contido = mousedown(e, idx);
+						if( _contido ) utilFun.GotoAndStop(e, MouseFrame[2]);
+					}
 				}
 				break;
 				case MouseEvent.MOUSE_UP:
 				{
-					if ( mouseup != null) _contido = mouseup(e,idx);
-					if( _contido ) utilFun.GotoAndStop(e, MouseFrame[3]);
+					if ( mouseup != null) 
+					{
+						_contido = mouseup(e, idx);
+						if( _contido ) utilFun.GotoAndStop(e, MouseFrame[3]);
+					}
+					
 				}
 				break;
 			}

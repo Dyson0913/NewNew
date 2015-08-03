@@ -29,6 +29,14 @@ package util
 			return null;
 		}
 		
+		public function Del(name:*):void
+		{
+			if ( _dic[name] != null)
+			{
+				delete _dic[name] 
+			}			
+		}
+		
 		public function clean():void
 		{
 			_dic = new Dictionary();

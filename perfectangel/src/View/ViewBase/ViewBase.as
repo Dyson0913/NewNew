@@ -1,6 +1,5 @@
 package View.ViewBase
 {
-	import Command.BetCommand;
 	import Command.DataOperation;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
@@ -57,8 +56,12 @@ package View.ViewBase
 		
 		protected function GetSingleItem(name:*,idx:int = 0):*
 		{
-			var ob:* = _viewcom.currentViewDI .getValue(name);
-			return ob.ItemList[idx];
+			if( _viewcom.currentViewDI .getValue(name) )
+			{
+				var ob:* = _viewcom.currentViewDI .getValue(name);
+				return ob.ItemList[idx];
+			}
+			return null;
 		}
 		
 		protected function prepare(name:*, ob:ViewComponentInterface, container:DisplayObjectContainer = null):*

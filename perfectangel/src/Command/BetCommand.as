@@ -38,41 +38,48 @@ package Command
 			_model.putValue("after_bet_credit", 0);
 		}
 		
-		public function fake_test_fun(e:Event, idx:int):Boolean
-		{
-			return true;
-		}
-		
 		public function betTypeMain(e:Event,idx:int):Boolean
 		{			
-			idx += 3;
-			utilFun.Log("idx ="+idx);
-			//擋狀態
-			//if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )
-			//{				
-				//return false;
-			//}
+			idx += 1;
 			
-			//if ( _Actionmodel.length() > 0) return false;
-			//
-			//TODO all bet
-			//if ( get_total_bet(CardType.BANKER) + get_total_bet(CardType.PLAYER) +_opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
-			//{
-				//dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.NO_CREDIT));
-				//return false;
-			//}
+			if ( _Actionmodel.length() > 0) return false;
+			
+			//押注金額判定
+			if ( all_betzone_totoal() + _opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
+			{
+				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.NO_CREDIT));
+				return false;
+			}
 			
 			var bet:Object = { "betType": idx, 
 			                               "bet_amount":  get_total_bet(idx) + _opration.array_idx("coin_list", "coin_selectIdx")
 			};
 			
 			dispatcher( new ActionEvent(bet, "bet_action"));
-			//fake bet
-			dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));
-			//sdispatcher(new ModelEvent("updateCredit"));
-			dispatcher(new ModelEvent("updateCoin"));
+			dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BET));
 			
-			//dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BET));
+			return true;
+		}		
+		
+		public function empty_reaction(e:Event, idx:int):Boolean
+		{
+			return true;
+		}
+		
+		public function bet_local(e:Event,idx:int):Boolean
+		{			
+			idx += 1;
+			utilFun.Log("idx ="+idx);
+			
+			var bet:Object = { "betType": idx, 
+			                               "bet_amount":  get_total_bet(idx) + _opration.array_idx("coin_list", "coin_selectIdx")
+			};
+			
+			dispatcher( new ActionEvent(bet, "bet_action"));
+			
+			//fake bet proccess
+			dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));
+			dispatcher(new ModelEvent("updateCoin"));
 			
 			return true;
 		}		
@@ -111,6 +118,17 @@ package Command
 			_model.putValue("after_bet_credit", credit - total);
 		}
 		
+		public function all_betzone_totoal():Number
+		{
+			var betzone:Array = _model.getValue(modelName.BET_ZONE);
+			
+			var total:Number = 0;
+			for each (var i:int in betzone)
+			{
+				total +=get_total_bet(i);
+			}
+			return total;
+		}
 		private function get_total_bet(type:int):Number
 		{
 			if ( _Bet_info.getValue("self") == null) return 0;

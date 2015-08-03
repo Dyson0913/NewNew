@@ -1,5 +1,7 @@
 package util 
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
@@ -183,22 +185,22 @@ package util
 			
 			var rest:Array = Get_restItem(list, fixelemnt);
 			while (fixelemnt[0] != list[list.length - lenght])
-			{
-				
+			{				
 				//one set conbination
 				for (i = 0; i < rest.length; i++)
 				{
 					var temp:Array = [];
-					temp = fixelemnt.concat();
-					if ( rest[i] <= fixelemnt[fixelemnt.length - 1]) continue;
+					temp = fixelemnt.concat();				
+					if ( rest[i] <= fixelemnt[fixelemnt.length - 1])  continue;
 					temp.push (rest[i]);
 					result.push(temp);
 				}
-				rest.shift();
+				rest.shift();			
+				
 				
 				//bound judge
 				fixelemnt[fixelemnt.length - 1] ++;
-				if ( fixelemnt[fixelemnt.length - 1] == list.length -1)
+				if ( fixelemnt[fixelemnt.length - 1] == (list.length -1))
 				{
 					fixelemnt[fixelemnt.length - 1] --;
 					averagedistance(fixelemnt);
@@ -206,13 +208,15 @@ package util
 				}
 			}
 			
-			//last combi
+			//last combi			
 			for (i = 0; i < rest.length; i++)
 			{
-				temp.length = 0;
-				temp = fixelemnt.concat();
+				//do not using temp.lenght = 0,will become temp = 1,2,3.. ,n seprate element,not 1 arrary with n elemnt [1,2,3]
+				var temp:Array = [];
+				//temp.length = 0;
+				temp = fixelemnt.concat();			
 				if ( rest[i] <= fixelemnt[fixelemnt.length - 1]) continue;
-				temp.push (rest[i]);
+				temp.push (rest[i]);				
 				result.push(temp);
 			}
 			
@@ -353,7 +357,17 @@ package util
 			}
 			arr.length = 0;
 			return str;
-		}				
+		}	
+		
+		public static function Getbitmap(name:String):Bitmap
+		{
+			var mc:MovieClip = GetClassByString(name);
+			var b:BitmapData = new BitmapData(mc.width, mc.height, true, 0xFFFFFF);
+			b.draw(mc);
+			var bt:Bitmap = new Bitmap(b);
+			return bt;
+		}
+	
 		
 		/**
 		 * 線性內插等距N個點

@@ -26,6 +26,12 @@ package
 		
 		private var _appconfig:appConfig = new appConfig();
 		
+		private var _par:MovieClip;
+		
+		private var _credit:Number =-1;
+		private var _clientidx:Number =-1;
+		private var _handshake:Function = null;
+		
 		public function Main():void 
 		{
 			if (stage) init();
@@ -37,17 +43,27 @@ package
 			result = pass;
 		}
 		
+		public function handshake(credit:Number,Clientidx:int,handshake:Function,playerinfo:Object):void
+		{
+			_credit = credit;
+			_clientidx = Clientidx;
+			_handshake = handshake;
+			result = playerinfo;
+			utilFun.Log("_credit = " + _credit + " client id = " +_clientidx + "_handshake = "+_handshake+ "result = "+result);
+			
+		}
+		
 		private function init(e:Event = null):void 
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
-			
 			Debug.monitor(stage);
-			utilFun.Log("welcome to alcon");
+			utilFun.Log("welcome to perfect alcon");
 			
 			
 			
-			_context  = ActionScriptContextBuilder.build(appConfig, stage);
+			//no thing ,ok
+			_context  = ActionScriptContextBuilder.build(appConfig);
 			
 			addChild(_context.getObjectByType(LoadingView) as LoadingView);			
 			addChild(_context.getObjectByType(betView) as betView);
@@ -55,7 +71,7 @@ package
 			
 			var Enter:LoadingView = _context.getObject("Enter") as LoadingView;
 			utilFun.Log("Enter = "+Enter);
-			Enter.FirstLoad(result);			
+			Enter.FirstLoad([result,_credit,_clientidx,_handshake]);
 		}
 	}
 	

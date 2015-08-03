@@ -15,6 +15,27 @@ package util
 			
 		}
 		
+		public static function pokerTrans(strpoker:String):int
+		{			
+			var point:String = strpoker.substr(0, 1);
+			var color:String = strpoker.substr(1, 1);
+			
+			var myidx:int = 0;
+			
+			if ( color == "d") myidx = 1;
+			if ( color == "h") myidx = 2;
+			if ( color == "s") myidx = 3;
+			if ( color == "c") myidx = 4;
+				
+			if ( point == "i") myidx += (9*4);
+			else if ( point == "j") myidx += (10*4);
+			else if ( point == "q") myidx += (11*4);
+			else if ( point == "k") myidx += (12*4);
+			else 	myidx +=  (parseInt(point) - 1) * 4;
+			
+			return myidx;
+		}
+		
 		public static function showPoker(mc:MovieClip, idx:int, data:Array):void
 		{
 			var poke:String =  data[idx];
@@ -38,11 +59,11 @@ package util
 			mc.gotoAndStop(myidx);
 		}	
 		
-		public static function newnew_judge(pok:Array):Array
+		public static function newnew_judge(pok:Array,po:Array):Array
 		{		
 			//var pok:Array = ["kc", "1h", "jd", "9h", "jh"];
 			//var pok:Array = ["3c", "4h", "kd", "3h", "1h"];
-			var po:Array = [0, 1, 2, 3, 4];
+			//var po:Array = ["0", "1", "2", "3","4"];
 			
 			var point:Array = pokerUtil.get_Point(pok);
 			var totalPoint:int = pokerUtil.Get_Mapping_Value(po, point);
@@ -79,7 +100,7 @@ package util
 			{
 				answer.push.apply(answer,utilFun.Get_restItem(po, answer));
 			}
-			else answer = po;
+			else answer = [];
 			
 			//utilFun.Log( "final answer:" + answer);
 			return answer;
@@ -138,6 +159,7 @@ package util
 			if ( point == "i" ||  point == "j" || point == "q" || point == "k") return 10;			
 			return parseInt(point);			
 		}
+		
 	}
 
 }

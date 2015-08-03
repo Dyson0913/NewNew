@@ -13,6 +13,8 @@ package Res
 		
 		//swc res		
 		public static const Poker:String = "poker";
+		public static const poker_back:String = "pokerback"
+		
 		//public static const playerInfo:String = "playerinfo";
 		public static const Timer:String = "countDowntimer";
 		//public static const Hint:String = "HintMsg";
@@ -45,7 +47,10 @@ package Res
 		public static const ball_banker:String = "banker_ball"
 		public static const ball_player:String = "player_ball"
 		public static const ball_tie:String = "tie_ball"
-		public static const poker_back:String = "pokerback"
+		
+		public static const b_paytable:String = "paytable_btn"
+		
+		
 		public static const state_angel:String = "angel_state"
 		public static const state_evil:String = "evil_state"
 		

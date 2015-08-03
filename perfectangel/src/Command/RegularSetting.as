@@ -1,5 +1,7 @@
 package Command 
 {
+	import flash.display.DisplayObjectContainer;
+	import flash.display.InteractiveObject;
 	import flash.display.MovieClip;
 	import flash.text.TextField;
 	import util.utilFun;
@@ -83,6 +85,14 @@ package Command
 		{
 			Tweener.addTween(mc, { x:x ,y:y,time:t, transition:"easeOutCubic"} );
 		}
+		
+		public function ascii_idx_setting(mc:*, idx:int, data:Array):void
+		{
+			var code:int  = data[idx].toString().charCodeAt(0) -32;
+			mc.drawTile(code);
+		}
+		
+		
 		
 	}
 

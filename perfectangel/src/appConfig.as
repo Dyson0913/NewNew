@@ -46,6 +46,10 @@ package
 		public var _hint:Visual_Hintmsg = new Visual_Hintmsg();
 		public var _playerinfo:Visual_PlayerInfo = new Visual_PlayerInfo();
 		public var _coin:Visual_Coin = new Visual_Coin();
+		public var _betzone:Visual_betZone = new Visual_betZone();
+		public var _btn:Visual_BtnHandle = new Visual_BtnHandle();
+		public var _strem:Visual_stream = new Visual_stream();
+		public var _loader:Visual_Loder = new Visual_Loder();
 		
 		//[ProcessSuperclass]
 		//public var _vibase:ViewBase = new ViewBase();
@@ -53,7 +57,7 @@ package
 		
 		public function appConfig() 
 		{
-			Debug.trace("my init");
+			Debug.trace("my perf init");
 		}
 	
 	}
