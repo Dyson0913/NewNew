@@ -28,7 +28,8 @@ package Model
 		public static const BET_AMOUNT:int = Num++;
 		public static const SETTLE_AMOUNT:int = Num++;
 		public static const ROUND_RESULT:int = Num++;
-		
+		public static const AVALIBLE_ZONE:int = Num++;		
+		public static const AVALIBLE_ZONE_SENCE:int = Num++;
 		
 		//view
 		public static const Loading:int  = Num++;		

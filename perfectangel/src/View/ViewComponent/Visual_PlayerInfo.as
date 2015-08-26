@@ -27,6 +27,23 @@ package View.ViewComponent
 			
 		}
 		
+		public function init():void
+		{			
+			//var bet:MultiObject = prepare("total_betcredit", new MultiObject() , GetSingleItem("_view").parent.parent);
+			//bet.CustomizedFun = _regular.FrameSetting;
+			//bet.CustomizedData =  [10,10,10,10,10,10,10,10,10,10];
+			//bet.Create_by_list(10, [ResName.num_sefi], 0, 0, 10, 26, 0, "info_");
+			//bet.container.x = 523;
+			//bet.container.y = 1033;
+			//
+			//var win:MultiObject = prepare("win_credit", new MultiObject() , GetSingleItem("_view").parent.parent);
+			//win.CustomizedFun = _regular.FrameSetting;
+			//win.CustomizedData =  [10,10,10,10,10,10,10,10,10,10];
+			//win.Create_by_list(10, [ResName.num_sefi], 0, 0, 10, 26, 0, "info_");
+			//win.container.x = 1139;
+			//win.container.y = 1033;		
+		}
+		
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
 		public function Clean_():void
@@ -44,9 +61,9 @@ package View.ViewComponent
 			var s:int = _model.getValue("after_bet_credit");	
 			if ( _model.getValue(modelName.HandShake_chanel) != null )
 			{
-				var response:Function = _model.getValue(modelName.HandShake_chanel);
-				response(_model.getValue(modelName.Client_ID), ["HandShake_updateCredit", s]);
-				utilFun.Log("Hand_she asking "+ _model.getValue(modelName.Client_ID));
+				//var response:Function = _model.getValue(modelName.HandShake_chanel);
+				//response(_model.getValue(modelName.Client_ID), ["HandShake_updateCredit", s]);
+				//utilFun.Log("Hand_she asking "+ _model.getValue(modelName.Client_ID));
 			}
 			else 
 			{
@@ -86,8 +103,8 @@ package View.ViewComponent
 			var s:int = _model.getValue(modelName.CREDIT);
 			if ( _model.getValue(modelName.HandShake_chanel) != null )
 			{
-				var response:Function = _model.getValue(modelName.HandShake_chanel);
-				response(_model.getValue(modelName.Client_ID), ["HandShake_updateCredit", s]);				
+				//var response:Function = _model.getValue(modelName.HandShake_chanel);
+				//response(_model.getValue(modelName.Client_ID), ["HandShake_updateCredit", s]);				
 			}
 			else
 			{

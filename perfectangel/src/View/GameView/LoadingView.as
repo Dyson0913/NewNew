@@ -21,10 +21,7 @@ package View.GameView
 	import Model.modelName;
 	import Command.ViewCommand;		
 	import View.ViewBase.VisualHandler;
-	import View.ViewComponent.Visual_BtnHandle;
-	import View.ViewComponent.Visual_Coin;
-	import View.ViewComponent.Visual_Loder;
-	import View.ViewComponent.Visual_stream;
+	import View.ViewComponent.*;
 	import View.Viewutil.*;
 	
 	import caurina.transitions.Tweener;
@@ -62,6 +59,35 @@ package View.GameView
 		[Inject]
 		public var _loader:Visual_Loder;
 		
+		[Inject]
+		public var _pokerhandler:Visual_poker;
+		
+		[Inject]
+		public var _settle:Visual_Settle;
+		
+		[Inject]
+		public var _betzone:Visual_betZone;
+		
+		[Inject]
+		public var _coin:Visual_Coin;
+		
+		[Inject]
+		public var _hint:Visual_Hintmsg;
+		
+		[Inject]
+		public var _time:Visual_timer;
+		
+		[Inject]
+		public var _sence:Visual_betZone_Sence;
+		
+		[Inject]
+		public var _paytable:Visual_Paytable;
+		
+		
+		[Inject]
+		public var _test:Visual_testInterface;		
+		
+		
 		public function LoadingView()  
 		{
 			
@@ -70,10 +96,14 @@ package View.GameView
 			//result:Object
 		public function FirstLoad(para:Array ):void
  		{			
-			_model.putValue(modelName.LOGIN_INFO,  para[0]);
+			//_model.putValue(modelName.LOGIN_INFO,  para[0]);
+			_model.putValue(modelName.UUID,  para[0]);
 			_model.putValue(modelName.CREDIT, para[1]);
 			_model.putValue(modelName.Client_ID, para[2]);
 			_model.putValue(modelName.HandShake_chanel, para[3]);
+			
+			_betCommand.bet_init();
+			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));			
 		}
 		
@@ -84,22 +114,40 @@ package View.GameView
 			super.EnterView(View);
 			utilFun.Log("loading view enter");
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
-			view.Create_by_list(1, [ResName.Loading_Scene], 0, 0, 1, 0, 0, "a_");
-			_tool = new AdjustTool();
+			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
+			_tool = new AdjustTool();		
 			
-			//_tool.SetControlMc(view.ItemList[0]["_lay_2"]);
-			//addChild(_tool);
-         
-			_regular.strdotloop(view.ItemList[0]["_Text"], 20, 40);
-			utilFun.SetTime(connet, 2);
+							
+			//utilFun.SetTime(connet, 0.1);
+			//_hint.init();			
+			//_paytable.init();
+			//_time.init();
+			
+		    //=====================================bet & coin test
+			//_betzone.init();		
+			//_coin.init();
+			//_sence.init();			
+			//dispatcher(new ModelEvent("display"));		
+			
+		    //=====================================poker
+		    //_pokerhandler.init();					
+			//dispatcher(new ModelEvent("hide"));	
+			//_test.init();
+			
+			//=====================================settle			
+			//_pokerhandler.init();
+			//_coin.init();
+			//_settle.init();			
+			_test.init();
+			
+			
 			//utilFun.SetTime(stre, 2);
-		//
-		//_visual_stream.init();
-		//_loader.init();
-		//
-		//_visual_stream._miss_id.push(_loader.getToken());		
-		//dispatcher(new ArrayObject([_visual_stream._miss_id[0],"stream_setting.txt"], "binary_file_loading"));
-		//
+			//_visual_stream.init();
+			//_loader.init();
+			//
+			//_visual_stream._miss_id.push(_loader.getToken());		
+			//dispatcher(new ArrayObject([_visual_stream._miss_id[0],"stream_setting.txt"], "binary_file_loading"));
+			//
 		}
 		
 		private function stre():void

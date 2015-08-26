@@ -6,13 +6,6 @@ package ConnectModule.websocket
 	 */
 	public final class Message
 	{			
-		public static const DEMO_SESSION:String = "FO1h0Is1RPGswo/tVScLzKvWRvE5dEvkjgIWuHTn6BY=";
-		
-		//login
-		public static const MSG_TYPE_LOGIN:int = 100
-		public static const MSG_TYPE_LOGIN_ERROR:int = 101
-		
-		
 		//lobby
 		//進入大廳
 		public static const MSG_TYPE_LOBBY:int = 200

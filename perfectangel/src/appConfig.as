@@ -6,8 +6,10 @@ package
 	import Model.*;
 	import org.spicefactory.parsley.asconfig.processor.ActionScriptConfigurationProcessor;
 	import org.spicefactory.parsley.core.registry.ObjectDefinition;
+	import Test.TestCommand;
 	import View.ViewBase.ViewBase;
 	import ConnectModule.websocket.WebSoketComponent;
+	import View.ViewBase.VisualHandler;
 	import View.ViewComponent.*;
 	
 	import View.GameView.*;
@@ -50,9 +52,14 @@ package
 		public var _btn:Visual_BtnHandle = new Visual_BtnHandle();
 		public var _strem:Visual_stream = new Visual_stream();
 		public var _loader:Visual_Loder = new Visual_Loder();
+		public var _settle:Visual_Settle = new Visual_Settle();
+		public var _sencer:Visual_betZone_Sence = new Visual_betZone_Sence();
+		public var _mask:Visual_Mask = new Visual_Mask();
+		public var _paytable:Visual_Paytable = new Visual_Paytable();
 		
-		//[ProcessSuperclass]
-		//public var _vibase:ViewBase = new ViewBase();
+		
+		public var _test:Visual_testInterface = new Visual_testInterface();
+		public var _testCom:TestCommand = new TestCommand();
 		
 		
 		public function appConfig() 
