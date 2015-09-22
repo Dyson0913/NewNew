@@ -37,9 +37,6 @@ package View.ViewComponent
 	public class Visual_Loder  extends VisualHandler
 	{
 		[Inject]
-		public var _regular:RegularSetting;
-		
-		[Inject]
 		public var _betCommand:BetCommand;
 		
 		public function Visual_Loder() 

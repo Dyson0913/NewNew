@@ -38,41 +38,69 @@ package Command
 			_model.putValue("coin_list", [100, 500, 1000, 5000, 10000]);
 			_model.putValue("after_bet_credit", 0);
 			
-		    var bet_name_to_idx:DI = new DI()
-		    bet_name_to_idx.putValue("BetPAEvil", 0);
-		    bet_name_to_idx.putValue("BetPAAngel", 1);			
-		    bet_name_to_idx.putValue("BetPABigEvil", 2);
-			bet_name_to_idx.putValue("BetPABigAngel", 3);
-			bet_name_to_idx.putValue("BetPAUnbeatenEvil", 4);
-			bet_name_to_idx.putValue("BetPAPerfectAngel", 5);		
+			var betzone:Array = [0, 1, 2, 3, 4, 5, 6];
+			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel"];// , 6, 7, 8];
+			
+		    var bet_name_to_idx:DI = new DI();
+			var bet_idx_to_name:DI = new DI();
+			for ( var i:int = 0; i < betzone.length ; i++)
+			{
+				bet_name_to_idx.putValue(betzone_name[i], i);
+				bet_idx_to_name.putValue(i, betzone_name[i]);
+			}
+		    //bet_name_to_idx.putValue("BetPAEvil", 0);
+		    //bet_name_to_idx.putValue("BetPAAngel", 1);			
+		    //bet_name_to_idx.putValue("BetPABigEvil", 2);
+			//bet_name_to_idx.putValue("BetPABigAngel", 3);
+			//bet_name_to_idx.putValue("BetPAUnbeatenEvil", 4);
+			//bet_name_to_idx.putValue("BetPAPerfectAngel", 5);		
 			
 			_model.putValue("Bet_name_to_idx", bet_name_to_idx);		
-			
-			var bet_idx_to_name:DI = new DI();
-			bet_idx_to_name.putValue(0, "BetPAEvil");
-			bet_idx_to_name.putValue(1, "BetPAAngel");
-			bet_idx_to_name.putValue(2, "BetPABigEvil");
-			bet_idx_to_name.putValue(3, "BetPABigAngel");
-			bet_idx_to_name.putValue(4, "BetPAUnbeatenEvil");			
-			bet_idx_to_name.putValue(5, "BetPAPerfectAngel");
-			
 			_model.putValue("Bet_idx_to_name", bet_idx_to_name);
+			//
+			//bet_idx_to_name.putValue(0, "BetPAEvil");
+			//bet_idx_to_name.putValue(1, "BetPAAngel");
+			//bet_idx_to_name.putValue(2, "BetPABigEvil");
+			//bet_idx_to_name.putValue(3, "BetPABigAngel");
+			//bet_idx_to_name.putValue(4, "BetPAUnbeatenEvil");			
+			//bet_idx_to_name.putValue(5, "BetPAPerfectAngel");			
 			
 			
-			var betzone:Array = [1,2,3,4,5,6];
-			var allzone:Array =  [ResName.evilZone,ResName.angelZone,ResName.evil_big,ResName.angel_big,ResName.evil_per,ResName.angel_per]
-			var allzone_s:Array =  [ResName.evilZone_s,ResName.angelZone_s,ResName.evil_big_s,ResName.angel_big_s,ResName.evil_per_s,ResName.angel_per_s]
+			var allzone:Array =  [ResName.evilZone, ResName.angelZone, ResName.evil_big, ResName.angel_big, ResName.evil_per, ResName.angel_per,ResName.samepoint];
+			var allzone_s:Array =  [ResName.evilZone_s, ResName.angelZone_s, ResName.evil_big_s, ResName.angel_big_s, ResName.evil_per_s, ResName.angel_per_s,ResName.same_point_s];
 			var avaliblezone:Array = [];
 			var avaliblezone_s:Array = [];
-			for each (var i:int in betzone)
+			for each (var k:int in betzone)
 			{
-				avaliblezone.push ( allzone[i - 1]);
-				avaliblezone_s.push( allzone_s[i - 1]);
+				avaliblezone.push ( allzone[k]);
+				avaliblezone_s.push( allzone_s[k]);
 				
 			}
 			_model.putValue(modelName.AVALIBLE_ZONE, avaliblezone);
 			_model.putValue(modelName.AVALIBLE_ZONE_SENCE, avaliblezone_s);
-				
+			_model.putValue(modelName.AVALIBLE_ZONE_IDX, betzone);
+			
+			var betzone_po:Array = [ [0, 0], [-623, 0],  [318, 10], [-840, 14], [341, 164], [-880, 167] ,[-274,28]];
+			_model.putValue(modelName.AVALIBLE_ZONE_XY, betzone_po);
+			_model.putValue(modelName.COIN_STACK_XY,   [ [140, 210], [-483, 210],  [408, 80], [-760, 94], [451, 264], [-800, 267] ,[-174,238]]);
+			
+			
+			//bind lobby event
+			//var lobbyevent:Function = _model.getValue(modelName.Lobby_Call_back);
+			//utilFun.Log("lobbyeve ="+lobbyevent);
+			//lobbyevent = this.update_credit;
+			//_model.putValue(modelName.Lobby_Call_back,lobbyevent);
+			//
+			//utilFun.Log("lobbyeve ="+lobbyevent);
+			//utilFun.Log("model ="+_model.getValue(modelName.Lobby_Call_back));
+			
+			_Bet_info.putValue("self", []);
+		}
+		
+		public function update_credit(new_credit:Number):void
+		{
+			utilFun.Log("new credit = " + new_credit);
+			_model.putValue(modelName.CREDIT,new_credit)
 		}
 		
 		public function betTypeMain(e:Event,idx:int):Boolean
@@ -80,11 +108,11 @@ package Command
 			if ( _Actionmodel.length() > 0) return false;
 			
 			//押注金額判定
-			if ( all_betzone_totoal() + _opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
-			{
-				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.NO_CREDIT));
-				return false;
-			}	
+			//if ( all_betzone_totoal() + _opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
+			//{
+				//dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.NO_CREDIT));
+				//return false;
+			//}	
 			
 			var bet:Object = { "betType": idx, 
 			                               "bet_amount":  _opration.array_idx("coin_list", "coin_selectIdx"),
@@ -154,7 +182,7 @@ package Command
 		
 		public function all_betzone_totoal():Number
 		{
-			var betzone:Array = [1,2,3,4,5,6]; _model.getValue(modelName.BET_ZONE);
+			var betzone:Array = [1,2,3,4,5,6]; //_model.getValue(modelName.BET_ZONE);
 			
 			var total:Number = 0;
 			for each (var i:int in betzone)
@@ -199,6 +227,24 @@ package Command
 				}
 			}			
 			return arr;
+		}
+		
+		public function get_my_bet_info(type:String):Array
+		{
+			var arr:Array = _Bet_info.getValue("self");			
+			var data:Array = [];
+			
+			for ( var i:int = 0; i < arr.length ; i++)
+			{
+				var bet_ob:Object = arr[i];
+				if ( type == "Type") data.push(bet_ob["betType"]);				
+			}
+			return data;
+		}
+		
+		public function get_my_betlist():Array
+		{		
+			return _Bet_info.getValue("self");		
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]

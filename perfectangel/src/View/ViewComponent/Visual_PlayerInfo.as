@@ -16,8 +16,6 @@ package View.ViewComponent
 	 */
 	public class Visual_PlayerInfo  extends VisualHandler
 	{
-		[Inject]
-		public var _regular:RegularSetting;
 		
 		[Inject]
 		public var _betCommand:BetCommand;

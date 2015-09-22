@@ -16,8 +16,7 @@ package util
 	
 	import com.hexagonstar.util.debug.Debug;
 	import View.Viewutil.MouseBehavior;
-	import Res.ResName;
-	
+	import Res.ResName;	
 	/**
 	 * 常用功能
 	 * @author hhg
@@ -74,7 +73,8 @@ package util
 		 */
 		public static function Log(msg:String):void
 		{			
-			Debug.trace(msg);			
+			if ( CONFIG::debug ) Debug.trace(msg);	
+			//Logger.log("msg" + msg, 0, 0, false);
 		}
 		
 		/******************** 元件操作功能 ********************/
@@ -212,12 +212,12 @@ package util
 			for (i = 0; i < rest.length; i++)
 			{
 				//do not using temp.lenght = 0,will become temp = 1,2,3.. ,n seprate element,not 1 arrary with n elemnt [1,2,3]
-				var temp:Array = [];
+				var tem2:Array = [];
 				//temp.length = 0;
-				temp = fixelemnt.concat();			
+				tem2 = fixelemnt.concat();			
 				if ( rest[i] <= fixelemnt[fixelemnt.length - 1]) continue;
-				temp.push (rest[i]);				
-				result.push(temp);
+				tem2.push (rest[i]);				
+				result.push(tem2);
 			}
 			
 			return result;

@@ -24,13 +24,12 @@ package View.ViewComponent
 		public var _betCommand:BetCommand;
 		
 		[Inject]
-		public var _Actionmodel:ActionQueue;
-		
-		[Inject]
-		public var _regular:RegularSetting;
+		public var _Actionmodel:ActionQueue;		
 		
 		//coin seperate to N stack
 		private var _stack_num:int = 1;
+		
+		private var _coin:MultiObject;
 		
 		public function Visual_Coin() 
 		{
@@ -41,30 +40,21 @@ package View.ViewComponent
 		{
 			var avaliblezone:Array = _model.getValue(modelName.AVALIBLE_ZONE);
 			
-			var coinob:MultiObject = prepare("CoinOb", new MultiObject(), GetSingleItem("_view").parent.parent);
-			coinob.container.x = 1148;
-			coinob.container.y = 954;
-			coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,2,0]);
-			coinob.CustomizedFun = ocin_setup;
-			coinob.CustomizedData = [1, 1, 1, 1, 1];
-			coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 90, 0, "Coin_");
-			coinob.rollout = excusive_select_action;
-			coinob.rollover = excusive_select_action;
-			coinob.mousedown = betSelect;
-			coinob.ItemList[0].y -= 20;
-			coinob.ItemList[0].gotoAndStop(2);
+			_coin = prepare("CoinOb", new MultiObject(), GetSingleItem("_view").parent.parent);
+			_coin.container.x = 1080;
+			_coin.container.y = 1000;
+			_coin.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,2,0]);
+			_coin.CustomizedFun = ocin_setup;			
+			_coin.Create_by_list(5,  [ResName.Betcoin], 0 , 0, 5, 85, 0, "Coin_");
+			_coin.rollout = excusive_rollout;
+			_coin.rollover = excusive_select_action;
+			_coin.mousedown = betSelect;
+			_coin.ItemList[0].y -= 20;
+			_coin.ItemList[0].gotoAndStop(2);
 			
-			//stick cotainer  
-			//var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), playerzone.container);
-			var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), GetSingleItem("_view").parent.parent);
-			coinstack.container.x = 440 ;
-			coinstack.container.y = 808 ;
-			coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			coinstack.Post_CustomizedData =  [ [948, 10], [0, 0],  [847, -148], [67, -153], [677, -98], [291, -92]];
-			coinstack.Create_by_list(avaliblezone.length, [ResName.emptymc], 0, 0, avaliblezone.length, 0, 0, "time_");		
-			
-			//_tool.SetControlMc(coinstack.ItemList[3]);
-			//_tool.SetControlMc(coinstack.container);
+			//_tool.SetControlMc(coinstack.ItemList[7]);
+			//_tool.SetControlMc(_coin.container);
+			//_tool.y = 200;
 			//add(_tool);	
 			//_tool.SetControlMc(coinob.container);
 			//add(_tool);			
@@ -73,166 +63,75 @@ package View.ViewComponent
 		
 		public function ocin_setup(mc:MovieClip, idx:int, data:Array):void
 		{
-			utilFun.scaleXY(mc, 0.8, 0.8);
-			mc.gotoAndStop(data[idx]);
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
-		public function Clean_poker():void
-		{
-			//TODO why not 
-			//Get("coinstakeZone").Clear_itemChildren();		
-			var a:MultiObject = Get("coinstakeZone");
-			for ( var i:int = 0; i <  a.ItemList.length; i++)
-			{
-				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",i));
-			}		
+			mc["_coin"].gotoAndStop(idx+1);
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
 		public function display_coin():void
-		{
-			var a:MultiObject = Get("CoinOb");			
-			_regular.FadeIn(a.container, 0, 1,null);
+		{			
+			_regular.FadeIn(_coin.container, 0, 1,null);
 		}
 		
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
 		public function hide_coin():void
-		{
-			var a:MultiObject = Get("CoinOb");
-			_regular.Fadeout(a.container, 0, 1);			
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "updateCoin")]
-		public function updateCredit():void
-		{					
-			var bet_ob:Object = _Actionmodel.excutionMsg();			
-			_Actionmodel.dropMsg();
-			//coin動畫
-			stack(_betCommand.Bet_type_betlist(bet_ob["betType"]), GetSingleItem("coinstakeZone",bet_ob["betType"] ),bet_ob["betType"]);	
-			//if (bet_ob["betType"] == CardType.BANKER)
-			//{
-				//stack(_betCommand.Bet_type_betlist(CardType.BANKER), GetSingleItem("coinstakeZone"));
-			//}
-			//
-			//if ( bet_ob["betType"] == CardType.PLAYER )
-			//{	
-				//stack(_betCommand.Bet_type_betlist(CardType.PLAYER), GetSingleItem("coinstakeZone",1));
-			//}			
-			//
-			//if ( bet_ob["betType"] == CardType.BANKER_bigangel )
-			//{
-				//stack(_betCommand.Bet_type_betlist(CardType.BANKER_bigangel), GetSingleItem("coinstakeZone",2));
-			//}
-			//
-			//if ( bet_ob["betType"] == CardType.PLAYER_bigangel )
-			//{
-				//stack(_betCommand.Bet_type_betlist(CardType.PLAYER_bigangel), GetSingleItem("coinstakeZone",3));
-			//}
-			//
-			//if ( bet_ob["betType"] == CardType.BANKER_per ) 
-			//{
-				//stack(_betCommand.Bet_type_betlist(CardType.BANKER_per), GetSingleItem("coinstakeZone",4));
-			//}
-			//if ( bet_ob["betType"] == CardType.PLAYER_per )
-			//{
-				//stack(_betCommand.Bet_type_betlist(CardType.PLAYER_per), GetSingleItem("coinstakeZone",5));
-			//}
-		}
-		
-		public function stack(Allcoin:Array,contain:DisplayObjectContainer,bettype:int):void
 		{			
-			utilFun.Clear_ItemChildren(contain);
-			var coin:Array = [];
-			var shY:int = 0;
-			var shX:int = 0;
-			var coinshY:int = -5;		
-			
-			for (var i:int = 0; i < _stack_num ; i++)
+			_regular.Fadeout(_coin.container, 0, 1);			
+		}
+		
+		public function excusive_rollout(e:Event, idx:int):Boolean
+		{
+			var select:int = _model.getValue("coin_selectIdx");
+			if ( idx == select) 
 			{				
-				//每疊coin 的multiobject
-				createcoin(i, Allcoin.concat(), contain,shY,shX,coinshY,bettype);
-			}			
-		}
-		
-		public function createcoin(cointype:int, Allcoin:Array, contain:DisplayObjectContainer ,shY:int,shX:int,coinshY:int,bettype:int):void
-		{			
-			//var coin:Array = [];			
-			//while (coinstack.indexOf(_model.getValue("coin_list")[cointype]) != -1)
-			//{
-				//var idx:int = coinstack.indexOf( _model.getValue("coin_list")[cointype]);
-				//coin.push(coinstack[idx]);
-				//coinstack.splice(idx, 1);
-			//}
-			//
-			var reslist:Array = [];
-			var coin:Array = _model.getValue("coin_list");
-			for ( var i:int = 0; i < Allcoin.length ; i++)
-			{
-				var idx:int = coin.indexOf(Allcoin[i]);			
-				if ( idx != -1) reslist.push("coin_" + (idx + 1) );
+				return false;
 			}
-			
-			var shifty:int = 0;
-			var shiftx:int = 0;
-			
-			Allcoin.unshift(bettype);
-			var secoin:MultiObject = new MultiObject();
-			secoin.CleanList();
-			secoin.CustomizedFun = coinput;
-			secoin.CustomizedData = Allcoin;
-			secoin.setContainer(contain);
-			secoin.Create_by_list( Allcoin.length, reslist , 0 +shiftx+ (cointype * shX) , 0+shifty +shY, 1, 0, coinshY, "Bet_");			
-		}
-		
-	public function coinput(mc:MovieClip, idx:int, bettype:Array):void
-		{
-			//utilFun.Log("coinstack = "+coinstack);
-			//utilFun.Log("coinstack[0] = "+coinstack[0]);
-			//utilFun.Log("coinstack.length = "+coinstack.length);
-			utilFun.scaleXY(mc, 0.7, 0.7);
-			mc.gotoAndStop(3);
-			mc["_text"].text = "";
-			
-			if ( idx ==  bettype.length -1)
+			else 
 			{
-				var total:int = _betCommand.get_total_bet(bettype[0]);
-				mc["_text"].text = total.toString();
+				_coin.ItemList[idx].gotoAndStop(1);
+				_coin.ItemList[idx]["_coin"].gotoAndStop(idx+1);
+				return true;
 			}			
-		}	
+		}
 		
 		public function excusive_select_action(e:Event, idx:int):Boolean
 		{
 			var select:int = _model.getValue("coin_selectIdx");
-			if ( idx == select) return false;
-			else return true;
+			if ( idx == select) 
+			{				
+				return false;
+			}
+			else 
+			{
+				_coin.ItemList[idx].gotoAndStop(2);
+				_coin.ItemList[idx]["_coin"].gotoAndStop(idx+1);
+				return true;
+			}
 		}
 		
 		public function betSelect(e:Event, idx:int):Boolean
 		{			
-			utilFun.Log("betselect = " + idx);
 			var old_select:int = _model.getValue("coin_selectIdx");
 			
-			_model.putValue("coin_selectIdx", idx);		
-			var coinob:MultiObject = Get("CoinOb");			
-			
+			_model.putValue("coin_selectIdx", idx);			
 			//position chagne 
-			for (var i:int = 0; i < coinob.ItemList.length; i++)
+			for (var i:int = 0; i < _coin.ItemList.length; i++)
 			{
 				if ( i == old_select ) 
 				{				
-					coinob.ItemList[old_select].y += 20;					
+					var frame:int = _coin.ItemList[old_select]["_coin"].currentFrame;				
+					_coin.ItemList[old_select].y += 20;
+					_coin.ItemList[old_select].gotoAndStop(1);
+					_coin.ItemList[old_select]["_coin"].gotoAndStop(frame);
 				}
 				if ( i == idx)
 				{					
-					coinob.ItemList[idx].y -= 20;				
+					_coin.ItemList[idx].y -= 20;						
 				}
 			}
 			
 			//frame change
-			coinob.exclusive(idx,1);
-			
+			//_coin.exclusive(idx,1);			
 			
 			return true;
 		}

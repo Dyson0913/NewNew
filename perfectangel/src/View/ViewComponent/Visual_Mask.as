@@ -16,9 +16,6 @@ package View.ViewComponent
 	 */
 	public class Visual_Mask  extends VisualHandler
 	{
-		[Inject]
-		public var _regular:RegularSetting;
-		
 		public function Visual_Mask() 
 		{
 			

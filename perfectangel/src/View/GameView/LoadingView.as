@@ -17,6 +17,7 @@ package View.GameView
 	import Model.valueObject.StringObject;
 	import Res.ResName;
 	import util.DI;
+	import util.math.Path_Generator;
 	import View.ViewBase.ViewBase;
 	import Model.modelName;
 	import Command.ViewCommand;		
@@ -83,10 +84,17 @@ package View.GameView
 		[Inject]
 		public var _paytable:Visual_Paytable;
 		
+		[Inject]
+		public var _coin_stack:Visual_Coin_stack;
 		
 		[Inject]
 		public var _test:Visual_testInterface;		
 		
+		[Inject]
+		public var _path:Path_Generator;
+		
+		[Inject]
+		public var _gameinfo:Visual_Game_Info;		
 		
 		public function LoadingView()  
 		{
@@ -96,13 +104,30 @@ package View.GameView
 			//result:Object
 		public function FirstLoad(para:Array ):void
  		{			
+			
+			//Logger.displayLevel = LogLevel.DEBUG;
+			//Logger.addProvider(new ArthropodLogProvider(), "Arthropod pa");
+			//utilFun.Log("para = "+para);
+			
 			//_model.putValue(modelName.LOGIN_INFO,  para[0]);
 			_model.putValue(modelName.UUID,  para[0]);
 			_model.putValue(modelName.CREDIT, para[1]);
 			_model.putValue(modelName.Client_ID, para[2]);
 			_model.putValue(modelName.HandShake_chanel, para[3]);
+			_model.putValue(modelName.Domain_Name, para[4]);
+			//_model.putValue(modelName.Lobby_Call_back, para[4]);			
+			
 			
 			_betCommand.bet_init();
+			_path.init();
+			
+			_model.putValue(modelName.Game_Name, "PerfectAngel");
+			
+			_model.putValue("history_win_list", []);
+			_model.putValue("history_Play_Pai_list", []);			
+			_model.putValue("history_banker_Pai_list", []);			
+			
+			
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));			
 		}
@@ -114,31 +139,42 @@ package View.GameView
 			super.EnterView(View);
 			utilFun.Log("loading view enter");
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
-			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
-			_tool = new AdjustTool();		
+			view.Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "a_");
+			_tool = new AdjustTool();
 			
-							
 			//utilFun.SetTime(connet, 0.1);
+			
+			_test.init();
+			
 			//_hint.init();			
-			//_paytable.init();
+			//_paytable.init()
 			//_time.init();
+			//_paytable.init();
+			//_btn.init();
+			//_gameinfo.init();
+			//_test.init();
 			
 		    //=====================================bet & coin test
+			//bet,betsence,coin number連動
 			//_betzone.init();		
+			//_coin_stack.init();			
+			//_sence.init();
 			//_coin.init();
-			//_sence.init();			
+			//_test.init();
 			//dispatcher(new ModelEvent("display"));		
 			
 		    //=====================================poker
 		    //_pokerhandler.init();					
 			//dispatcher(new ModelEvent("hide"));	
+			//dispatcher(new ModelEvent("clearn"));	
 			//_test.init();
 			
 			//=====================================settle			
-			//_pokerhandler.init();
-			//_coin.init();
+			//_pokerhandler.init();			
+			//dispatcher(new ModelEvent("hide"));			
+			//_coin_stack.init();			
 			//_settle.init();			
-			_test.init();
+			//_test.init();
 			
 			
 			//utilFun.SetTime(stre, 2);
@@ -149,6 +185,8 @@ package View.GameView
 			//dispatcher(new ArrayObject([_visual_stream._miss_id[0],"stream_setting.txt"], "binary_file_loading"));
 			//
 		}
+		
+		
 		
 		private function stre():void
 		{

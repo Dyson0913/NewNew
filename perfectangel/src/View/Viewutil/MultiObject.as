@@ -141,7 +141,6 @@ package View.Viewutil
 			for (var i:int = 0 ; i < ItemNum; i++)
 			{
 				var mc:MovieClip = utilFun.GetClassByString(ItemNameList[i]);
-				
 				//TODO position customized
 				mc.x = StartX + (i % RowCnt * Xdiff);
 				mc.y = StartY + ( Math.floor(i / RowCnt) * Ydiff);			
@@ -152,12 +151,13 @@ package View.Viewutil
 				_Container.addChild(mc);
 			}
 			
-			//customized area		
+			//customized area					
 			customized();			
+			
 			Listen();
 		}		
 		
-		private function customized():void
+		public function customized():void
 		{
 			var ItemNum:int = ItemList.length;
 			for (var i:int = 0 ; i < ItemNum; i++)

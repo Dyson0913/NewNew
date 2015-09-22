@@ -31,11 +31,21 @@ package Command
 		}
 		
 		public function Posi_xy_Setting(mc:MovieClip, idx:int, data:Array):void
-		{
+		{			
 			var po:Array = data[idx]
 			mc.x = po[0];
 			mc.y = po[1];
 		}
+		
+		public function Posi_Colum_first_Setting(mc:MovieClip, idx:int, data:Array):void
+		{			
+			var ColumnCnt:int = data[0];
+			var xdiff:int = data[1];
+			var ydiff:int = data[2];
+			mc.x = ( Math.floor(idx / ColumnCnt) * data[1]);		
+			mc.y = (idx % ColumnCnt * ydiff);
+		}
+		
 		
 		public function FrameSetting(mc:MovieClip, idx:int, data:Array):void
 		{
@@ -59,7 +69,7 @@ package Command
 		
 		public function Twinkle(mc:MovieClip, t:int, cnt:int,frameNum:int):void
 		{
-			Tweener.addCaller(mc, { time:3 , count: 10 , transition:"linear", onUpdateParams:[mc,frameNum], onUpdate: this.flash } );
+			Tweener.addCaller(mc, { time:t , count: cnt , transition:"linear", onUpdateParams:[mc,frameNum], onUpdate: this.flash } );
 		}
 		
 		private function flash(mc:MovieClip,frameNum:int):void
@@ -90,6 +100,30 @@ package Command
 		{
 			var code:int  = data[idx].toString().charCodeAt(0) -32;
 			mc.drawTile(code);
+		}
+		
+		//_regular.Call(Get("aa").container, { onUpdate:this.test_ok,onUpdateParams:[Get("aa").container] }, 1, 0, 5, "linear");
+		//_regular.Call(Get("aa").container, { onComplete:this.test_ok,onCompleteParams:[Get("aa").container] }, 1, 0, 1, "linear");
+		public function Call(mc:Object,pa:Object , t:int,delay:int =0,cnt:int = 1,transition_p:String = "linear"):void
+		{
+			var tweenOb:Object  = { time:t,
+													  count:cnt,
+													  transition:transition_p
+													};
+										 
+			if ( pa["onComplete"] != undefined) 
+			{
+				tweenOb["onComplete"] = pa["onComplete"];
+				if (  pa["onCompleteParams"] != undefined) tweenOb["onCompleteParams"] = pa["onCompleteParams"];				
+			}
+			
+			if ( pa["onUpdate"] != undefined) 
+			{
+				tweenOb["onUpdate"] = pa["onUpdate"];
+				if (  pa["onUpdateParams"] != undefined) tweenOb["onUpdateParams"] = pa["onUpdateParams"];				
+			}
+			
+			Tweener.addCaller(mc, tweenOb  );
 		}
 		
 		

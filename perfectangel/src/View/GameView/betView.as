@@ -55,8 +55,6 @@ package View.GameView
 		[Inject]
 		public var _sencer:Visual_betZone_Sence;
 		
-		//[Inject]
-		//public var _playinfo:Visual_PlayerInfo;
 		[Inject]
 		public var _mask:Visual_Mask;
 		
@@ -66,7 +64,11 @@ package View.GameView
 		[Inject]
 		public var _paytable:Visual_Paytable;
 		
+		[Inject]
+		public var _coin_stack:Visual_Coin_stack;
 		
+		[Inject]
+		public var _gameinfo:Visual_Game_Info;	
 		
 		public function betView()  
 		{
@@ -88,51 +90,31 @@ package View.GameView
 			
 			_mask.init();
 			
+			_gameinfo.init();
+			
 			_paytable.init();
 			_settle.init();
-			
-			
-		
 			//_playinfo.init();
 			_time.init();			
 		   _hint.init();
 			
+		  
+		   
 			_betzone.init();
-			_coin.init();
-			_sencer.init();
+			_coin_stack.init();
 			
-			//paytable
-			//var paytable:MultiObject = prepare("paytable", new MultiObject() , this);
-			//paytable.CustomizedData = [[-240,0],[240,0]]		 
-			//paytable.container.y = 110;		
-			//paytable.Create_by_list(2, [ResName.main_paytable,ResName.side_paytable], 0, 0, 2, 1670, 0, "time_");
-			//paytable.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 1, 0]);
-			//paytable.mousedown = sliding;
+			_pokerhandler.init();
+			
+			_sencer.init();	
+			_coin.init();
+			_btn.init();
 			
 			//var name:MultiObject = prepare("name", new MultiObject() , this);
 			//name.CustomizedFun = _regular.ascii_idx_setting;			
 			//name.CustomizedData = _model.getValue(modelName.NICKNAME).split("");
 			//name.container.x = 235 + (name.CustomizedData.length -1) * 37 *-0.5;
 			//name.container.y = 1020;
-			//name.Create_by_bitmap(name.CustomizedData.length, utilFun.Getbitmap("LableAtlas"), 0, 0, name.CustomizedData.length, 37, 51, "o_");			
-			
-			
-			_pokerhandler.init();
-			
-			//var paytable:MultiObject =  prepare("paytable_btn", new MultiObject(), this);
-			//paytable.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);				
-			//paytable.mousedown = _btn.cycle_reaction;
-			//paytable.Create_by_list(1, [ResName.b_paytable], 0 , 0, 1, 0, 0, "Bet_");			
-			//paytable.container.x = 868;
-			//paytable.container.y = 978;
-			//
-			//var mypoker:Array = _model.getValue(modelName.PLAYER_POKER);
-			//if ( mypoker.length == 0) paytable.ItemList[0].gotoAndStop(2);
-			
-			//_tool.SetControlMc(paytable.ItemList[1]);
-			//_tool.SetControlMc(paytable.container);
-			//addChild(_tool);			
-			
+			//name.Create_by_bitmap(name.CustomizedData.length, utilFun.Getbitmap("LableAtlas"), 0, 0, name.CustomizedData.length, 37, 51, "o_");				
 		}
 		
 		public function sliding(e:Event, idx:int):Boolean

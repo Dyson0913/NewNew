@@ -15,6 +15,27 @@ package util
 			
 		}
 		
+		public static function pokerTrans_s(strpoker:String):int
+		{			
+			var point:String = strpoker.substr(0, 1);
+			var color:String = strpoker.substr(1, 1);
+			
+			var myidx:int = 0;
+			
+			if ( color == "c") myidx = 0;
+			if ( color == "d") myidx = 13;
+			if ( color == "h") myidx = 26;
+			if ( color == "s") myidx = 39;
+				
+			if ( point == "i") myidx += 9;
+			else if ( point == "j") myidx += 10;
+			else if ( point == "q") myidx += 11;
+			else if ( point == "k") myidx += 12;
+			else 	myidx +=  (parseInt(point) - 1) ;
+			
+			return myidx;
+		}
+		
 		public static function pokerTrans(strpoker:String):int
 		{			
 			var point:String = strpoker.substr(0, 1);
