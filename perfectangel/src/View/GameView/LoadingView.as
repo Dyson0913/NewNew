@@ -128,7 +128,6 @@ package View.GameView
 			_model.putValue("history_banker_Pai_list", []);			
 			
 			
-			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));			
 		}
 		

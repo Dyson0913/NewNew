@@ -43,6 +43,7 @@ package Res
 		public static const Betcoin:String = "Bet_coin";	
 		public static const Wincoin:String = "Win_coin";	
 		public static const emptymc:String = "Emptymc";
+		public static const settletable:String = "settle_table";
 		
 		public static const evilZone:String = "bet_evil"
 		public static const angelZone:String = "bet_angel"

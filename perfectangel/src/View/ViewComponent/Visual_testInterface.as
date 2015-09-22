@@ -77,6 +77,9 @@ package View.ViewComponent
 		[Inject]
 		public var _text:Visual_Text;
 		
+		[Inject]
+		public var _settlePanel:Visual_SettlePanel;
+		
 		private var _script_item:MultiObject;
 		
 		public function Visual_testInterface() 
@@ -261,7 +264,7 @@ package View.ViewComponent
 			_poker.init();
 			dispatcher(new ModelEvent("hide"));
 			
-			
+			//settle_table
 			
 			//================================================settle info
 			//_settle.init();
@@ -304,8 +307,8 @@ package View.ViewComponent
 		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "2")]
 		public function settleScript():void
 		{
-			_model.putValue(modelName.PLAYER_POKER, ["4d","2s"]);				
-			_model.putValue(modelName.BANKER_POKER, ["2s","3s"]);		
+			_model.putValue(modelName.PLAYER_POKER, ["9d","4c","5s","7s","9s"]);				
+			_model.putValue(modelName.BANKER_POKER, ["1s","2d","3s","5c","6h"]);		
 					
 			
 			
@@ -314,51 +317,44 @@ package View.ViewComponent
 			
 			//=============================================gameinfo			
 			_gameinfo.init();
-		//	_gameinfo.settle_parse();
+			//_gameinfo.settle_parse();
 			//
 			
 			//=============================================Hintmsg
 			//_hint.init();			
 			
-			//=============================================paytable
-			var arr:Array = _model.getValue("history_win_list");			
-			for ( var i:int = 0; i < 10; i++)
-			{
-				var ran:int = utilFun.Random(3);
-				if ( ran == 1) arr.push(ResName.angelball);
-				else if ( ran == 2) arr.push(ResName.evilball);
-				else arr.push(ResName.Noneball);
-				_model.putValue("history_win_list", arr);
-			}
-			_paytable.init();		
+			//=============================================paytable			
+			//_paytable.init();		
 			//_paytable.settle_parse();
 			
 			//================================================settle info
 			_settle.init();			
-			dispatcher(new Intobject(modelName.PLAYER_POKER, "show_judge"));
-			dispatcher(new Intobject(modelName.BANKER_POKER, "show_judge"));			
+			//dispatcher(new Intobject(modelName.PLAYER_POKER, "show_judge"));
+			//dispatcher(new Intobject(modelName.BANKER_POKER, "show_judge"));			
 			//摸擬押注
 			//_betzone.init();			
 			//_coin_stack.init();
 			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 0);
 			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 1);
 			
-			//
-			var fakePacket:Object =  { "result_list": [
-			                                                                {"bet_type": "BetBWPlayer", "settle_amount": 200, "odds": 2, "win_state": "WSBWFullHouse", "bet_amount": 100 },
-																			{"bet_type": "BetBWBanker", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 100 } ],
-																			"game_state": "EndRoundState", 
-																			"game_result_id": "225761", 
-																			"timestamp": 1439967961.396191, 
-																			"remain_time": 4, 
-																			"game_type": "BigWin", 
-																			"game_round": 1, 
-																			"game_id": "BigWin-1", 
-																			"message_type": 
-																			"MsgBPEndRound", 
-			"id": "bfc643be464011e599caf23c9189e2a9" } ;
 			
-			_MsgModel.push(fakePacket);			
+			_settlePanel.init();
+			//
+			//var fakePacket:Object =  { "result_list": [
+			                                                                //{"bet_type": "BetBWPlayer", "settle_amount": 200, "odds": 2, "win_state": "WSBWFullHouse", "bet_amount": 100 },
+																			//{"bet_type": "BetBWBanker", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 100 } ],
+																			//"game_state": "EndRoundState", 
+																			//"game_result_id": "225761", 
+																			//"timestamp": 1439967961.396191, 
+																			//"remain_time": 4, 
+																			//"game_type": "BigWin", 
+																			//"game_round": 1, 
+																			//"game_id": "BigWin-1", 
+																			//"message_type": 
+																			//"MsgBPEndRound", 
+			//"id": "bfc643be464011e599caf23c9189e2a9" } ;
+			//
+			//_MsgModel.push(fakePacket);			
 			
 		}
 		

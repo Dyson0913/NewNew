@@ -62,6 +62,7 @@ package
 		public var _mask:Visual_Mask = new Visual_Mask();
 		public var _paytable:Visual_Paytable = new Visual_Paytable();		
 		public var _gameinfo:Visual_Game_Info = new Visual_Game_Info();		
+		public var _settlePanel:Visual_SettlePanel = new Visual_SettlePanel();
 		
 		//util
 		public var _path:Path_Generator = new Path_Generator();
