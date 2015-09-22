@@ -146,8 +146,20 @@ package View.ViewComponent
 			Get("Historytable").container.visible = false;
 			Get("opencard_betinfo").container.visible = true;
 			
-			Get("opencard_bet_amount").container.visible = true;			
-			var mylist:Array = ["0", "0", "0", "0", "0", "0", "0","0"];
+			Get("opencard_bet_amount").container.visible = true;	
+			var mylist:Array = [];// ["0", "0", "0", "0", "0", "0", "0", "0"];
+			var zone:Array = _model.getValue(modelName.AVALIBLE_ZONE_IDX);
+			var maping:DI = _model.getValue("idx_to_result_idx");
+			for ( var i:int = 0; i < zone.length; i++)
+			{
+				utilFun.Log("num = "+zone[i]);
+				utilFun.Log("num = " + _betCommand.get_total_bet(zone[i]));
+				var map:int = maping.getValue(zone[i]);				 
+				mylist.splice(map, 0,_betCommand.get_total_bet(zone[i]));
+				
+			}
+			
+			
 			var font:Array = [{size:26,align:_text.align_right}];
 			font = font.concat(mylist);
 			Get("opencard_bet_amount").CustomizedData = font;

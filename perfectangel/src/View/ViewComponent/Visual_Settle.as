@@ -297,7 +297,7 @@ package View.ViewComponent
 			_model.putValue("history_banker_Pai_list", cobi2);
 			
 			//simu click item 
-			_paytable.history_sence(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 0);
+			//_paytable.history_sence(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 0);
 			
 		}		
 		

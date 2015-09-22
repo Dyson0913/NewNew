@@ -38,7 +38,7 @@ package Command
 			_model.putValue("coin_list", [100, 500, 1000, 5000, 10000]);
 			_model.putValue("after_bet_credit", 0);
 			
-			var betzone:Array = [0, 1, 2, 3, 4, 5, 6];
+			var betzone:Array = [0, 1, 2, 3, 4, 5];
 			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel"];// , 6, 7, 8];
 			
 		    var bet_name_to_idx:DI = new DI();
@@ -84,6 +84,15 @@ package Command
 			_model.putValue(modelName.AVALIBLE_ZONE_XY, betzone_po);
 			_model.putValue(modelName.COIN_STACK_XY,   [ [140, 210], [-483, 210],  [408, 80], [-760, 94], [451, 264], [-800, 267] ,[-174,238]]);
 			
+			var _idx_to_result_idx:DI = new DI();
+			
+			_idx_to_result_idx.putValue("0", 1);
+			_idx_to_result_idx.putValue("1", 0);
+			_idx_to_result_idx.putValue("2", 3);
+			_idx_to_result_idx.putValue("3", 2);
+			_idx_to_result_idx.putValue("4", 5);
+			_idx_to_result_idx.putValue("5", 4);
+			_model.putValue("idx_to_result_idx", _idx_to_result_idx);		
 			
 			//bind lobby event
 			//var lobbyevent:Function = _model.getValue(modelName.Lobby_Call_back);

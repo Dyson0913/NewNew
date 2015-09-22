@@ -68,6 +68,8 @@ package View.ViewComponent
 			_betzone.rollout = _betCommand.empty_reaction;
 			_betzone.rollover = _betCommand.empty_reaction;
 			
+			Get("tableitem").container.visible = true;
+			
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
@@ -82,6 +84,8 @@ package View.ViewComponent
 			_betzone.CustomizedFun = _regular.FrameSetting;
 			_betzone.CustomizedData = frame;
 			_betzone.FlushObject();
+			
+			Get("tableitem").container.visible = false;
 		}
 		
 		

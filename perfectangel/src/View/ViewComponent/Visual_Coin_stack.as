@@ -63,13 +63,24 @@ package View.ViewComponent
 			for ( var i:int = 0; i <  a.ItemList.length; i++)
 			{
 				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",i));
-			}		
+			}
 			
-			a.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			a.Post_CustomizedData =  [ [988, 0], [0, 0],  [827, -108], [147, -103], [677, -68], [311, -62], [ -33, -193], [1011, -181], [492, -43]];
-			a.customized();
 		}
-				
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
+		public function display():void
+		{					
+			Get("coinstakeZone").container.visible = true;			
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
+		public function timer_hide():void
+		{					
+			Get("coinstakeZone").container.visible = false;
+		}
+		
+		
+		
 		[MessageHandler(type = "Model.ModelEvent", selector = "updateCoin")]
 		public function updateCredit():void
 		{					

@@ -338,23 +338,25 @@ package View.ViewComponent
 			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 1);
 			
 			
-			_settlePanel.init();
+			//_settlePanel.init();
 			//
-			//var fakePacket:Object =  { "result_list": [
-			                                                                //{"bet_type": "BetBWPlayer", "settle_amount": 200, "odds": 2, "win_state": "WSBWFullHouse", "bet_amount": 100 },
-																			//{"bet_type": "BetBWBanker", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 100 } ],
-																			//"game_state": "EndRoundState", 
-																			//"game_result_id": "225761", 
-																			//"timestamp": 1439967961.396191, 
-																			//"remain_time": 4, 
-																			//"game_type": "BigWin", 
-																			//"game_round": 1, 
-																			//"game_id": "BigWin-1", 
-																			//"message_type": 
-																			//"MsgBPEndRound", 
-			//"id": "bfc643be464011e599caf23c9189e2a9" } ;
-			//
-			//_MsgModel.push(fakePacket);			
+			var fakePacket:Object =  { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 300 }, 
+			                                                                   {"bet_type": "BetPAEvil", "settle_amount": 400, "odds": 2, "win_state": "WSPANormalWin", "bet_amount": 200 },
+																			    {"bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 300 }, 
+																				{"bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 400 }, 
+																				{"bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 600 },
+																				{"bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 500 } ], 
+																				"game_state": "EndRoundState", 
+																				"game_result_id": "287925",
+																				"timestamp": 1442940663.023373,
+																				"remain_time": 4, 
+																				"game_type": "PerfectAngel", 
+																				"game_round": 1, 
+																				"game_id": "PerfectAngel-1", 
+																				"message_type": "MsgBPEndRound",
+																				"id": "1c0503c6614a11e5a16df23c9189e2a9"}
+			
+			_MsgModel.push(fakePacket);			
 			
 		}
 		
