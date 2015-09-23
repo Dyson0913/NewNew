@@ -166,13 +166,22 @@ package View.ViewComponent
 			utilFun.Log("arr = "+ arr);
 			utilFun.Log("evillFrame = "+ evillFrame +" angelFrame "+angelFrame);
 			utilFun.Log("angPoint = "+ angPoint +" eviPoint "+eviPoint);
+			utilFun.Log("evel_winstate = "+ evel_winstate +" angel_winstate "+angel_winstate);
 			
 			
 			_paytable.win_frame_hint(winst);
 			
 			GetSingleItem("zone", 0).gotoAndStop(evillFrame);
-			GetSingleItem("zone", 1).gotoAndStop(angelFrame);
+			if ( evillFrame == 4 || evillFrame == 5)
+			{
+				GetSingleItem("zone", 0)["_point"].gotoAndStop(eviPoint);
+			}
 			
+			GetSingleItem("zone", 1).gotoAndStop(angelFrame);			
+			if ( angelFrame == 4 || angelFrame == 5)
+			{
+				GetSingleItem("zone", 1)["_point"].gotoAndStop(angPoint);
+			}
 			
 			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 2, 1, "linear");
 			
