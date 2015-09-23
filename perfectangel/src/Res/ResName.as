@@ -31,6 +31,9 @@ package Res
 		public static const angelball:String = "angel_ball";
 		public static const evilball:String = "evil_ball";
 		public static const Noneball:String = "None_ball";
+		public static const historyball:String = "history_ball";
+		
+		
 		public static const history_Item_select:String = "historyItem_select";
 		public static const historytable:String = "history_table";		
 		public static const history_select_itembar:String = "history_select_item_bar";

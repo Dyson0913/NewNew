@@ -40,10 +40,9 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var zone:MultiObject = prepare("zone", new MultiObject() , GetSingleItem("_view").parent.parent);
-			zone.container.visible = false;
+			var zone:MultiObject = prepare("zone", new MultiObject() , GetSingleItem("_view").parent.parent);			
 			zone.container.x = 1450;
-			zone.container.y = 300;			
+			zone.container.y = 450;			
 			zone.Create_by_list(2, [ResName.state_evil, ResName.state_angel], 0 , 0, 2, -1014, 0, "Bet_");		
 			
 			//_tool.SetControlMc(zone.container);
@@ -54,15 +53,10 @@ package View.ViewComponent
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
 		public function Clean():void
-		{
-			Get("zone").container.visible = false;
-			GetSingleItem("zone",0).visible = false;
-			GetSingleItem("zone", 1).visible = false;
-			
+		{		
 			var a:MultiObject = Get("zone");
 			for ( var i:int = 0; i <  a.ItemList.length; i++)
-			{
-				GetSingleItem("zone", i).visible = false;
+			{				
 				GetSingleItem("zone", i).gotoAndStop(1);
 			}
 		}
@@ -73,12 +67,128 @@ package View.ViewComponent
 			var result_list:Array = _model.getValue(modelName.ROUND_RESULT);
 			var num:int = result_list.length;
 			
+			var name_to_idx:DI = _model.getValue("Bet_name_to_idx");
+			var idx_to_name:DI = _model.getValue("Bet_idx_to_name");
+			var idx_to_result_idx:DI = _model.getValue("idx_to_result_idx");
+			//var win_text:DI = _model.getValue(modelName.BIG_POKER_TEXT);
+			var settle_amount:Array = [0, 0, 0, 0, 0, 0];
+			var zonebet_amount:Array = [0, 0, 0, 0, 0, 0];	
+			var total:int = 0;
+			var winst:String = "";
+			
+			var clean:Array = [];
+			var resultframe:int = 0;
+			var angelFrame:int = 1;
+			var evillFrame:int = 1;
+			var angel_winstate:int = 0;
+			var evel_winstate:int = 0;
+			for ( var i:int = 0; i < num; i++)
+			{
+				var resultob:Object = result_list[i];		
+				
+				//coin 清除區
+				if ( resultob.win_state == "WSLost")
+				{
+					if ( resultob.bet_type == "BetPAAngel" )  angelFrame = 1;
+					if ( resultob.bet_type == "BetPAEvil" )  evillFrame = 1;
+					clean.push (name_to_idx.getValue(resultob.bet_type));
+				}
+				else
+				{
+					
+					if ( resultob.bet_type == "BetPAAngel" ) 
+					{
+						//point
+						angelFrame = 4;
+						angel_winstate = 1;						
+						//result_str.push("天使");
+						winst = resultob.win_state;
+					}
+					else if ( resultob.bet_type == "BetPAEvil") 
+					{
+						//point
+						evillFrame = 4;
+						evel_winstate = 1;						
+						winst = resultob.win_state;
+						//if( bigwin == -1) result_str.push("惡魔贏");
+					}
+					else if ( resultob.bet_type == "BetPABigEvil")
+					{
+						//point
+						evillFrame = 5;
+					}
+					else if ( resultob.bet_type == "BetPABigAngel")
+					{
+						//point
+						angelFrame = 5;
+					}
+					else if ( resultob.bet_type == "BetPAUnbeatenEvil")
+					{
+						evillFrame = 6;
+					}
+					else if ( resultob.bet_type == "BetPAPerfectAngel")
+					{
+						angelFrame = 6;
+					}
+					
+				}
+				
+				
+				settle_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type) )] =  resultob.settle_amount;
+				zonebet_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type)) ]  = resultob.bet_amount;
+				total += resultob.settle_amount;
+			}
+			
+			_model.putValue("result_settle_amount",settle_amount);
+			_model.putValue("result_zonebet_amount",zonebet_amount);
+			_model.putValue("result_total", total);
+			
+			
+			_paytable.win_frame_hint(winst);
+			
+			GetSingleItem("zone", 0).gotoAndStop(evillFrame);
+			GetSingleItem("zone", 1).gotoAndStop(angelFrame);
+			
+			
+			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 1, 1, "linear");
+			
+		}
+		
+		public function showAni(evel_winstate:int,angel_winstate:int):void
+		{
+			if( evel_winstate ==1)
+			{
+				GetSingleItem("zone", 0).gotoAndStop(3);				
+			}
+			
+			if ( angel_winstate == 1)
+			{
+				GetSingleItem("zone", 1).gotoAndStop(3);
+			}
+			
+			_regular.Call(this, { onComplete:this.show_ok }, 1, 1, 1, "linear");
+		}
+		
+		public function show_ok():void
+		{
+			utilFun.Log("show_ok");
+			dispatcher(new ModelEvent("show_settle_table"));
+		}
+		
+		//[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
+		public function old_round_result_data_process():void
+		{
+			var result_list:Array = _model.getValue(modelName.ROUND_RESULT);
+			var num:int = result_list.length;
+			
 			var result:Array = [];			
 			var total_settle_amount:int = 0;
 			var name_to_idx:DI = _model.getValue("Bet_name_to_idx");
 			var clean:Array = [];
 			var settle_amount:Array = [];// [0, 0, 0, 0, 0, 0];
 		
+			
+			
 			var angel_frame:int = 1;
 			var angel_winstate:int = 0;
 			var evel_frame:int = 1;

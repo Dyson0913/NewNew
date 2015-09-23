@@ -94,6 +94,15 @@ package Command
 			_idx_to_result_idx.putValue("5", 4);
 			_model.putValue("idx_to_result_idx", _idx_to_result_idx);		
 			
+			var poer_msg:DI = new DI();		
+			poer_msg.putValue("WSWin", "贏");
+			poer_msg.putValue("WSPANormalWin", "贏");
+			poer_msg.putValue("WSPAOnePointWin", "一點贏");
+			poer_msg.putValue("WSPATwoPointWin", "二點贏");
+			poer_msg.putValue("WSPAFiveWawaWin", "五公贏");
+			poer_msg.putValue("WSPAFourOfAKindWin", "四條贏");		
+			//_model.putValue(modelName.BIG_POKER_TEXT , poer_msg);
+			
 			//bind lobby event
 			//var lobbyevent:Function = _model.getValue(modelName.Lobby_Call_back);
 			//utilFun.Log("lobbyeve ="+lobbyevent);
@@ -191,7 +200,7 @@ package Command
 		
 		public function all_betzone_totoal():Number
 		{
-			var betzone:Array = [1,2,3,4,5,6]; //_model.getValue(modelName.BET_ZONE);
+			var betzone:Array = _model.getValue(modelName.AVALIBLE_ZONE_IDX); //_model.getValue(modelName.BET_ZONE);
 			
 			var total:Number = 0;
 			for each (var i:int in betzone)

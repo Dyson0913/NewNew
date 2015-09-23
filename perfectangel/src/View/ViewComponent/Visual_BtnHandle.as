@@ -54,10 +54,11 @@ package View.ViewComponent
 			_rule_table.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 1]);
 			_rule_table.mousedown = table_true;
 			_rule_table.mouseup = test_reaction;
-			_rule_table.container.x = -10;
-			_rule_table.container.y = 100;			
+			_rule_table.container.x = 30;
+			_rule_table.container.y = 60;			
 			_rule_table.Create_by_list(1,[ResName.ruletable], 0, 0, 1, 0, 0, "time_");		
 			_rule_table.container.visible = false;
+			
 			//_tool.SetControlMc(btn_group.ItemList[1]);
 			//_tool.SetControlMc(_rule_table.container);
 			//add(_tool);

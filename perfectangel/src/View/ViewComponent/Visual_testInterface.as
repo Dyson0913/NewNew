@@ -72,7 +72,7 @@ package View.ViewComponent
 		public var _settle:Visual_Settle;	
 		
 		[Inject]
-		public var _btn:Visual_BtnHandle;
+		public var _btn:Visual_BtnHandle;		
 		
 		[Inject]
 		public var _text:Visual_Text;
@@ -172,17 +172,20 @@ package View.ViewComponent
 			//=============================================gameinfo			
 			_gameinfo.init();
 			
+			//=============================================btninfo
+			_btn.init();
+			
 			//=============================================paytable
 			var arr:Array = _model.getValue("history_win_list");			
 			for ( var i:int = 0; i < 10; i++)
 			{
-				var ran:int = utilFun.Random(3);
-				if ( ran == 1) arr.push(ResName.angelball);
-				else if ( ran == 2) arr.push(ResName.evilball);
-				else arr.push(ResName.Noneball);
-				_model.putValue("history_win_list", arr);
+				var ran:int = utilFun.Random(4) +1;
+				var point:int = utilFun.Random(9);			
+				arr.push([ran, point]);				
 			}
+			_model.putValue("history_win_list", arr);
 			_paytable.init();
+			_paytable.update_history();
 			
 			//================================================betzone
 			_betzone.init();			
@@ -308,11 +311,7 @@ package View.ViewComponent
 		public function settleScript():void
 		{
 			_model.putValue(modelName.PLAYER_POKER, ["9d","4c","5s","7s","9s"]);				
-			_model.putValue(modelName.BANKER_POKER, ["1s","2d","3s","5c","6h"]);		
-					
-			
-			
-			
+			_model.putValue(modelName.BANKER_POKER, ["1s","2d","3s","5c","6h"]);	
 			changeBG(ResName.Bet_Scene);
 			
 			//=============================================gameinfo			
@@ -320,12 +319,14 @@ package View.ViewComponent
 			//_gameinfo.settle_parse();
 			//
 			
+			
+			
 			//=============================================Hintmsg
 			//_hint.init();			
 			
 			//=============================================paytable			
-			//_paytable.init();		
-			//_paytable.settle_parse();
+			_paytable.init();		
+			_paytable.update_history();
 			
 			//================================================settle info
 			_settle.init();			
@@ -338,7 +339,7 @@ package View.ViewComponent
 			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 1);
 			
 			
-			//_settlePanel.init();
+			_settlePanel.init();
 			//
 			var fakePacket:Object =  { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 300 }, 
 			                                                                   {"bet_type": "BetPAEvil", "settle_amount": 400, "odds": 2, "win_state": "WSPANormalWin", "bet_amount": 200 },

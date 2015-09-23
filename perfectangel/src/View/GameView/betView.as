@@ -70,6 +70,9 @@ package View.GameView
 		[Inject]
 		public var _gameinfo:Visual_Game_Info;	
 		
+		[Inject]
+		public var _settlePanel:Visual_SettlePanel;
+		
 		public function betView()  
 		{
 			utilFun.Log("betView");
@@ -108,6 +111,8 @@ package View.GameView
 			_sencer.init();	
 			_coin.init();
 			_btn.init();
+			
+			_settlePanel.init();
 			
 			//var name:MultiObject = prepare("name", new MultiObject() , this);
 			//name.CustomizedFun = _regular.ascii_idx_setting;			

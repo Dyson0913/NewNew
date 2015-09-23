@@ -12,9 +12,7 @@ package View.GameView
 	import flash.events.MouseEvent;
 	import flash.ui.Multitouch;
 	import Model.ModelEvent;
-	import Model.valueObject.ArrayObject;
-	import Model.valueObject.Intobject;
-	import Model.valueObject.StringObject;
+	import Model.valueObject.*;	
 	import Res.ResName;
 	import util.DI;
 	import util.math.Path_Generator;
@@ -141,40 +139,9 @@ package View.GameView
 			view.Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "a_");
 			_tool = new AdjustTool();
 			
-			//utilFun.SetTime(connet, 0.1);
+			utilFun.SetTime(connet, 0.1);
 			
-			_test.init();
-			
-			//_hint.init();			
-			//_paytable.init()
-			//_time.init();
-			//_paytable.init();
-			//_btn.init();
-			//_gameinfo.init();
 			//_test.init();
-			
-		    //=====================================bet & coin test
-			//bet,betsence,coin number連動
-			//_betzone.init();		
-			//_coin_stack.init();			
-			//_sence.init();
-			//_coin.init();
-			//_test.init();
-			//dispatcher(new ModelEvent("display"));		
-			
-		    //=====================================poker
-		    //_pokerhandler.init();					
-			//dispatcher(new ModelEvent("hide"));	
-			//dispatcher(new ModelEvent("clearn"));	
-			//_test.init();
-			
-			//=====================================settle			
-			//_pokerhandler.init();			
-			//dispatcher(new ModelEvent("hide"));			
-			//_coin_stack.init();			
-			//_settle.init();			
-			//_test.init();
-			
 			
 			//utilFun.SetTime(stre, 2);
 			//_visual_stream.init();
