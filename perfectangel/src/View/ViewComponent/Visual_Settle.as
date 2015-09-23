@@ -71,8 +71,8 @@ package View.ViewComponent
 			var idx_to_name:DI = _model.getValue("Bet_idx_to_name");
 			var idx_to_result_idx:DI = _model.getValue("idx_to_result_idx");
 			//var win_text:DI = _model.getValue(modelName.BIG_POKER_TEXT);
-			var settle_amount:Array = [0, 0, 0, 0, 0, 0];
-			var zonebet_amount:Array = [0, 0, 0, 0, 0, 0];	
+			var settle_amount:Array = [0, 0, 0, 0, 0, 0, 0];
+			var zonebet_amount:Array = [0, 0, 0, 0, 0, 0, 0];
 			var total:int = 0;
 			var winst:String = "";
 			
@@ -82,6 +82,8 @@ package View.ViewComponent
 			var evillFrame:int = 1;
 			var angel_winstate:int = 0;
 			var evel_winstate:int = 0;
+			var angPoint:int = pokerUtil.ca_point(_model.getValue(modelName.PLAYER_POKER));
+			var eviPoint:int = pokerUtil.ca_point(_model.getValue(modelName.BANKER_POKER));
 			for ( var i:int = 0; i < num; i++)
 			{
 				var resultob:Object = result_list[i];		
@@ -89,8 +91,8 @@ package View.ViewComponent
 				//coin 清除區
 				if ( resultob.win_state == "WSLost")
 				{
-					if ( resultob.bet_type == "BetPAAngel" )  angelFrame = 1;
-					if ( resultob.bet_type == "BetPAEvil" )  evillFrame = 1;
+					if ( resultob.bet_type == "BetPAAngel" )  angelFrame = 2;
+					if ( resultob.bet_type == "BetPAEvil" )  evillFrame = 2;
 					clean.push (name_to_idx.getValue(resultob.bet_type));
 				}
 				else
@@ -139,9 +141,31 @@ package View.ViewComponent
 				total += resultob.settle_amount;
 			}
 			
+			//押注及得分
 			_model.putValue("result_settle_amount",settle_amount);
 			_model.putValue("result_zonebet_amount",zonebet_amount);
 			_model.putValue("result_total", total);
+			
+			var history:Array = _model.getValue("history_win_list");
+			var arr:Array = [];
+			if ( evel_winstate == 1) 
+			{
+				arr.push(2);
+				arr.push(angPoint);
+			}
+			else if ( angel_winstate == 1) 
+			{
+				arr.push(3);
+				arr.push(eviPoint);
+			}
+			else  arr.push(5);
+			
+			history.push(arr);
+			if ( history.length > 60) history.shift();			
+			_model.putValue("history_win_list", history);
+			utilFun.Log("arr = "+ arr);
+			utilFun.Log("evillFrame = "+ evillFrame +" angelFrame "+angelFrame);
+			utilFun.Log("angPoint = "+ angPoint +" eviPoint "+eviPoint);
 			
 			
 			_paytable.win_frame_hint(winst);
@@ -150,12 +174,14 @@ package View.ViewComponent
 			GetSingleItem("zone", 1).gotoAndStop(angelFrame);
 			
 			
-			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 1, 1, "linear");
+			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 2, 1, "linear");
 			
 		}
 		
 		public function showAni(evel_winstate:int,angel_winstate:int):void
 		{
+			//TODO       大天使,(完美)
+			//                XX幾點
 			if( evel_winstate ==1)
 			{
 				GetSingleItem("zone", 0).gotoAndStop(3);				
@@ -166,7 +192,7 @@ package View.ViewComponent
 				GetSingleItem("zone", 1).gotoAndStop(3);
 			}
 			
-			_regular.Call(this, { onComplete:this.show_ok }, 1, 1, 1, "linear");
+			_regular.Call(this, { onComplete:this.show_ok }, 1, 2, 1, "linear");
 		}
 		
 		public function show_ok():void
@@ -197,7 +223,7 @@ package View.ViewComponent
 			for ( var i:int = 0; i < num; i++)
 			{
 				var resultob:Object = result_list[i];				
-				var result:Array  = [];				
+				//var result:Array  = [];				
 				//result.push(name_to_idx.getValue(resultob.bet_type));
 				if ( resultob.bet_type == "BetPAAngel")
 				{
@@ -323,21 +349,22 @@ package View.ViewComponent
 			}
 			else  if ( angel_frame == 4)
 			{
-				var apoint:int = ca_point(modelName.PLAYER_POKER);
+			//	var apoint:int = ca_point(modelName.PLAYER_POKER);
 				GetSingleItem("zone", 1).gotoAndStop(angel_frame);
-				GetSingleItem("zone", 1)["_point"].gotoAndStop(apoint);
+				//GetSingleItem("zone", 1)["_point"].gotoAndStop(apoint);
 			}
 			else if ( angel_frame == 3)
 			{
-					var apoint:int = ca_point(modelName.PLAYER_POKER);
-					utilFun.Log("apoint  =  " + apoint); 
+					//var apoint:int = ca_point(modelName.PLAYER_POKER);
+					//utilFun.Log("apoint  =  " + apoint); 
 					//check 沒點 切無懶
-					if ( apoint != -1) 
+					//if ( apoint != -1) 
 					{ 						
 						GetSingleItem("zone", 1).gotoAndStop(angel_frame);		
-						if (apoint !=0) GetSingleItem("zone", 1)["_point"].gotoAndStop(apoint);
+						//if (apoint !=0) GetSingleItem("zone", 1)["_point"].gotoAndStop(apoint);
 					}
-					else {
+					//else 
+					{
 					    //有妞但輸,會傳lost,frame 先切3 check 後還是輸,先切到無懶
 						angel_frame = 1;
 						GetSingleItem("zone", 1).gotoAndStop(angel_frame);		
@@ -356,20 +383,20 @@ package View.ViewComponent
 			}
 			else  if ( evel_frame == 4)
 			{
-				var epoint:int = ca_point(modelName.BANKER_POKER);
+				//var epoint:int = ca_point(modelName.BANKER_POKER);
 				GetSingleItem("zone", 0).gotoAndStop(evel_frame);
-				GetSingleItem("zone", 0)["_point"].gotoAndStop(epoint);
+			//	GetSingleItem("zone", 0)["_point"].gotoAndStop(epoint);
 			}
 			else if ( evel_frame == 3)
 			{
-				var epoint:int = ca_point(modelName.BANKER_POKER);
-				utilFun.Log(" epoint  =  " + epoint);		
-				if ( epoint != -1)
+				//var epoint:int = ca_point(modelName.BANKER_POKER);
+				//utilFun.Log(" epoint  =  " + epoint);		
+			//if ( epoint != -1)
 				{
 					GetSingleItem("zone", 0).gotoAndStop(evel_frame);
-					if ( epoint != 0 )  GetSingleItem("zone", 0)["_point"].gotoAndStop(epoint);					
+					//if ( epoint != 0 )  GetSingleItem("zone", 0)["_point"].gotoAndStop(epoint);					
 				}
-				else
+				//else
 				{
 					evel_frame = 1;
 					GetSingleItem("zone", 0).gotoAndStop(evel_frame);
@@ -392,19 +419,19 @@ package View.ViewComponent
 			}
 			
 			//poker hisotry
-			var arr:Array = _model.getValue("history_Play_Pai_list");				
-			var arr2:Array = _model.getValue("history_banker_Pai_list");				
-			
-			var playerpoker:Array = _model.getValue(modelName.PLAYER_POKER);			
-			var cobi:Array = playerpoker.concat(arr);
-			if ( cobi.length > 30)  cobi = cobi.slice(0, 30);
-			
-			var bankerpoker:Array = _model.getValue(modelName.BANKER_POKER);
-			var cobi2:Array = bankerpoker.concat(arr2);	
-			if ( cobi2.length > 30) cobi2 = cobi2.slice(0, 30);
-			
-			_model.putValue("history_Play_Pai_list", cobi);
-			_model.putValue("history_banker_Pai_list", cobi2);
+			//var arr:Array = _model.getValue("history_Play_Pai_list");				
+			//var arr2:Array = _model.getValue("history_banker_Pai_list");				
+			//
+			//var playerpoker:Array = _model.getValue(modelName.PLAYER_POKER);			
+			//var cobi:Array = playerpoker.concat(arr);
+			//if ( cobi.length > 30)  cobi = cobi.slice(0, 30);
+			//
+			//var bankerpoker:Array = _model.getValue(modelName.BANKER_POKER);
+			//var cobi2:Array = bankerpoker.concat(arr2);	
+			//if ( cobi2.length > 30) cobi2 = cobi2.slice(0, 30);
+			//
+			//_model.putValue("history_Play_Pai_list", cobi);
+			//_model.putValue("history_banker_Pai_list", cobi2);
 			
 			//simu click item 
 			//_paytable.history_sence(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 0);
@@ -508,31 +535,7 @@ package View.ViewComponent
 		public function over_credit_ani(mc:DisplayObjectContainer):void
 		{
 			
-		}
-		
-		public function ca_point(pokertype:int):int
-		{
-			var mypoker:Array = [];			
-			mypoker = _model.getValue(pokertype);
-			
-			var total:Array = [0, 1, 2, 3, 4]; 					
-			var newpoker:Array = pokerUtil.newnew_judge(mypoker, total);
-			var selectCard:Array = newpoker.slice(0, 3);
-			var rest:Array = utilFun.Get_restItem(total, selectCard);
-			utilFun.Log("selectCard =" + selectCard);
-			var point:int = 0;
-			if ( selectCard.length == 0) return -1;
-			else
-			{
-				utilFun.Log("rest =" + rest);
-				var pointar:Array  = pokerUtil.get_Point( [mypoker[ rest[0]], mypoker[rest[1]]] );
-				point = pokerUtil.Get_Mapping_Value([0, 1], pointar);
-										
-				point %= 10;										
-				return point;
-			}
-			
-		}
+		}		
 		
 		//[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
 		public function new_round_result():void
@@ -540,7 +543,7 @@ package View.ViewComponent
 			var result_list:Array = _model.getValue(modelName.ROUND_RESULT);
 			var num:int = result_list.length;
 			
-			var result:Array = [];
+			//var result:Array = [];
 			var clean:Array = [];
 			var total_settle_amount:int = 0;
 			var name_to_idx:DI = _model.getValue("Bet_name_to_idx");
@@ -622,7 +625,7 @@ package View.ViewComponent
 			}
 		}
 		
-		public function fanout(hint:MovieClip,winstate):void
+		public function fanout(hint:MovieClip,winstate:int):void
 		{			
 			if ( winstate ) hint.gotoAndStop(2);
 		}

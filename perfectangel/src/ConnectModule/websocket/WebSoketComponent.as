@@ -14,7 +14,7 @@ package ConnectModule.websocket
 	import Model.valueObject.Intobject;
 	import util.DI;
 	
-	import Command.ViewCommand;
+	import Command.*;
 	import View.GameView.CardType;
 	
 	import util.utilFun;
@@ -36,6 +36,9 @@ package ConnectModule.websocket
 		
 		[Inject]
 		public var _actionqueue:ActionQueue;
+		
+		[Inject]
+		public var _opration:DataOperation;
 		
 		[Inject]
 		public var _model:Model;		
@@ -101,14 +104,9 @@ package ConnectModule.websocket
 						{						
 							if( _model.getValue(modelName.HandShake_chanel) == null )  dispatcher(new ValueObject( result.inside_game_info.player_info.credit, modelName.CREDIT) );					
 							
-							var state:int = 0;
-							if (  result.game_state == "NewRoundState") state = gameState.NEW_ROUND;
-							if (  result.game_state == "EndBetState") state = gameState.END_BET;
-							if (  result.game_state == "OpenState") state = gameState.START_OPEN;
-							if (  result.game_state == "EndRoundState") state = gameState.END_ROUND;									
 							
 							dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );						
-							dispatcher(new ValueObject(  state, modelName.GAMES_STATE) );
+							dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
 							
 							dispatcher(new ValueObject(  result.game_round, "game_round") );
 							dispatcher(new ValueObject(  result.game_id, "game_id") );
@@ -122,35 +120,31 @@ package ConnectModule.websocket
 							
 							dispatcher(new ModelEvent("update_state"));
 							dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
-							dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));
-							dispatcher(new ModelEvent("update_result_Credit"));
+							dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));							
 							
 						}
 						break;
 					case Message.MSG_TYPE_GAME_OPEN_INFO:
 						{
 							
-							var state:int = 0;
-							if (  result.game_state == "OpenState") state = gameState.START_OPEN;
-							if (  result.game_state == "EndBetState") state = gameState.END_BET;		
-							dispatcher(new ValueObject(  state, modelName.GAMES_STATE) );			
+							dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
 							
 							dispatcher(new ValueObject(  result.game_round, "game_round") );
 							dispatcher(new ValueObject(  result.game_id, "game_id") );
 							
 							var card:Array = result.card_list;
 							var card_type:String = result.card_type
-							
+							var mypoker:Array;
 							if ( card_type == "Player")
 							{										
-								var mypoker:Array = _model.getValue(modelName.PLAYER_POKER);										
+								mypoker = _model.getValue(modelName.PLAYER_POKER);										
 								mypoker.push(card[0]);
 								_model.putValue(modelName.PLAYER_POKER, mypoker);										
 								dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_mi"));									
 							}
 							else if ( card_type == "Banker")
 							{							
-								var mypoker:Array = _model.getValue(modelName.BANKER_POKER);										
+								mypoker = _model.getValue(modelName.BANKER_POKER);										
 								mypoker.push( card[0]);
 								
 								_model.putValue(modelName.BANKER_POKER, mypoker);
@@ -165,8 +159,7 @@ package ConnectModule.websocket
 					{
 						if (result.result == 0)
 						{
-							dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));
-							dispatcher(new ModelEvent("updateCredit"));
+							dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));							
 							dispatcher(new ModelEvent("updateCoin"));
 						}
 						else
@@ -179,13 +172,9 @@ package ConnectModule.websocket
 						
 					case Message.MSG_TYPE_STATE_INFO:
 					{
-						var state:int = 0;
+						
 						dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );						
-						if (  result.game_state == "NewRoundState") state = gameState.NEW_ROUND;
-						if (  result.game_state == "EndBetState") state = gameState.END_BET;
-						if (  result.game_state == "OpenState") state = gameState.START_OPEN;
-						if (  result.game_state == "EndRoundState") state = gameState.END_ROUND;							
-						dispatcher(new ValueObject(  state, modelName.GAMES_STATE) );			
+						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );								
 							
 						dispatcher(new ModelEvent("update_state"));					
 					}
@@ -193,12 +182,7 @@ package ConnectModule.websocket
 					
 					case Message.MSG_TYPE_ROUND_INFO:
 					{							
-						var state:int = 0;
-						if (  result.game_state == "NewRoundState") state = gameState.NEW_ROUND;
-						if (  result.game_state == "EndBetState") state = gameState.END_BET;
-						if (  result.game_state == "OpenState") state = gameState.START_OPEN;
-						if (  result.game_state == "EndRoundState") state = gameState.END_ROUND;
-						dispatcher(new ValueObject(  state, modelName.GAMES_STATE) );			
+						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
 						
 						//dispatcher(new ModelEvent("update_state"));
 						
@@ -206,9 +190,7 @@ package ConnectModule.websocket
 						//dispatcher( new ValueObject(result.settle_amount, modelName.SETTLE_AMOUNT));
 						
 						dispatcher( new ValueObject(result.result_list, modelName.ROUND_RESULT));
-						dispatcher(new ModelEvent("round_result"));
-						dispatcher(new ModelEvent("update_result_Credit"));
-						
+						dispatcher(new ModelEvent("round_result"));						
 					}
 					break;					
 				}

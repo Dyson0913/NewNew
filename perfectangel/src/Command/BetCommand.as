@@ -103,6 +103,13 @@ package Command
 			poer_msg.putValue("WSPAFourOfAKindWin", "四條贏");		
 			//_model.putValue(modelName.BIG_POKER_TEXT , poer_msg);
 			
+			var state:DI = new DI();
+			state.putValue("NewRoundState", gameState.NEW_ROUND);
+			state.putValue("EndBetState", gameState.END_BET);
+			state.putValue("OpenState", gameState.START_OPEN);
+			state.putValue("EndRoundState", gameState.END_ROUND);			
+			_model.putValue("state_mapping", state);
+			
 			//bind lobby event
 			//var lobbyevent:Function = _model.getValue(modelName.Lobby_Call_back);
 			//utilFun.Log("lobbyeve ="+lobbyevent);

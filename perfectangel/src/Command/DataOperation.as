@@ -1,6 +1,7 @@
 package Command 
 {
 	import Model.Model;
+	import util.DI;
 	/**
 	 * data operation
 	 * @author hhg
@@ -55,6 +56,14 @@ package Command
 			var idx:int = _model.getValue(idx_name);
 			
 			return data[idx];
+		}
+		
+		//get some DI mapping value
+		public function  getMappingValue(data_name:*, mapping_name:*):*
+		{
+			var Di:DI = _model.getValue(data_name);
+			return Di.getValue(mapping_name);
+			
 		}
 	}
 

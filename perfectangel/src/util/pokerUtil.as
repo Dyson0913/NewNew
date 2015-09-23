@@ -15,6 +15,27 @@ package util
 			
 		}
 		
+		public static function ca_point(mypoker:Array):int
+		{
+			var total:Array = [0, 1, 2, 3, 4]; 					
+			var newpoker:Array = newnew_judge(mypoker, total);
+			var selectCard:Array = newpoker.slice(0, 3);
+			var rest:Array = utilFun.Get_restItem(total, selectCard);
+			//utilFun.Log("selectCard =" + selectCard);
+			var point:int = 0;
+			if ( selectCard.length == 0) return -1;
+			else
+			{
+				utilFun.Log("rest =" + rest);
+				var pointar:Array  = get_Point( [mypoker[ rest[0]], mypoker[rest[1]]] );
+				point = Get_Mapping_Value([0, 1], pointar);
+										
+				point %= 10;										
+				return point;
+			}
+			
+		}
+		
 		public static function pokerTrans_s(strpoker:String):int
 		{			
 			var point:String = strpoker.substr(0, 1);

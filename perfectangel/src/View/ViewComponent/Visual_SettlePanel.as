@@ -50,7 +50,7 @@ package View.ViewComponent
 			settletable_zone.Create_by_list(settletable_zone.CustomizedData.length-1, [ResName.TextInfo], 0 , 0, 1, 0, 50, "Bet_");		
 			
 			var settletable_zone_bet:MultiObject = prepare("settletable_zone_bet", new MultiObject(), settletable.container);		
-			settletable_zone_bet.container.x = -90;
+			settletable_zone_bet.container.x = -250;
 			settletable_zone_bet.container.y = 90;		
 			settletable_zone_bet.CustomizedFun = _text.textSetting;
 			settletable_zone_bet.CustomizedData = [{size:28,align:_text.align_right}, "100","100","1000","0","200","100000"];
@@ -58,7 +58,7 @@ package View.ViewComponent
 			
 			
 			var settletable_zone_settle:MultiObject = prepare("settletable_zone_settle", new MultiObject(), settletable.container);		
-			settletable_zone_settle.container.x = -250;
+			settletable_zone_settle.container.x = -90;
 			settletable_zone_settle.container.y = 90;		
 			settletable_zone_settle.CustomizedFun = _text.colortextSetting;
 			settletable_zone_settle.CustomizedData = [{size:28,align:_text.align_right}, "0","0","1000","0","0","100000","10000"];
@@ -110,8 +110,8 @@ package View.ViewComponent
 			
 			//hintmsg.ItemList[0].gotoAndStop(2);	
 			//_tool.SetControlMc(settletable_title.ItemList[2]);
-			//_tool.SetControlMc(history_Pai_list_e.container);
-			//add(_tool);
+			_tool.SetControlMc(settletable_zone_bet.container);
+			add(_tool);
 		}		
 		
 		public function sprite_idx_setting_player(mc:*, idx:int, data:Array):void
@@ -146,16 +146,17 @@ package View.ViewComponent
 			font = font.concat(zone_amount);			
 			Get("settletable_zone_bet").CustomizedFun = _text.textSetting;
 			Get("settletable_zone_bet").CustomizedData = font;
-			Get("settletable_zone_bet").Create_by_list(6, [ResName.TextInfo], 0 , 0, 1, 0, 50, "Bet_");		
+			Get("settletable_zone_bet").Create_by_list(zone_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 50, "Bet_");		
 			
 			//總結
-			var settle_amount:Array = _model.getValue("result_settle_amount");			
+			var settle_amount:Array = _model.getValue("result_settle_amount");
+			settle_amount.push( _model.getValue("result_total"));
 			var font2:Array = [{size:28,align:_text.align_right}];
 			font2 = font2.concat(settle_amount);		
 			font2 = font2.concat( _model.getValue("result_total"));			
 			Get("settletable_zone_settle").CustomizedFun = _text.colortextSetting;
 			Get("settletable_zone_settle").CustomizedData = font2;
-			Get("settletable_zone_settle").Create_by_list(7, [ResName.TextInfo], 0 , 0, 1, 0, 50, "Bet_");				
+			Get("settletable_zone_settle").Create_by_list(settle_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 50, "Bet_");				
 			
 			//小 poker
 			var ppoker:Array =   _model.getValue(modelName.PLAYER_POKER);

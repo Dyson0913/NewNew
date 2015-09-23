@@ -54,12 +54,12 @@ package View.ViewBase
 		
 		public function colortextSetting(mc:MovieClip, idx:int, data:Array):void
 		{			
-			var textColor:uint ;
-			if ( parseInt( data[idx + 1]) > 0) textColor= 0x00FF33;
-			if ( parseInt( data[idx + 1]) < 0) textColor = 0xFF0000;	
+			var textColor:uint = 0xFFFFFF;
+			if ( parseInt( data[idx + 1]) > 0) textColor = 0x00FF33;
+			
 			var ob:Object = data[0];
-			ob["textColor"] = textColor;
-			var str:TextField = dynamic_text(data[idx + 1],ob);		
+			ob["color"] = textColor;
+			var str:TextField = dynamic_text(data[idx + 1], ob);
 			
 			mc.addChild(str);
 		}

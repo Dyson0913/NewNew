@@ -328,21 +328,23 @@ package View.ViewComponent
 		public function simple_move_push_up(cardtype:int):void
 		{				
 			var mypoker:Array =   _model.getValue(cardtype);			
-			var bnew:Boolean ;
+			var bnew:Boolean = true;
 			if ( cardtype == modelName.PLAYER_POKER) bnew = _model.getValue("playerNew");
 			if ( cardtype == modelName.BANKER_POKER) bnew = _model.getValue("bankerNew");			
 			
-			
+			var po:Array = [];
+			var pokerlist:MultiObject ;
+			var k:int ;
 			if ( mypoker.length == 3 && bnew == false)
 			{
-				var po:Array = [];
-				for (var k:int = 0; k < mypoker.length; k++) po.push(k);
+				
+				//for (var i:int = 0; i < mypoker.length; i++) po.push(i);
 				var point:Array = pokerUtil.get_Point(mypoker);
-				var totalPoint:int = pokerUtil.Get_Mapping_Value(po, point);
+				var totalPoint:int = pokerUtil.Get_Mapping_Value([0,1,2], point);
 				if ( totalPoint % 10 == 0)
 				{
-					var pokerlist:MultiObject = Get(cardtype)
-					for (var k:int = 0; k <3; k++)
+					pokerlist = Get(cardtype)
+					for ( k = 0; k <3; k++)
 					{
 						Tweener.addTween(pokerlist.ItemList[k], { y:pokerlist.ItemList[k].y + 25, transition:"linear", time:0.1 } );			
 					}
@@ -352,16 +354,15 @@ package View.ViewComponent
 						//Tweener.addTween(pokerlist.ItemList[k], {  y:pokerlist.ItemList[k].y + 25, transition:"linear", time:0.1 } );						
 					//}
 					//shakeTween(pokerlist.ItemList[4], 200);
-					if ( cardtype == modelName.PLAYER_POKER) bnew = _model.putValue("playerNew", true);
-					if ( cardtype == modelName.BANKER_POKER) bnew = _model.putValue("bankerNew", true);
+					if ( cardtype == modelName.PLAYER_POKER)  _model.putValue("playerNew", true);
+					if ( cardtype == modelName.BANKER_POKER)  _model.putValue("bankerNew", true);
 				}
 			}
 			
 			if ( mypoker.length >= 4 && bnew == false)
-			{
-				var po:Array = [];
+			{				
 				var total:Array = [0, 1, 2, 3, 4];  //num
-				for (var k:int = 0; k < mypoker.length; k++) po.push(k);				
+				for (k= 0; k < mypoker.length; k++) po.push(k);				
 				var newpoker:Array = pokerUtil.newnew_judge(mypoker, po);				
 				if ( newpoker.length != 0)
 				{					
@@ -369,7 +370,7 @@ package View.ViewComponent
 					var rest:Array = utilFun.Get_restItem(total, selectCard)					
 					//utilFun.Log("selectCard ="+selectCard);
 					//utilFun.Log("rest =" + rest);
-					var pokerlist:MultiObject = Get(cardtype);
+					pokerlist = Get(cardtype);
 					
 					for (var j:int = 0; j <selectCard.length; j++)
 					{						
@@ -381,8 +382,8 @@ package View.ViewComponent
 						//Tweener.addTween(pokerlist.ItemList[rest[k]], {  y:pokerlist.ItemList[rest[k]].y + 25, transition:"linear", time:0.1 } );
 					//}
 					
-					if ( cardtype == modelName.PLAYER_POKER) bnew = _model.putValue("playerNew", true);
-					if ( cardtype == modelName.BANKER_POKER) bnew = _model.putValue("bankerNew", true);					
+					if ( cardtype == modelName.PLAYER_POKER)  _model.putValue("playerNew", true);
+					if ( cardtype == modelName.BANKER_POKER) _model.putValue("bankerNew", true);					
 				}				
 				
 			}
@@ -394,31 +395,34 @@ package View.ViewComponent
 			var bnew:Boolean 
 			if ( cardtype == modelName.PLAYER_POKER) bnew = _model.getValue("playerNew");
 			if ( cardtype == modelName.BANKER_POKER) bnew = _model.getValue("bankerNew");			
+			
+			var po:Array = [];
+			var k:int;
+			var pokerlist:MultiObject ;
 			if ( mypoker.length ==3 && bnew == false)
-			{
-				var po:Array = [];
-				for (var k:int = 0; k < mypoker.length; k++) po.push(k);
+			{				
+				for (k = 0; k < mypoker.length; k++) po.push(k);
 				var point:Array = pokerUtil.get_Point(mypoker);
 				var totalPoint:int = pokerUtil.Get_Mapping_Value(po, point);				
 				if ( totalPoint % 10 == 0)
 				{
-					var pokerlist:MultiObject = Get(cardtype)
+					pokerlist= Get(cardtype)
 					//[160,80]
-					for (var k:int = 0; k <3; k++)
+					for (k = 0; k <3; k++)
 					{
 						Tweener.addTween(pokerlist.ItemList[k], { y:pokerlist.ItemList[k].y + 80, x:pokerlist.ItemList[k].x +160, transition:"easeOutQuint", time:1 } );
 					}
 					
 					//[230,-130]
-					for (var k:int = 3; k <5; k++)
+					for ( k = 3; k <5; k++)
 					{
 						Tweener.addTween(pokerlist.ItemList[k], { y:pokerlist.ItemList[k].y - 130, x:pokerlist.ItemList[k].x - 190, transition:"easeOutQuint", time:1 } );
 							//change 50 to 200 or 5 to see how it works
 						
 					}
 					//shakeTween(pokerlist.ItemList[4], 200);
-					if ( cardtype == modelName.PLAYER_POKER) bnew = _model.putValue("playerNew", true);
-					if ( cardtype == modelName.BANKER_POKER) bnew = _model.putValue("bankerNew", true);
+					if ( cardtype == modelName.PLAYER_POKER)  _model.putValue("playerNew", true);
+					if ( cardtype == modelName.BANKER_POKER)  _model.putValue("bankerNew", true);
 					
 						
 				}
@@ -431,9 +435,9 @@ package View.ViewComponent
 			
 			if ( mypoker.length >= 4 && bnew == false)
 			{
-				var po:Array = [];
+				
 				var total:Array = [0, 1, 2, 3, 4];  //num
-				for (var k:int = 0; k < mypoker.length; k++) po.push(k);				
+				for ( k = 0; k < mypoker.length; k++) po.push(k);				
 				var newpoker:Array = pokerUtil.newnew_judge(mypoker, po);				
 				if ( newpoker.length != 0)
 				{									
@@ -441,9 +445,9 @@ package View.ViewComponent
 					var rest:Array = utilFun.Get_restItem(total,selectCard)
 						
 					//[160,80]
-					var po:Array = [ [200, 80], [340, 80], [480, 80]];
-					var pokerlist:MultiObject = Get(cardtype)					
-					for (var k:int = 0; k <selectCard.length; k++)
+					po = [ [200, 80], [340, 80], [480, 80]];
+					pokerlist = Get(cardtype)					
+					for ( k = 0; k <selectCard.length; k++)
 					{
 						Tweener.addTween(pokerlist.ItemList[selectCard[k]], {x:po[k][0], y:po[k][1] , transition:"easeOutQuint", time:1 } );
 					}
@@ -453,7 +457,7 @@ package View.ViewComponent
 					//隨挑選結果不同
 					//[230,-130]
 					var po2:Array = [ [260, -130], [400, -130]];				
-					for (var k:int = 0; k <rest.length; k++)
+					for ( k = 0; k <rest.length; k++)
 					{
 						Tweener.addTween(pokerlist.ItemList[rest[k]], {  x:po2[k][0] ,y:po2[k][1] , transition:"easeOutQuint", time:1 } );
 					}
@@ -463,8 +467,8 @@ package View.ViewComponent
 						//toos.SetControlMc(pokerlist.ItemList[2]);
 						//add(toos);
 					//
-					if ( cardtype == modelName.PLAYER_POKER) bnew = _model.putValue("playerNew", true);
-					if ( cardtype == modelName.BANKER_POKER) bnew = _model.putValue("bankerNew", true);					
+					if ( cardtype == modelName.PLAYER_POKER)  _model.putValue("playerNew", true);
+					if ( cardtype == modelName.BANKER_POKER)  _model.putValue("bankerNew", true);					
 				}				
 				
 			}

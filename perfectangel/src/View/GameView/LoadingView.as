@@ -121,10 +121,7 @@ package View.GameView
 			
 			_model.putValue(modelName.Game_Name, "PerfectAngel");
 			
-			_model.putValue("history_win_list", []);
-			_model.putValue("history_Play_Pai_list", []);			
-			_model.putValue("history_banker_Pai_list", []);			
-			
+			_model.putValue("history_win_list", []);		
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));			
 		}
