@@ -99,18 +99,15 @@ package View.ViewComponent
 			history_Pai_list_e.Create_by_bitmap(1, utilFun.Getbitmap("poker_atlas"), 0, 0, 6, 22, 25, "o_");		
 			
 			
-			_model.putValue("result_str_list", ["(天使贏2點)"]);
-			var historystr_model:Array = _model.getValue("result_str_list");			
-			var result_str_list:MultiObject = prepare("result_str_list", new MultiObject() , settletable.container);
-			result_str_list.CustomizedFun =_text.textSetting;
-			result_str_list.CustomizedData =[{size:24,align:_text.align_center},historystr_model.join("、")];	
+			
+			var result_str_list:MultiObject = prepare("result_str_list", new MultiObject() , settletable.container);			
 			result_str_list.container.x = 397;
 			result_str_list.container.y = 404;
 			result_str_list.Create_by_list(1, [ResName.TextInfo], 0 , 0,1,0 , 0, "Bet_");		
 			
 			//hintmsg.ItemList[0].gotoAndStop(2);	
 			//_tool.SetControlMc(settletable_title.ItemList[2]);
-			_tool.SetControlMc(settletable_zone_bet.container);
+			_tool.SetControlMc(result_str_list.container);
 			add(_tool);
 		}		
 		

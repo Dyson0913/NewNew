@@ -95,13 +95,14 @@ package Command
 			_model.putValue("idx_to_result_idx", _idx_to_result_idx);		
 			
 			var poer_msg:DI = new DI();		
-			poer_msg.putValue("WSWin", "贏");
-			poer_msg.putValue("WSPANormalWin", "贏");
+			poer_msg.putValue("WSLost", "無賴");
+			poer_msg.putValue("WSWin", "點贏");
+			poer_msg.putValue("WSPANormalWin", "點贏");
 			poer_msg.putValue("WSPAOnePointWin", "一點贏");
 			poer_msg.putValue("WSPATwoPointWin", "二點贏");
 			poer_msg.putValue("WSPAFiveWawaWin", "五公贏");
 			poer_msg.putValue("WSPAFourOfAKindWin", "四條贏");		
-			//_model.putValue(modelName.BIG_POKER_TEXT , poer_msg);
+			_model.putValue(modelName.BIG_POKER_TEXT , poer_msg);
 			
 			var state:DI = new DI();
 			state.putValue("NewRoundState", gameState.NEW_ROUND);

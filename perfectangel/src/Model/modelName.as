@@ -35,6 +35,7 @@ package Model
 		public static const AVALIBLE_ZONE_SENCE:int = Num++;
 		public static const AVALIBLE_ZONE_XY:int = Num++;
 		public static const COIN_STACK_XY:int = Num++;
+		public static const BIG_POKER_TEXT:int = Num++;
 		
 		
 		//view

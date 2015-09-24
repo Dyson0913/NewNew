@@ -30,7 +30,8 @@ package util
 				var pointar:Array  = get_Point( [mypoker[ rest[0]], mypoker[rest[1]]] );
 				point = Get_Mapping_Value([0, 1], pointar);
 										
-				point %= 10;										
+				point %= 10;
+				if ( point == 0) point = 10;
 				return point;
 			}
 			

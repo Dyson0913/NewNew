@@ -64,24 +64,28 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
 		public function round_result_data_process():void
 		{
+			utilFun.Log("round_result_data_process");
 			var result_list:Array = _model.getValue(modelName.ROUND_RESULT);
 			var num:int = result_list.length;
 			
 			var name_to_idx:DI = _model.getValue("Bet_name_to_idx");
 			var idx_to_name:DI = _model.getValue("Bet_idx_to_name");
 			var idx_to_result_idx:DI = _model.getValue("idx_to_result_idx");
-			//var win_text:DI = _model.getValue(modelName.BIG_POKER_TEXT);
+			var win_text:DI = _model.getValue(modelName.BIG_POKER_TEXT);
 			var settle_amount:Array = [0, 0, 0, 0, 0, 0, 0];
 			var zonebet_amount:Array = [0, 0, 0, 0, 0, 0, 0];
 			var total:int = 0;
 			var winst:String = "";
 			
 			var clean:Array = [];
+			var result_str:Array = [];
 			var resultframe:int = 0;
 			var angelFrame:int = 1;
 			var evillFrame:int = 1;
 			var angel_winstate:int = 0;
 			var evel_winstate:int = 0;
+			var evil_winstr:String = "";
+			var ang_winstr:String = "";
 			var angPoint:int = pokerUtil.ca_point(_model.getValue(modelName.PLAYER_POKER));
 			var eviPoint:int = pokerUtil.ca_point(_model.getValue(modelName.BANKER_POKER));
 			for ( var i:int = 0; i < num; i++)
@@ -91,8 +95,17 @@ package View.ViewComponent
 				//coin 清除區
 				if ( resultob.win_state == "WSLost")
 				{
-					if ( resultob.bet_type == "BetPAAngel" )  angelFrame = 2;
-					if ( resultob.bet_type == "BetPAEvil" )  evillFrame = 2;
+					if ( resultob.bet_type == "BetPAAngel" )
+					{
+						
+						angelFrame = 2;
+					}
+					
+					if ( resultob.bet_type == "BetPAEvil" )
+					{						
+						evillFrame = 2;
+					}
+					
 					clean.push (name_to_idx.getValue(resultob.bet_type));
 				}
 				else
@@ -103,8 +116,8 @@ package View.ViewComponent
 						//point
 						angelFrame = 4;
 						angel_winstate = 1;						
-						//result_str.push("天使");
-						winst = resultob.win_state;
+						ang_winstr = "天使" + angPoint.toString() +"點";
+						winst = resultob.win_state;						
 					}
 					else if ( resultob.bet_type == "BetPAEvil") 
 					{
@@ -112,25 +125,31 @@ package View.ViewComponent
 						evillFrame = 4;
 						evel_winstate = 1;						
 						winst = resultob.win_state;
-						//if( bigwin == -1) result_str.push("惡魔贏");
+							
+						evil_winstr = "惡魔" +  eviPoint.toString() +"點";
 					}
 					else if ( resultob.bet_type == "BetPABigEvil")
 					{
 						//point
 						evillFrame = 5;
+						evil_winstr = "大惡魔" + eviPoint.toString() +"點";
 					}
 					else if ( resultob.bet_type == "BetPABigAngel")
 					{
 						//point
 						angelFrame = 5;
+						ang_winstr = "大天使" + angPoint.toString() +"點";
 					}
 					else if ( resultob.bet_type == "BetPAUnbeatenEvil")
 					{
 						evillFrame = 6;
+						evil_winstr = "闇黑惡魔";
 					}
 					else if ( resultob.bet_type == "BetPAPerfectAngel")
 					{
 						angelFrame = 6;
+						ang_winstr = "完美天使";
+						
 					}
 					
 				}
@@ -139,24 +158,19 @@ package View.ViewComponent
 				settle_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type) )] =  resultob.settle_amount;
 				zonebet_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type)) ]  = resultob.bet_amount;
 				total += resultob.settle_amount;
-			}
-			
-			//押注及得分
-			_model.putValue("result_settle_amount",settle_amount);
-			_model.putValue("result_zonebet_amount",zonebet_amount);
-			_model.putValue("result_total", total);
+			}		
 			
 			var history:Array = _model.getValue("history_win_list");
 			var arr:Array = [];
 			if ( evel_winstate == 1) 
 			{
 				arr.push(2);
-				arr.push(angPoint);
+				arr.push(eviPoint);
 			}
 			else if ( angel_winstate == 1) 
 			{
 				arr.push(3);
-				arr.push(eviPoint);
+				arr.push(angPoint);
 			}
 			else  arr.push(5);
 			
@@ -172,16 +186,56 @@ package View.ViewComponent
 			_paytable.win_frame_hint(winst);
 			
 			GetSingleItem("zone", 0).gotoAndStop(evillFrame);
-			if ( evillFrame == 4 || evillFrame == 5)
+			if ( evillFrame == 6) 
+			{
+				GetSingleItem("zone", 0)["_wing"].rotationY = -180;					
+				
+			}
+			if (evillFrame == 5)
+			{
+				GetSingleItem("zone", 0)["_point"].gotoAndStop(eviPoint);				
+			}
+			if ( evillFrame == 4 )
 			{
 				GetSingleItem("zone", 0)["_point"].gotoAndStop(eviPoint);
+				
 			}
 			
+			
 			GetSingleItem("zone", 1).gotoAndStop(angelFrame);			
-			if ( angelFrame == 4 || angelFrame == 5)
+			if ( angelFrame == 6) 
+			{
+				GetSingleItem("zone", 1)["_wing"].rotationY = -180;			
+			}
+				if ( angelFrame == 5)
+			{
+				GetSingleItem("zone", 1)["_point"].gotoAndStop(angPoint);				
+			}
+			if ( angelFrame == 4)
 			{
 				GetSingleItem("zone", 1)["_point"].gotoAndStop(angPoint);
+				
 			}
+		
+			if ( evel_winstate == 1 ) 
+			{				
+				result_str.push(evil_winstr+ "贏");
+			}
+			if ( angel_winstate == 1 )
+			{
+				result_str.push(ang_winstr+"贏");
+			}
+			//特殊條件
+			if (angelFrame == 2 && evillFrame == 2)
+			{
+				result_str.push("天使，惡魔無賴");
+			}
+			
+				//押注及得分
+			_model.putValue("result_settle_amount",settle_amount);
+			_model.putValue("result_zonebet_amount",zonebet_amount);
+			_model.putValue("result_total", total);
+			_model.putValue("result_str_list", result_str);
 			
 			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 2, 1, "linear");
 			

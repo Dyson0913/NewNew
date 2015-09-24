@@ -110,7 +110,8 @@ package View.ViewComponent
 		public function history_ball_Setting(mc:MovieClip, idx:int, data:Array):void
 		{			
 			var info:Array =  data[idx];
-			utilFun.Log("history_ball_Setting "+ data[idx]);
+			utilFun.Log("history_ball_Setting " + data[idx]);
+			if ( data[idx] == undefined ) return;
 			var frame:int = info[0];
 			if ( info[0] != 4)
 			{				
