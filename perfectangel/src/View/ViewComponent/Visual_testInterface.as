@@ -334,6 +334,13 @@ package View.ViewComponent
 			_paytable.init();		
 			//_paytable.update_history();
 			
+				//================================================poker
+			_poker.init();
+			dispatcher(new ModelEvent("hide"));
+			dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
+			dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));							
+							
+			
 			//================================================settle info
 			_settle.init();			
 			

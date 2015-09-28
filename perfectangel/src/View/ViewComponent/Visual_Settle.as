@@ -41,9 +41,9 @@ package View.ViewComponent
 		public function init():void
 		{
 			var zone:MultiObject = prepare("zone", new MultiObject() , GetSingleItem("_view").parent.parent);			
-			zone.container.x = 1450;
-			zone.container.y = 450;			
-			zone.Create_by_list(2, [ResName.state_evil, ResName.state_angel], 0 , 0, 2, -1014, 0, "Bet_");		
+			zone.container.x = 1420;
+			zone.container.y = 440;			
+			zone.Create_by_list(2, [ResName.state_evil, ResName.state_angel], 0 , 0, 2, -884, 0, "Bet_");		
 			
 			//_tool.SetControlMc(zone.container);
 			//_tool.SetControlMc(zone.ItemList[1]);
@@ -186,6 +186,11 @@ package View.ViewComponent
 			_paytable.win_frame_hint(winst);
 			
 			GetSingleItem("zone", 0).gotoAndStop(evillFrame);
+			if ( evillFrame == 2 && eviPoint != -1) 
+			{
+				GetSingleItem("zone", 0).gotoAndStop(4);
+				GetSingleItem("zone", 0)["_point"].gotoAndStop(eviPoint);
+			}
 			if ( evillFrame == 6) 
 			{
 				GetSingleItem("zone", 0)["_wing"].rotationY = -180;					
@@ -202,7 +207,12 @@ package View.ViewComponent
 			}
 			
 			
-			GetSingleItem("zone", 1).gotoAndStop(angelFrame);			
+			GetSingleItem("zone", 1).gotoAndStop(angelFrame);	
+			if ( angelFrame == 2 && angPoint != -1)
+			{
+				GetSingleItem("zone", 1).gotoAndStop(4);				
+				GetSingleItem("zone", 1)["_point"].gotoAndStop(angPoint);
+			}
 			if ( angelFrame == 6) 
 			{
 				GetSingleItem("zone", 1)["_wing"].rotationY = -180;			
@@ -243,6 +253,7 @@ package View.ViewComponent
 		
 		public function showAni(evel_winstate:int,angel_winstate:int):void
 		{
+			//return;
 			//TODO       大天使,(完美)
 			//                XX幾點
 			if( evel_winstate ==1)

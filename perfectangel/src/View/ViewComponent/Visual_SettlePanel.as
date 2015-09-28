@@ -107,16 +107,14 @@ package View.ViewComponent
 			
 			//hintmsg.ItemList[0].gotoAndStop(2);	
 			//_tool.SetControlMc(settletable_title.ItemList[2]);
-			_tool.SetControlMc(result_str_list.container);
-			add(_tool);
+			//_tool.SetControlMc(result_str_list.container);
+			//add(_tool);
 		}		
 		
 		public function sprite_idx_setting_player(mc:*, idx:int, data:Array):void
 		{			
 			var code:int  = pokerUtil.pokerTrans_s(data[idx]);			
-			mc.x += 25;
-			
-			
+			mc.x += 25;			
 			//押暗
 			//if ( history_win[Math.floor(idx / 5)] != ResName.angelball) mc.alpha =  0.5;			
 			mc.drawTile(code);	
