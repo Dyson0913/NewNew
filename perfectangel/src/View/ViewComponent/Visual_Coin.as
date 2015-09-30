@@ -119,6 +119,7 @@ package View.ViewComponent
 			{
 				if ( i == old_select ) 
 				{				
+					if ( old_select == idx) continue;
 					var frame:int = _coin.ItemList[old_select]["_coin"].currentFrame;				
 					_coin.ItemList[old_select].y += 20;
 					_coin.ItemList[old_select].gotoAndStop(1);
