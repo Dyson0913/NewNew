@@ -138,7 +138,7 @@ package View.ViewComponent
 			var mypoker:Array =   _model.getValue(type.Value);			
 			var pokerid:int = pokerUtil.pokerTrans(mypoker[mypoker.length - 1])					
 			
-			if ( mypoker.length == 5)
+			if ( mypoker.length == 4 || mypoker.length == 5)
 			{
 				
 				Get("mipoker").CleanList();		
@@ -233,7 +233,8 @@ package View.ViewComponent
 		{
 			var mipoker:MultiObject = Get("mipoker");
 			Tweener.addTween(mipoker.container, { alpha:0, time:1 } );
-			var anipoker:MovieClip = GetSingleItem(pokertype, 4);
+			var mypoker:Array =   _model.getValue(pokertype);		
+			var anipoker:MovieClip = GetSingleItem(pokertype, mypoker.length -1);
 			anipoker.visible = true;
 			//anipoker.gotoAndStop(23);						
 			//anipoker["_poker_a"].gotoAndStop(pokerid);	

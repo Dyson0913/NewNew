@@ -101,59 +101,59 @@ package ConnectModule.websocket
 				switch(result.message_type)
 				{				
 					case Message.MSG_TYPE_INTO_GAME:
-						{						
-							if( _model.getValue(modelName.HandShake_chanel) == null )  dispatcher(new ValueObject( result.inside_game_info.player_info.credit, modelName.CREDIT) );					
-							
-							
-							dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );						
-							dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
-							
-							dispatcher(new ValueObject(  result.game_round, "game_round") );
-							dispatcher(new ValueObject(  result.game_id, "game_id") );
-							
-							//dispatcher( new ValueObject(result.cards_info["player_card_list"], modelName.PLAYER_POKER) );
-							//dispatcher( new ValueObject(result.cards_info["banker_card_list"], modelName.BANKER_POKER) );                        
-							_model.putValue(modelName.PLAYER_POKER, result.cards_info["player_card_list"]);
-							_model.putValue(modelName.BANKER_POKER, result.cards_info["banker_card_list"]);
-							
-							dispatcher(new Intobject(modelName.Bet, ViewCommand.SWITCH) );							
-							
-							dispatcher(new ModelEvent("update_state"));
-							dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
-							dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));							
-							
-						}
-						break;
+					{						
+						if( _model.getValue(modelName.HandShake_chanel) == null )  dispatcher(new ValueObject( result.inside_game_info.player_info.credit, modelName.CREDIT) );					
+						
+						
+						dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );						
+						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
+						
+						dispatcher(new ValueObject(  result.game_round, "game_round") );
+						dispatcher(new ValueObject(  result.game_id, "game_id") );
+						
+						//dispatcher( new ValueObject(result.cards_info["player_card_list"], modelName.PLAYER_POKER) );
+						//dispatcher( new ValueObject(result.cards_info["banker_card_list"], modelName.BANKER_POKER) );                        
+						_model.putValue(modelName.PLAYER_POKER, result.cards_info["player_card_list"]);
+						_model.putValue(modelName.BANKER_POKER, result.cards_info["banker_card_list"]);
+						
+						dispatcher(new Intobject(modelName.Bet, ViewCommand.SWITCH) );							
+						
+						dispatcher(new ModelEvent("update_state"));
+						dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
+						dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));						
+					}
+					break;		
+					
 					case Message.MSG_TYPE_GAME_OPEN_INFO:
-						{
-							
-							dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
-							
-							dispatcher(new ValueObject(  result.game_round, "game_round") );
-							dispatcher(new ValueObject(  result.game_id, "game_id") );
-							
-							var card:Array = result.card_list;
-							var card_type:String = result.card_type
-							var mypoker:Array;
-							if ( card_type == "Player")
-							{										
-								mypoker = _model.getValue(modelName.PLAYER_POKER);										
-								mypoker.push(card[0]);
-								_model.putValue(modelName.PLAYER_POKER, mypoker);										
-								dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_mi"));									
-							}
-							else if ( card_type == "Banker")
-							{							
-								mypoker = _model.getValue(modelName.BANKER_POKER);										
-								mypoker.push( card[0]);
-								
-								_model.putValue(modelName.BANKER_POKER, mypoker);
-								//dispatcher( new ValueObject(card, modelName.BANKER_POKER) );
-								dispatcher(new Intobject(modelName.BANKER_POKER, "poker_mi"));
-								
-							}
+					{
+						
+						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
+						
+						dispatcher(new ValueObject(  result.game_round, "game_round") );
+						dispatcher(new ValueObject(  result.game_id, "game_id") );
+						
+						var card:Array = result.card_list;
+						var card_type:String = result.card_type
+						var mypoker:Array;
+						if ( card_type == "Player")
+						{										
+							mypoker = _model.getValue(modelName.PLAYER_POKER);										
+							mypoker.push(card[0]);
+							_model.putValue(modelName.PLAYER_POKER, mypoker);										
+							dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_mi"));									
 						}
-						break;
+						else if ( card_type == "Banker")
+						{							
+							mypoker = _model.getValue(modelName.BANKER_POKER);										
+							mypoker.push( card[0]);
+							
+							_model.putValue(modelName.BANKER_POKER, mypoker);
+							//dispatcher( new ValueObject(card, modelName.BANKER_POKER) );
+							dispatcher(new Intobject(modelName.BANKER_POKER, "poker_mi"));
+							
+						}
+					}
+					break;
 						
 					case Message.MSG_TYPE_BET_INFO:
 					{
@@ -192,7 +192,8 @@ package ConnectModule.websocket
 						dispatcher( new ValueObject(result.result_list, modelName.ROUND_RESULT));
 						dispatcher(new ModelEvent("round_result"));						
 					}
-					break;					
+					break;
+					
 				}
 		}
 		
