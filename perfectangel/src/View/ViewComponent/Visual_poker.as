@@ -42,9 +42,7 @@ package View.ViewComponent
 			bankerCon.container.y = 630;
 			bankerCon.container.alpha = 0;
 			
-			//_tool.SetControlMc(paytable.ItemList[1]);
-			//_tool.SetControlMc(bankerCon.container);
-			//add(_tool);			
+				
 			
 			var table_hint:MultiObject = prepare("table_hint", new MultiObject(), GetSingleItem("_view").parent.parent);
 			table_hint.autoClean = true;
@@ -60,7 +58,9 @@ package View.ViewComponent
 			mipoker.container.y = 570;
 			mipoker.container.alpha = 0;
 			
-			
+			//_tool.SetControlMc(paytable.ItemList[1]);
+			//_tool.SetControlMc(mipoker.container);
+			//add(_tool);		
 			
 			//no clean ,half in init ,cant cleanr model
 		}
@@ -144,6 +144,17 @@ package View.ViewComponent
 				Get("mipoker").CleanList();		
 				Get("mipoker").Create_by_list(1, [ResName.Mipoker_zone], 0 , 0, 1, 130, 0, "Bet_");
 				Get("mipoker").container.alpha = 0;
+				
+				if( type.Value == modelName.PLAYER_POKER)
+				{
+					Get("mipoker").container.x = 1200;
+					Get("mipoker").container.y = 570;
+				}
+				if( type.Value == modelName.BANKER_POKER)
+				{
+					Get("mipoker").container.x = 300;
+					Get("mipoker").container.y = 570;
+				}
 				
 				var mipoker:MultiObject = Get("mipoker");
 				var mc:MovieClip = mipoker.ItemList[0];
