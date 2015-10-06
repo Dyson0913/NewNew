@@ -56,9 +56,6 @@ package View.GameView
 		public var _sencer:Visual_betZone_Sence;
 		
 		[Inject]
-		public var _mask:Visual_Mask;
-		
-		[Inject]
 		public var _sence:Visual_betZone_Sence;
 		
 		[Inject]
@@ -69,6 +66,9 @@ package View.GameView
 		
 		[Inject]
 		public var _gameinfo:Visual_Game_Info;	
+		
+		[Inject]
+		public var _betinfo:Visual_Betinfo;
 		
 		[Inject]
 		public var _settlePanel:Visual_SettlePanel;
@@ -91,10 +91,8 @@ package View.GameView
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
 			
-			_mask.init();
-			
 			_gameinfo.init();
-			
+			_betinfo.init();
 			_paytable.init();
 			_settle.init();
 			//_playinfo.init();

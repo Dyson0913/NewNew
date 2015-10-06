@@ -197,14 +197,7 @@ package View.ViewComponent
 			vid.y = 100; //_aspectH;
 			vid.width = 320;  //_videoW;
 			vid.height = 240; //_videoH;
-		}
-
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function timer_hide():void
-		{			
-			Get(modelName.REMAIN_TIME).container.visible = false;
-		}
+		}	
 		
 		
 	}

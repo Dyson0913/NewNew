@@ -42,25 +42,22 @@ package View.ViewComponent
 			bankerCon.container.y = 630;
 			bankerCon.container.alpha = 0;
 			
-				
-			
-			var table_hint:MultiObject = prepare("table_hint", new MultiObject(), GetSingleItem("_view").parent.parent);
+			var table_hint:MultiObject = create("table_hint", [ResName.open_tableitem]);
 			table_hint.autoClean = true;
 			table_hint.CleanList();
-			table_hint.Create_by_list(1, [ResName.open_tableitem], 0 , 0, 1, 0, 0, "Bet_");
+			table_hint.Create_(1, "table_hint");
 			table_hint.container.x = 442;
 			table_hint.container.y = 590;	
 			table_hint.container.visible = false;
 			
-			var mipoker:MultiObject =  prepare("mipoker", new MultiObject(), GetSingleItem("_view").parent.parent);			
-			mipoker.Create_by_list(1, [ResName.Mipoker_zone], 0 , 0, 1, 0, 0, "Bet_");			
+			var mipoker:MultiObject =  create("mipoker",  [ResName.Mipoker_zone]);		
+			mipoker.Create_(1, "mipoker");
 			mipoker.container.x = 740;
 			mipoker.container.y = 570;
 			mipoker.container.alpha = 0;
 			
-			//_tool.SetControlMc(paytable.ItemList[1]);
-			//_tool.SetControlMc(mipoker.container);
-			//add(_tool);		
+			put_to_lsit(table_hint);
+			put_to_lsit(mipoker);
 			
 			//no clean ,half in init ,cant cleanr model
 		}
@@ -147,13 +144,13 @@ package View.ViewComponent
 				
 				if( type.Value == modelName.PLAYER_POKER)
 				{
-					Get("mipoker").container.x = 1200;
-					Get("mipoker").container.y = 570;
+					Get("mipoker").container.x = 490;
+					Get("mipoker").container.y = 590;
 				}
 				if( type.Value == modelName.BANKER_POKER)
 				{
-					Get("mipoker").container.x = 300;
-					Get("mipoker").container.y = 570;
+					Get("mipoker").container.x = 1010;
+					Get("mipoker").container.y = 590;
 				}
 				
 				var mipoker:MultiObject = Get("mipoker");

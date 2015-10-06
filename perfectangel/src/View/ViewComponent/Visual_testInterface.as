@@ -78,6 +78,12 @@ package View.ViewComponent
 		public var _text:Visual_Text;
 		
 		[Inject]
+		public var _betinfo:Visual_Betinfo;
+		
+		[Inject]
+		public var _debug:Visual_debugTool;
+		
+		[Inject]
 		public var _settlePanel:Visual_SettlePanel;
 		
 		private var _script_item:MultiObject;
@@ -89,7 +95,7 @@ package View.ViewComponent
 		
 		public function init():void
 		{			
-			
+			_debug.init();
 			_betCommand.bet_init();
 			_model.putValue("result_Pai_list", []);
 			_model.putValue("game_round", 1);			
@@ -202,7 +208,7 @@ package View.ViewComponent
 			_model.putValue(modelName.REMAIN_TIME, 20);					
 			_timer.init();
 			_timer.display();
-			
+			_timer.debug();
 			
 		}	
 		
@@ -256,6 +262,7 @@ package View.ViewComponent
 			_paytable.init();
 			_paytable.opencard_parse();
 			
+			_betinfo.init();
 			
 			//=============================================Hintmsg
 			_hint.init();
@@ -265,7 +272,7 @@ package View.ViewComponent
 			//================================================poker
 			_poker.init();
 			dispatcher(new ModelEvent("hide"));
-			
+			_poker.debug();
 			//settle_table
 			
 			//================================================settle info
@@ -349,7 +356,7 @@ package View.ViewComponent
 			//_coin_stack.init();
 			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 0);
 			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 1);
-			
+			//_betinfo.init();
 			
 			_settlePanel.init();
 			utilFun.Log("ok");

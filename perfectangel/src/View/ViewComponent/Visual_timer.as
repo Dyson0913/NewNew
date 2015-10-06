@@ -29,27 +29,26 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var countDown:MultiObject = prepare(modelName.REMAIN_TIME,new MultiObject()  , GetSingleItem("_view").parent.parent);
-		   countDown.Create_by_list(1, [ResName.Timer], 0, 0, 1, 0, 0, "timer");
+			var countDown:MultiObject = create(modelName.REMAIN_TIME, [ResName.Timer]);
+		   countDown.Create_(1, ResName.Timer.toString());
 		   countDown.container.x = 1183;
 		   countDown.container.y = 340;
 		   countDown.container.visible = false;
 		   
 		   
-		   	var timellight:MultiObject = prepare("timellight",new MultiObject()  , countDown.container);
-		   timellight.Create_by_list(1, ["time_light"], 0, 0, 1, 0, 0, "time_");		   
+		   	var timellight:MultiObject = create("timellight", ["time_light"] , countDown.container);
+		   timellight.Create_(1, "timellight");
 		   timellight.container.x = 75;
 		   timellight.container.y = 75;
 		   
 		   //TODO item test model put in here ?
 		   //_model.putValue(modelName.REMAIN_TIME, 10);
-		   	
-		   	//_tool.SetControlMc(playerzone.ItemList[0]);
-			//_tool.SetControlMc(countDown.container);
-			//_tool.x = 100;
-			//add(_tool);
+		   
 			already_countDown = false;
 			Waring_sec = 7;
+			
+			put_to_lsit(countDown);
+			put_to_lsit(timellight);
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]

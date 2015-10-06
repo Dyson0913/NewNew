@@ -34,9 +34,7 @@ package View.ViewComponent
 		}
 		
 		public function init():void
-		{
-			
-			
+		{			
 			//賠率提示
 			var paytable:MultiObject = prepare("paytable", new MultiObject() ,  GetSingleItem("_view").parent.parent);
 			paytable.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 1]);			
@@ -57,8 +55,7 @@ package View.ViewComponent
 			historytable.container.y =  170;
 			historytable.Create_by_list(1, [ResName.historytable], 0, 0, 1, 0, 0, "time_");
 			
-			//結果歷史記錄
-			var history_model:Array = _model.getValue("history_win_list");
+			//結果歷史記錄			
 			var historyball:MultiObject = prepare("historyball", new MultiObject() ,   historytable.container);
 			historyball.container.x = 6.35;
 			historyball.container.y = 8.85;
@@ -67,19 +64,7 @@ package View.ViewComponent
 			historyball.Create_by_list(60, [ResName.historyball], 0, 0, 1, 0, 0, "histor");			
 			//historyball.container.visible = true;				
 			
-			var settletable_zone:MultiObject = prepare("opencard_betinfo", new MultiObject(), GetSingleItem("_view").parent.parent);		
-			settletable_zone.container.x = 1320;
-			settletable_zone.container.y =  140;	
-			settletable_zone.CustomizedFun = _text.textSetting;
-			settletable_zone.CustomizedData = [{size:28}, "天使","惡魔","大天使8、9","大惡魔8、9","完美天使10","闇黑惡魔10","同點數","總計"];
-			settletable_zone.Create_by_list(settletable_zone.CustomizedData.length-1, [ResName.TextInfo], 0 , 0, 1, 0, 38, "Bet_");		
-			settletable_zone.container.visible = false;			
 			
-			var opencard_bet_amount:MultiObject = prepare("opencard_bet_amount", new MultiObject(), GetSingleItem("_view").parent.parent);		
-			opencard_bet_amount.container.x = 1001;
-			opencard_bet_amount.container.y =  139;	
-			opencard_bet_amount.CustomizedFun = _text.textSetting;
-			opencard_bet_amount.container.visible = false;
 			
 			//_tool.SetControlMc(paytable.container);
 			//.._tool.SetControlMc(paytable_baridx.ItemList[0]);
@@ -92,17 +77,13 @@ package View.ViewComponent
 		{
 			GetSingleItem("paytable_baridx").gotoAndStop(1);
 			
-			Get("Historytable").container.visible = true;
-			Get("opencard_betinfo").container.visible = false;
-			Get("opencard_bet_amount").container.visible = false;	
-			
+			Get("Historytable").container.visible = true;			
 			update_history();
 		}
 		
 		public function update_history():void
-		{
-			var history_model:Array = _model.getValue("history_win_list");
-			Get("historyball").CustomizedData = history_model;
+		{			
+			Get("historyball").CustomizedData = _model.getValue("history_win_list");
 			Get("historyball").CustomizedFun = history_ball_Setting;
 			Get("historyball").FlushObject();
 		}
@@ -113,7 +94,7 @@ package View.ViewComponent
 			utilFun.Log("history_ball_Setting " + data[idx]);
 			if ( data[idx] == undefined ) return;
 			var frame:int = info[0];
-			if ( info[0] != 4)
+			if (  info[0] !=5)
 			{				
 				mc["_Text"].text = info[1];
 			}
@@ -124,34 +105,13 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
 		public function opencard_parse():void
 		{
-			Get("Historytable").container.visible = false;
-			Get("opencard_betinfo").container.visible = true;			
-			Get("opencard_bet_amount").container.visible = true;	
-			
-			
-			var mylist:Array = [];// ["0", "0", "0", "0", "0", "0", "0", "0"];
-			var zone:Array = _model.getValue(modelName.AVALIBLE_ZONE_IDX);
-			var maping:DI = _model.getValue("idx_to_result_idx");
-			for ( var i:int = 0; i < zone.length; i++)
-			{				
-				var map:int = maping.getValue(zone[i]);				 
-				mylist.splice(map, 0,_betCommand.get_total_bet(zone[i]));
-			}
-			//同點數
-			mylist.push(0);
-			mylist.push(_betCommand.all_betzone_totoal());
-			
-			
-			
-			var font:Array = [{size:26,align:_text.align_right,color:0xFF0000}];
-			font = font.concat(mylist);
-			Get("opencard_bet_amount").CustomizedData = font;
-			Get("opencard_bet_amount").Create_by_list(font.length-1, [ResName.TextInfo], 0 , 0, 1, 0, 38, "Bet_");	
+			Get("Historytable").container.visible = false;			
 		}
 		
 		public function win_frame_hint(wintype:String):void
 		{
-			if ( wintype == "") return ;			
+			if ( wintype == "") return ;
+			
 			var frame:int = 1;
 			if (wintype ==  "WSWin" || wintype == "WSPANormalWin") frame = 6
 			else if ( wintype == "WSPATwoPointWin") frame = 5
@@ -159,11 +119,9 @@ package View.ViewComponent
 			else if ( wintype == "WSPAFourOfAKindWin") frame = 2
 			else if ( wintype == "WSPAFiveWawaWin") frame = 3;
 			
-			//GetSingleItem("paytable_baridx").y = y;
 			GetSingleItem("paytable_baridx").gotoAndStop(frame);
 			
-			//TODO frame Twinkel
-			//_regular.Twinkle(GetSingleItem("paytable_baridx"), 5, 15, 2);
+		
 			
 		}
 		

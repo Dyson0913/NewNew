@@ -8,8 +8,7 @@ package Res
 	{
 		
 		public static const Loading_Scene:String = "LoadingSence";
-		public static const Bet_Scene:String = "BetSence";
-		public static const BGMask:String = "BG_Mask";
+		public static const Bet_Scene:String = "BetSence";		
 		
 		
 		
@@ -28,17 +27,13 @@ package Res
 		public static const Time_light:String = "time_light";
 		public static const Hint:String = "HintMsg";
 		
-		public static const angelball:String = "angel_ball";
-		public static const evilball:String = "evil_ball";
-		public static const Noneball:String = "None_ball";
+		
 		public static const historyball:String = "history_ball";
 		
+		public static const betlimit:String = "bet_limit";
+		public static const realtimeinfo:String = "realtime_info";
 		
-		public static const history_Item_select:String = "historyItem_select";
 		public static const historytable:String = "history_table";		
-		public static const history_select_itembar:String = "history_select_item_bar";
-		public static const history_select_item_sencebar:String = "history_select_item_sence_bar";
-		
 		public static const bet_tableitem:String = "bet_table_item";		
 		
 		
@@ -48,22 +43,13 @@ package Res
 		public static const emptymc:String = "Emptymc";
 		public static const settletable:String = "settle_table";
 		
-		public static const evilZone:String = "bet_evil"
-		public static const angelZone:String = "bet_angel"
-		public static const angel_big:String = "big_angel"
-		public static const evil_big:String = "big_evil"
-		public static const evil_per:String = "per_evil"
-		public static const angel_per:String = "per_angel"
-		public static const samepoint:String = "same_point"
-	
-		public static const evilZone_s:String = "bet_evil_sence"
-		public static const angelZone_s:String = "bet_angel_sence"
-		public static const angel_big_s:String = "big_angel_sence"
-		public static const evil_big_s:String = "big_evil_sence"
-		public static const evil_per_s:String = "per_evil_sence"
-		public static const angel_per_s:String = "per_angel_sence"
-		public static const same_point_s:String = "same_point_sence"
-	
+		public static const evilZone:String = "bet_evil";
+		public static const angelZone:String = "bet_angel";
+		public static const angel_big:String = "big_angel";
+		public static const evil_big:String = "big_evil";
+		public static const evil_per:String = "per_evil";
+		public static const angel_per:String = "per_angel";
+		public static const samepoint:String = "same_point";
 		
 		public static const open_tableitem:String = "open_table_item";		
 		public static const rebet_btn:String = "btn_rebet";

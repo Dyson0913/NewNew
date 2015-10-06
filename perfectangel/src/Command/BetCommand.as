@@ -29,7 +29,7 @@ package Command
 		
 		public function BetCommand() 
 		{
-			Clean_bet();					
+			
 		}
 		
 		public function bet_init():void
@@ -66,14 +66,13 @@ package Command
 			//bet_idx_to_name.putValue(5, "BetPAPerfectAngel");			
 			
 			
-			var allzone:Array =  [ResName.evilZone, ResName.angelZone, ResName.evil_big, ResName.angel_big, ResName.evil_per, ResName.angel_per,ResName.samepoint];
-			var allzone_s:Array =  [ResName.evilZone_s, ResName.angelZone_s, ResName.evil_big_s, ResName.angel_big_s, ResName.evil_per_s, ResName.angel_per_s,ResName.same_point_s];
+			var allzone:Array =  [ResName.evilZone, ResName.angelZone, ResName.evil_big, ResName.angel_big, ResName.evil_per, ResName.angel_per,ResName.samepoint];			
 			var avaliblezone:Array = [];
 			var avaliblezone_s:Array = [];
 			for each (var k:int in betzone)
 			{
 				avaliblezone.push ( allzone[k]);
-				avaliblezone_s.push( allzone_s[k]);
+				avaliblezone_s.push( allzone[k]+"_sence");
 				
 			}
 			_model.putValue(modelName.AVALIBLE_ZONE, avaliblezone);
@@ -121,6 +120,7 @@ package Command
 			//utilFun.Log("model ="+_model.getValue(modelName.Lobby_Call_back));
 			
 			_Bet_info.putValue("self", []);
+			_model.putValue("history_bet",[]);
 		}
 		
 		public function update_credit(new_credit:Number):void
@@ -140,7 +140,8 @@ package Command
 				//return false;
 			//}	
 			
-			var bet:Object = { "betType": idx, 
+			var bet:Object = { "betType": idx,
+											"bet_idx":_model.getValue("coin_selectIdx"),
 			                               "bet_amount":  _opration.array_idx("coin_list", "coin_selectIdx"),
 										   "total_bet_amount": get_total_bet(idx) +_opration.array_idx("coin_list", "coin_selectIdx")
 			};
@@ -154,6 +155,7 @@ package Command
 		public function bet_local(e:Event,idx:int):Boolean
 		{			
 			var bet:Object = { "betType": idx, 
+											 "bet_idx":_model.getValue("coin_selectIdx"),
 			                               "bet_amount":  _opration.array_idx("coin_list", "coin_selectIdx"),
 										   "total_bet_amount": get_total_bet(idx) +_opration.array_idx("coin_list", "coin_selectIdx")
 			};
@@ -276,8 +278,61 @@ package Command
 		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
 		public function Clean_bet():void
 		{
-			_Bet_info.clean();
+			save_bet();
+			_Bet_info.clean();			
+			
+			_Bet_info.putValue("self", [] ) ;
 		}
+		
+		public function save_bet():void
+		{
+			var bet_list:Array = _Bet_info.getValue("self");
+			utilFun.Log("save_bet bet_list  = "+bet_list.length );
+			if ( bet_list.length ==0) return;
+			_model.putValue("history_bet", bet_list);
+		}
+		
+		public function clean_hisotry_bet():void
+		{
+			_model.putValue("history_bet", []);
+			dispatcher(new ModelEvent("can_not_rebet"));
+		}
+		
+		public function need_rebet():Boolean
+		{
+			var bet_list:Array  = _model.getValue("history_bet");			
+			if ( bet_list.length ==0) return false;
+			
+			return true;
+		}
+		
+		public function re_bet():void
+		{
+			var bet_list:Array  = _model.getValue("history_bet");
+			
+			utilFun.Log("check bet_list  = " + bet_list );
+			if ( bet_list == null) return;
+			
+			//與賓果不同,同一注區會分多筆,必需要等上一筆注單確認,再能再下第二筆,不然total_bet_amount,值會錯
+			utilFun.Log("bet_list  = " + bet_list.length );
+			if ( bet_list.length != 0)
+			{			
+				var coin_list:Array = _model.getValue("coin_list");
+				var bet:Object = bet_list[0];				
+				var mybet:Object = { "betType": bet["betType"],
+													  "bet_idx":bet["bet_idx"],
+														"bet_amount": coin_list[ bet["bet_idx"]] ,
+														"total_bet_amount": ( get_total_bet( bet["betType"]) + coin_list[ bet["bet_idx"]] )
+				};
+			
+				utilFun.Log("bet_info  = " + mybet["betType"] +" amount =" + mybet["bet_amount"] + " idx = " + bet["bet_idx"] +" total_bet_amount " + (get_total_bet( bet["betType"]) +coin_list[ bet["bet_idx"]] ) );
+				bet_list.shift();
+				_model.putValue("history_bet",bet_list);
+				dispatcher( new ActionEvent(mybet, "bet_action"));
+				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BET));
+			}
+		}
+		
 	}
 
 }

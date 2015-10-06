@@ -58,7 +58,17 @@ package View.ViewComponent
 			game_info_data.container.x = 312;
 			game_info_data.container.y = 80;
 			
-			//_tool.SetControlMc(game_info_data.container);			
+			var betlimit:MultiObject = prepare("betlimit", new MultiObject() , GetSingleItem("_view").parent.parent);			
+			betlimit.container.x = 40;
+			betlimit.container.y = 130;	
+			betlimit.Create_by_list(1, [ResName.betlimit], 0, 0, 1, 0, 0, "time_");				
+			
+			var realtimeinfo:MultiObject = prepare("realtimeinfo", new MultiObject() , GetSingleItem("_view").parent.parent);			
+			realtimeinfo.container.x = 1704;
+			realtimeinfo.container.y = 130;	
+			realtimeinfo.Create_by_list(1, [ResName.realtimeinfo], 0, 0, 1, 0, 0, "time_");			
+			
+			//_tool.SetControlMc(realtimeinfo.container);			
 			//_tool.SetControlMc(game_info_data.ItemList[3]);			
 			//_tool.y = 200;
 			//add(_tool);	
@@ -67,12 +77,21 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
 		public function display():void
 		{
+			Get("betlimit").container.visible = true;
+			Get("realtimeinfo").container.visible = true;
+			
 			utilFun.Clear_ItemChildren(Get("game_title_info_data").ItemList[1]);			
 			var round_code:int = _opration.operator("game_round", DataOperation.add);
 			var textfi:TextField = _text.dynamic_text(round_code.toString(),{size:18});
 			Get("game_title_info_data").ItemList[1].addChild(textfi);	
 		}		
 		
+		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
+		public function opencard_parse():void
+		{			
+			Get("betlimit").container.visible = false;
+			Get("realtimeinfo").container.visible = false;
+		}
 	}
 
 }

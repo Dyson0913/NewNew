@@ -78,6 +78,13 @@ package View.ViewComponent
 		
 		public function bet_sencer(e:Event,idx:int):Boolean
 		{			
+			//玩家手動第一次下注,取消上一局的betinfo
+			utilFun.Log("bet_sencer = "+_betCommand.need_rebet());
+			if ( _betCommand.need_rebet() )
+			{
+				_betCommand.clean_hisotry_bet();
+			}
+			
 			if ( CONFIG::debug ) 
 			{
 				_betCommand.betTypeMain(e, idx);

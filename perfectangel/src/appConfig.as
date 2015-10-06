@@ -11,6 +11,7 @@ package
 	import View.ViewBase.Visual_Text;
 	import View.ViewBase.VisualHandler;
 	import View.ViewComponent.*;
+	import View.Viewutil.Visual_debugTool;
 	
 	import View.GameView.*;
 	import util.math.*;
@@ -32,6 +33,7 @@ package
 		public var _Model:Model = new Model();
 		public var _MsgModel:MsgQueue = new MsgQueue();		
 		public var _Actionmodel:ActionQueue = new ActionQueue();
+		public var _fileStream:fileStream = new fileStream();
 		
 		//connect module
 		public var _socket:WebSoketComponent = new WebSoketComponent();
@@ -44,6 +46,7 @@ package
 		public var _regular:RegularSetting = new RegularSetting();
 		
 		public var _text:Visual_Text = new Visual_Text();
+		public var _debug:Visual_debugTool = new Visual_debugTool();
 		
 		
 		//visual
@@ -57,11 +60,11 @@ package
 		public var _strem:Visual_stream = new Visual_stream();
 		public var _loader:Visual_Loder = new Visual_Loder();
 		public var _settle:Visual_Settle = new Visual_Settle();
-		public var _sencer:Visual_betZone_Sence = new Visual_betZone_Sence();
-		public var _mask:Visual_Mask = new Visual_Mask();
+		public var _sencer:Visual_betZone_Sence = new Visual_betZone_Sence();		
 		public var _paytable:Visual_Paytable = new Visual_Paytable();		
 		public var _gameinfo:Visual_Game_Info = new Visual_Game_Info();		
 		public var _settlePanel:Visual_SettlePanel = new Visual_SettlePanel();
+		public var _Betinfo:Visual_Betinfo = new Visual_Betinfo();
 		
 		//util
 		public var _path:Path_Generator = new Path_Generator();

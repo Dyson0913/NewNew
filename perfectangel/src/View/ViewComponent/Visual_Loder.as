@@ -53,10 +53,8 @@ package View.ViewComponent
 		}
 		
 		public function getToken():int
-		{
-			var serial:int = _model.getValue("Loading_Serial");
-			_model.putValue("Loading_Serial", serial +1);			
-			return serial;
+		{			
+			return _opration.operator("Loading_Serial", DataOperation.add, 1);
 		}
 		
 		[MessageHandler(type="Model.valueObject.ArrayObject",selector="binary_file_loading")]

@@ -11,6 +11,7 @@ package ConnectModule.websocket
 	import flash.utils.ByteArray;
 	import flash.system.Security;	
 	import Model.*;
+	import Model.valueObject.ArrayObject;
 	import Model.valueObject.Intobject;
 	import util.DI;
 	
@@ -192,9 +193,10 @@ package ConnectModule.websocket
 						dispatcher( new ValueObject(result.result_list, modelName.ROUND_RESULT));
 						dispatcher(new ModelEvent("round_result"));						
 					}
-					break;
-					
+					break;					
 				}
+				
+				dispatcher(new ArrayObject([result], "pack_recoder"));
 		}
 		
 		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="Bet")]
@@ -219,6 +221,7 @@ package ConnectModule.websocket
 		
 		public function SendMsg(msg:Object):void 
 		{
+			dispatcher(new ArrayObject([msg], "pack_recoder"));
 			var jsonString:String = JSON.encode(msg);			
 			websocket.sendUTF(jsonString);
 		}
