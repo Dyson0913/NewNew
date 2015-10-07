@@ -20,6 +20,9 @@ package View.ViewComponent
 		[Inject]
 		public var _text:Visual_Text;
 		
+		[Inject]
+		public var _betCommand:BetCommand;
+		
 		public function Visual_SettlePanel() 
 		{
 			
@@ -34,14 +37,15 @@ package View.ViewComponent
 			settletable.container.visible = false;
 			
 			
-			var settletable_title:MultiObject = prepare("settletable_title", new MultiObject(), settletable.container);		
+			var settletable_title:MultiObject = create("settletable_title",[ResName.TextInfo], settletable.container);		
 			settletable_title.container.x = 70;
 			settletable_title.container.y = 40;
 			settletable_title.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			settletable_title.Post_CustomizedData = [[0,0],[270,0],[430,0]];
+			settletable_title.Post_CustomizedData = [[0,0],[260,0],[420,0]];
 			settletable_title.CustomizedFun = _text.textSetting;
 			settletable_title.CustomizedData = [{size:24}, "投注內容", "押分","得分"];
-			settletable_title.Create_by_list(3, [ResName.TextInfo], 0 , 0,3, 200, 0, "Bet_");		
+			settletable_title.Create_(3, "settletable_title");	
+			GetSingleItem("settletable_title", 2).visible = false;
 			
 			var settletable_zone:MultiObject = prepare("settletable_zone", new MultiObject(), settletable.container);		
 			settletable_zone.container.x = 70;
@@ -54,8 +58,8 @@ package View.ViewComponent
 			settletable_zone_bet.container.x = -250;
 			settletable_zone_bet.container.y = settletable_zone.container.y;		
 			settletable_zone_bet.CustomizedFun = _text.textSetting;
-			settletable_zone_bet.CustomizedData = [{size:24,align:_text.align_right}, "100","100","1000","0","200","100000"];
-			settletable_zone_bet.Create_by_list(6, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
+			settletable_zone_bet.CustomizedData = [{size:24,align:_text.align_right,color:0xFF0000}, "0","0","0","0","0","0","0","0"];
+			settletable_zone_bet.Create_by_list(8, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
 			
 			
 			var settletable_zone_settle:MultiObject = prepare("settletable_zone_settle", new MultiObject(), settletable.container);		
@@ -64,13 +68,14 @@ package View.ViewComponent
 			settletable_zone_settle.CustomizedFun = _text.colortextSetting;
 			settletable_zone_settle.CustomizedData = [{size:24,align:_text.align_right}, "0","0","1000","0","0","100000","10000"];
 			settletable_zone_settle.Create_by_list(7, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
+			settletable_zone_settle.container.visible = false;
 			
-			var settletable_desh:MultiObject = prepare("settletable_desh", new MultiObject(), settletable.container);		
-			settletable_desh.container.x = 70;
-			settletable_desh.container.y = 308;		
-			settletable_desh.CustomizedFun = _text.textSetting;
-			settletable_desh.CustomizedData = [{size:24},"---------------------------------------------"];
-			settletable_desh.Create_by_list(1, [ResName.TextInfo], 0 , 0, 1, 7, 0, "Bet_");			
+			//var settletable_desh:MultiObject = prepare("settletable_desh", new MultiObject(), settletable.container);		
+			//settletable_desh.container.x = 70;
+			//settletable_desh.container.y = 308;		
+			//settletable_desh.CustomizedFun = _text.textSetting;
+			//settletable_desh.CustomizedData = [{size:24},"---------------------------------------------"];
+			//settletable_desh.Create_by_list(1, [ResName.TextInfo], 0 , 0, 1, 7, 0, "Bet_");			
 			
 			//var settletable_H_desh:MultiObject = prepare("settletable_H_desh", new MultiObject(), settletable.container);		
 			//settletable_H_desh.container.x = 564;
@@ -84,10 +89,7 @@ package View.ViewComponent
 			//result_str_list.container.y = 404;
 			//result_str_list.Create_by_list(1, [ResName.TextInfo], 0 , 0,1,0 , 0, "Bet_");		
 			
-			//hintmsg.ItemList[0].gotoAndStop(2);	
-			//_tool.SetControlMc(settletable_title.ItemList[2]);
-			//_tool.SetControlMc(settletable_desh.container);
-			//add(_tool);
+			put_to_lsit(settletable_title);
 		}		
 		
 		public function sprite_idx_setting_player(mc:*, idx:int, data:Array):void
@@ -105,20 +107,50 @@ package View.ViewComponent
 		public function display():void
 		{				
 			Get("settletable").container.visible = false;
+			GetSingleItem("settletable_title", 2).visible = false;
+			Get("settletable_zone_settle").container.visible = false;
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
+		public function opencard_parse():void
+		{
+			Get("settletable").container.visible = true;			
+			GetSingleItem("settletable_title", 2).visible = false;
+			Get("settletable_zone_settle").container.visible = false;
+			
+			var mylist:Array = [];// ["0", "0", "0", "0", "0", "0", "0", "0"];
+			var zone:Array = _model.getValue(modelName.AVALIBLE_ZONE_IDX);
+			var maping:DI = _model.getValue("idx_to_result_idx");
+			for ( var i:int = 0; i < zone.length; i++)
+			{				
+				var map:int = maping.getValue(zone[i]);				 
+				mylist.splice(map, 0,_betCommand.get_total_bet(zone[i]));
+			}
+			//同點數
+			mylist.push(0);
+			mylist.push(_betCommand.all_betzone_totoal());
+			
+			var font:Array = [{size:24,align:_text.align_right,color:0xFF0000}];
+			font = font.concat(mylist);
+			utilFun.Log("mylist = "+mylist);
+			Get("settletable_zone_bet").CustomizedData = font;
+			Get("settletable_zone_bet").Create_by_list(mylist.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");	
+			
+			
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "show_settle_table")]
 		public function show_settle():void
 		{
-			utilFun.Log("show_settle");
-			var settletable:MultiObject = Get("settletable");
-			settletable.container.visible = true;
+			utilFun.Log("show_settle");			
+			Get("settletable").container.visible = true;			
+			GetSingleItem("settletable_title", 2).visible = true;
+			Get("settletable_zone_settle").container.visible = true;
 			
 			//押注
 			var zone_amount:Array = _model.getValue("result_zonebet_amount");			
-			var font:Array = [ { size:24, align:_text.align_right } ];
-			//TODO same point
-			//zone_amount.push(0);
+			var font:Array = [ { size:24, align:_text.align_right,color:0xFF0000} ];
+			zone_amount.push(_betCommand.all_betzone_totoal());
 			font = font.concat(zone_amount);			
 			Get("settletable_zone_bet").CustomizedFun = _text.textSetting;
 			Get("settletable_zone_bet").CustomizedData = font;

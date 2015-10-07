@@ -28,17 +28,21 @@ package View.ViewComponent
 		{
 			
 			
-			var playerCon:MultiObject = prepare(modelName.PLAYER_POKER, new MultiObject(), GetSingleItem("_view").parent.parent);		
-			playerCon.CustomizedFun = myscale;			
-			playerCon.Create_by_list(5, [ResName.just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
-			playerCon.container.x = 180;
+			var playerCon:MultiObject = create(modelName.PLAYER_POKER, [ResName.just_turnpoker]);
+			playerCon.CustomizedFun = myscale;
+			playerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
+			playerCon.Post_CustomizedData = [5, 140, 0];
+			playerCon.Create_(5, "playerpoker");
+			playerCon.container.x = 190;// 180;
 			playerCon.container.y = 630;
 			playerCon.container.alpha = 0;
 			//
-			var bankerCon:MultiObject =  prepare(modelName.BANKER_POKER, new MultiObject(), GetSingleItem("_view").parent.parent);
+			var bankerCon:MultiObject =  create(modelName.BANKER_POKER, [ResName.just_turnpoker]);
 			bankerCon.CustomizedFun = myscale;
-			bankerCon.Create_by_list(5, [ResName.just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");			
-			bankerCon.container.x = 1050;
+			bankerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
+			bankerCon.Post_CustomizedData = [5, 140, 0];
+			bankerCon.Create_(5, "bankerpoker");
+			bankerCon.container.x = 1040;
 			bankerCon.container.y = 630;
 			bankerCon.container.alpha = 0;
 			
@@ -58,6 +62,8 @@ package View.ViewComponent
 			
 			put_to_lsit(table_hint);
 			put_to_lsit(mipoker);
+			put_to_lsit(playerCon);
+			put_to_lsit(bankerCon);
 			
 			//no clean ,half in init ,cant cleanr model
 		}
@@ -416,16 +422,16 @@ package View.ViewComponent
 				if ( totalPoint % 10 == 0)
 				{
 					pokerlist= Get(cardtype)
-					//[160,80]
+					//[150,80]
 					for (k = 0; k <3; k++)
 					{
-						Tweener.addTween(pokerlist.ItemList[k], { y:pokerlist.ItemList[k].y + 80, x:pokerlist.ItemList[k].x +160, transition:"easeOutQuint", time:1 } );
+						Tweener.addTween(pokerlist.ItemList[k], { y:pokerlist.ItemList[k].y + 80, x:pokerlist.ItemList[k].x +150, transition:"easeOutQuint", time:1 } );
 					}
 					
-					//[230,-130]
+					//[220,-130]
 					for ( k = 3; k <5; k++)
 					{
-						Tweener.addTween(pokerlist.ItemList[k], { y:pokerlist.ItemList[k].y - 130, x:pokerlist.ItemList[k].x - 190, transition:"easeOutQuint", time:1 } );
+						Tweener.addTween(pokerlist.ItemList[k], { y:pokerlist.ItemList[k].y - 130, x:pokerlist.ItemList[k].x - 200, transition:"easeOutQuint", time:1 } );
 							//change 50 to 200 or 5 to see how it works
 						
 					}
@@ -454,7 +460,7 @@ package View.ViewComponent
 					var rest:Array = utilFun.Get_restItem(total,selectCard)
 						
 					//[160,80]
-					po = [ [200, 80], [340, 80], [480, 80]];
+					po = [ [150, 80], [290, 80], [430, 80]];
 					pokerlist = Get(cardtype)					
 					for ( k = 0; k <selectCard.length; k++)
 					{
@@ -465,7 +471,7 @@ package View.ViewComponent
 					
 					//隨挑選結果不同
 					//[230,-130]
-					var po2:Array = [ [260, -130], [400, -130]];				
+					var po2:Array = [ [220, -130], [360, -130]];				
 					for ( k = 0; k <rest.length; k++)
 					{
 						Tweener.addTween(pokerlist.ItemList[rest[k]], {  x:po2[k][0] ,y:po2[k][1] , transition:"easeOutQuint", time:1 } );

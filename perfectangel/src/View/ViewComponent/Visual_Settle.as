@@ -40,15 +40,14 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var zone:MultiObject = prepare("zone", new MultiObject() , GetSingleItem("_view").parent.parent);			
-			zone.container.x = 1420;
-			zone.container.y = 440;			
-			zone.Create_by_list(2, [ResName.state_evil, ResName.state_angel], 0 , 0, 2, -884, 0, "Bet_");		
+			var zone:MultiObject = create("zone",  [ResName.state_evil, ResName.state_angel]);	
+			zone.container.x = 1391;
+			zone.container.y = 446;			
+			zone.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
+			zone.Post_CustomizedData = [2, -850, 0];
+			zone.Create_(2,"zone");
 			
-			//_tool.SetControlMc(zone.container);
-			//_tool.SetControlMc(zone.ItemList[1]);
-			//add(_tool);
-			//Clean();
+			put_to_lsit(zone);
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
@@ -258,12 +257,12 @@ package View.ViewComponent
 			//                XX幾點
 			if( evel_winstate ==1)
 			{
-				GetSingleItem("zone", 0).gotoAndStop(3);				
+				GetSingleItem("zone", 0)["ani"].gotoAndPlay(2);				
 			}
 			
 			if ( angel_winstate == 1)
 			{
-				GetSingleItem("zone", 1).gotoAndStop(3);
+				GetSingleItem("zone", 1)["ani"].gotoAndPlay(2);
 			}
 			
 			_regular.Call(this, { onComplete:this.show_ok }, 1, 2, 1, "linear");
