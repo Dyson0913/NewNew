@@ -46,15 +46,16 @@ package
 			result = pass;
 		}
 		
-		public function call_back(Credit:Number):void
+		public function call_back():Function
 		{
-			utilFun.Log("call_back f= " + _call_back);
-			utilFun.Log("call_back Credit= " + Credit);
-			if ( _call_back != null)
-			{
-				
-				_call_back(Credit);
-			}
+			//utilFun.Log("call_back f= " + _call_back);
+			//utilFun.Log("call_back Credit= " + Credit);
+			//if ( _call_back != null)
+			//{
+				//
+				//_call_back(Credit);
+			//}
+			return _call_back
 		}
 		
 		public function handshake(handshakeinfo:Array):void
