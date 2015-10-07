@@ -94,7 +94,7 @@ package View.GameView
 			_gameinfo.init();
 			//_betinfo.init();
 			_paytable.init();
-			_settle.init();
+			
 			//_playinfo.init();
 			_time.init();			
 		   _hint.init();
@@ -105,7 +105,7 @@ package View.GameView
 			_coin_stack.init();
 			
 			_pokerhandler.init();
-			
+			_settle.init();
 			_sencer.init();	
 			_coin.init();
 			_btn.init();

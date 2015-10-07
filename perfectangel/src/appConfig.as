@@ -44,6 +44,7 @@ package
 		public var _dataoperation:DataOperation = new DataOperation();
 		public var _betcom:BetCommand = new BetCommand();
 		public var _regular:RegularSetting = new RegularSetting();
+		public var _sound:SoundCommand = new SoundCommand();
 		
 		public var _text:Visual_Text = new Visual_Text();
 		public var _debug:Visual_debugTool = new Visual_debugTool();

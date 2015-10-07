@@ -100,6 +100,7 @@ package View.ViewComponent
 			betzone.mouseup = null;
 			
 			_betCommand.re_bet();
+			dispatcher(new StringObject("sound_rebet","sound" ) );
 			return false;
 		}
 		

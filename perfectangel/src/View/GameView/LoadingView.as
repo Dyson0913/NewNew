@@ -3,6 +3,7 @@ package View.GameView
 	import Command.BetCommand;
 	import Command.DataOperation;
 	import Command.RegularSetting;
+	import Command.SoundCommand;
 	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -44,46 +45,7 @@ package View.GameView
 		public var _betCommand:BetCommand;
 		
 		[Inject]
-		public var _visual_coin:Visual_Coin;
-		
-		[Inject]
-		public var _opration:DataOperation;
-		
-		[Inject]
 		public var _visual_stream:Visual_stream;
-		
-		[Inject]
-		public var _btn:Visual_BtnHandle;
-		
-		[Inject]
-		public var _loader:Visual_Loder;
-		
-		[Inject]
-		public var _pokerhandler:Visual_poker;
-		
-		[Inject]
-		public var _settle:Visual_Settle;
-		
-		[Inject]
-		public var _betzone:Visual_betZone;
-		
-		[Inject]
-		public var _coin:Visual_Coin;
-		
-		[Inject]
-		public var _hint:Visual_Hintmsg;
-		
-		[Inject]
-		public var _time:Visual_timer;
-		
-		[Inject]
-		public var _sence:Visual_betZone_Sence;
-		
-		[Inject]
-		public var _paytable:Visual_Paytable;
-		
-		[Inject]
-		public var _coin_stack:Visual_Coin_stack;
 		
 		[Inject]
 		public var _test:Visual_testInterface;		
@@ -92,7 +54,7 @@ package View.GameView
 		public var _path:Path_Generator;
 		
 		[Inject]
-		public var _gameinfo:Visual_Game_Info;		
+		public var _sound:SoundCommand;
 		
 		public function LoadingView()  
 		{
@@ -118,6 +80,7 @@ package View.GameView
 			
 			_betCommand.bet_init();
 			_path.init();
+			_sound.init();
 			
 			_model.putValue(modelName.Game_Name, "PerfectAngel");
 			
@@ -138,7 +101,7 @@ package View.GameView
 			
 			utilFun.SetTime(connet, 0.1);			
 			//_test.init();
-			
+			//dispatcher(new StringObject("Soun_Bet_BGM","Music" ) );
 			//utilFun.SetTime(stre, 2);
 			//_visual_stream.init();
 			//_loader.init();

@@ -91,6 +91,7 @@ package View.ViewComponent
 			}		
 			else
 			{
+				dispatcher(new StringObject("sound_coin","sound" ) );
 				_betCommand.betTypeMain(e, idx);
 			}
 			
