@@ -439,13 +439,8 @@ package View.ViewComponent
 					if ( cardtype == modelName.PLAYER_POKER)  _model.putValue("playerNew", true);
 					if ( cardtype == modelName.BANKER_POKER)  _model.putValue("bankerNew", true);
 					
-						
+					dispatcher(new StringObject("sound_msg","sound" ) );
 				}
-					
-				
-					//_tool.SetControlMc(pokerlist.ItemList[0]);
-					//_tool.SetControlMc(bankerCon.container);
-					//add(_tool);		
 			}
 			
 			if ( mypoker.length >= 4 && bnew == false)
@@ -476,14 +471,11 @@ package View.ViewComponent
 					{
 						Tweener.addTween(pokerlist.ItemList[rest[k]], {  x:po2[k][0] ,y:po2[k][1] , transition:"easeOutQuint", time:1 } );
 					}
-					//_tool.SetControlMc(pokerlist.ItemList[rest[1]]);					
-					//add(_tool);	
-					//var toos:AdjustTool = new AdjustTool();
-						//toos.SetControlMc(pokerlist.ItemList[2]);
-						//add(toos);
-					//
+					
 					if ( cardtype == modelName.PLAYER_POKER)  _model.putValue("playerNew", true);
 					if ( cardtype == modelName.BANKER_POKER)  _model.putValue("bankerNew", true);					
+					
+					dispatcher(new StringObject("sound_msg","sound" ) );
 				}				
 				
 			}
