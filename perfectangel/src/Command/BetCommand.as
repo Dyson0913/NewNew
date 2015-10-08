@@ -3,6 +3,7 @@ package Command
 	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.events.Event;
 	import Model.*;
+	import Model.valueObject.StringObject;
 	
 	import util.*;
 	import View.GameView.*;
@@ -108,26 +109,13 @@ package Command
 			state.putValue("EndBetState", gameState.END_BET);
 			state.putValue("OpenState", gameState.START_OPEN);
 			state.putValue("EndRoundState", gameState.END_ROUND);			
-			_model.putValue("state_mapping", state);
-			
-			//bind lobby event
-			//var lobbyevent:Function = _model.getValue(modelName.Lobby_Call_back);
-			//utilFun.Log("lobbyeve ="+lobbyevent);
-			//lobbyevent = this.update_credit;
-			//_model.putValue(modelName.Lobby_Call_back,lobbyevent);
-			//
-			//utilFun.Log("lobbyeve ="+lobbyevent);
-			//utilFun.Log("model ="+_model.getValue(modelName.Lobby_Call_back));
+			_model.putValue("state_mapping", state);		
 			
 			_Bet_info.putValue("self", []);
 			_model.putValue("history_bet",[]);
 		}
 		
-		public function update_credit(new_credit:Number):void
-		{
-			utilFun.Log("new credit = " + new_credit);
-			_model.putValue(modelName.CREDIT,new_credit)
-		}
+		
 		
 		public function betTypeMain(e:Event,idx:int):Boolean
 		{

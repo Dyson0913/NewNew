@@ -90,8 +90,7 @@ package View.ViewComponent
 				_betCommand.betTypeMain(e, idx);
 			}		
 			else
-			{
-				dispatcher(new StringObject("sound_coin","sound" ) );
+			{				
 				_betCommand.betTypeMain(e, idx);
 			}
 			

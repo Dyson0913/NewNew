@@ -112,12 +112,7 @@ package View.GameView
 			
 			_settlePanel.init();
 			
-			//var name:MultiObject = prepare("name", new MultiObject() , this);
-			//name.CustomizedFun = _regular.ascii_idx_setting;			
-			//name.CustomizedData = _model.getValue(modelName.NICKNAME).split("");
-			//name.container.x = 235 + (name.CustomizedData.length -1) * 37 *-0.5;
-			//name.container.y = 1020;
-			//name.Create_by_bitmap(name.CustomizedData.length, utilFun.Getbitmap("LableAtlas"), 0, 0, name.CustomizedData.length, 37, 51, "o_");				
+			//dispatcher(new StringObject("Soun_Bet_BGM","Music" ) );
 		}
 		
 		public function sliding(e:Event, idx:int):Boolean

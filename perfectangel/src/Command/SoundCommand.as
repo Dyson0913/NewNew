@@ -1,6 +1,5 @@
 package Command 
-{
-	import flash.events.Event;
+{	
 	import Model.*;
 	import Model.valueObject.StringObject;
 	import treefortress.sound.SoundTween;
@@ -33,10 +32,28 @@ package Command
 		
 		public function init():void
 		{
-			SoundAS.addSound("Soun_Bet_BGM", new Soun_Bet_BGM());
+			//SoundAS.addSound("Soun_Bet_BGM", new Soun_Bet_BGM());
 			SoundAS.addSound("sound_coin", new sound_coin());
 			SoundAS.addSound("sound_msg", new sound_msg());
 			SoundAS.addSound("sound_rebet", new sound_rebet());			
+			
+			//create lobbycall back
+			var lobbyevent:Function =  _model.getValue(modelName.HandShake_chanel);			
+			lobbyevent(_model.getValue(modelName.Client_ID), ["HandShake_callback",this.lobby_callback]);			
+			
+		}
+		
+		public function lobby_callback(CMD:Array):void
+		{
+			utilFun.Log("PA lobby call back = " + CMD);	
+			if ( CMD[0] == "STOP_BGM")
+			{
+				//dispatcher(new StringObject("Soun_Bet_BGM","Music_pause" ) );
+			}
+			if ( CMD[0] == "START_BGM")
+			{
+				//dispatcher(new StringObject("Soun_Bet_BGM","Music" ) );
+			}
 		}
 		
 		[MessageHandler(type="Model.valueObject.StringObject",selector="Music")]

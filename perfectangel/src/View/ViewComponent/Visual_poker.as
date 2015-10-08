@@ -150,12 +150,12 @@ package View.ViewComponent
 				
 				if( type.Value == modelName.PLAYER_POKER)
 				{
-					Get("mipoker").container.x = 490;
+					Get("mipoker").container.x = 1010;
 					Get("mipoker").container.y = 590;
 				}
 				if( type.Value == modelName.BANKER_POKER)
 				{
-					Get("mipoker").container.x = 1010;
+					Get("mipoker").container.x = 490;
 					Get("mipoker").container.y = 590;
 				}
 				

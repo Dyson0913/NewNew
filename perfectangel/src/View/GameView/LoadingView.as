@@ -74,8 +74,7 @@ package View.GameView
 			_model.putValue(modelName.CREDIT, para[1]);
 			_model.putValue(modelName.Client_ID, para[2]);
 			_model.putValue(modelName.HandShake_chanel, para[3]);
-			_model.putValue(modelName.Domain_Name, para[4]);
-			//_model.putValue(modelName.Lobby_Call_back, para[4]);			
+			_model.putValue(modelName.Domain_Name, para[4]);			
 			
 			
 			_betCommand.bet_init();

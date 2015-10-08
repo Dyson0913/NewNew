@@ -90,6 +90,7 @@ package View.ViewComponent
 			//TODO  一次一次pop
 			_betCommand.re_bet();
 			
+			dispatcher(new StringObject("sound_coin","sound" ) );
 			
 			//coin動畫
 			stack(_betCommand.Bet_type_betlist(bet_ob["betType"]), GetSingleItem("coinstakeZone",bet_ob["betType"] ),bet_ob["betType"]);	

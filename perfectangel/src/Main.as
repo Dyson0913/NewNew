@@ -22,16 +22,11 @@ package
 	{
 		private var _context:Context;
 		
-		public var result:Object ;
-		
 		private var _appconfig:appConfig = new appConfig();
-		
-		private var _par:MovieClip;
 		
 		private var _credit:Number =-1;
 		private var _clientidx:Number =-1;
 		private var _handshake:Function = null;
-		public var _call_back:Function = null;
 		private var _uuid:String = "";
 		private var _DomainName:String = "";
 		
@@ -41,26 +36,8 @@ package
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
-		public function pass(pass:Object):void
-		{
-			result = pass;
-		}
-		
-		public function call_back():Function
-		{
-			//utilFun.Log("call_back f= " + _call_back);
-			//utilFun.Log("call_back Credit= " + Credit);
-			//if ( _call_back != null)
-			//{
-				//
-				//_call_back(Credit);
-			//}
-			return _call_back
-		}
-		
 		public function handshake(handshakeinfo:Array):void
-		{
-			// credit:Number, Clientidx:int, handshake:Function, uuid:String, DomainName:String
+		{			
 			_credit = handshakeinfo[0];
 			_clientidx = handshakeinfo[1];
 			_handshake = handshakeinfo[2];	
@@ -77,10 +54,7 @@ package
 			{
 				Debug.monitor(stage);
 				utilFun.Log("welcome to perfect alcon");
-			}			
-			
-			
-			
+			}
 			
 			//no thing ,ok
 			_context  = ActionScriptContextBuilder.build(appConfig);
