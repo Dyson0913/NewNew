@@ -86,6 +86,9 @@ package View.ViewComponent
 		[Inject]
 		public var _settlePanel:Visual_SettlePanel;
 		
+		[Inject]
+		public var _HistoryRecoder:Visual_HistoryRecoder;
+		
 		private var _script_item:MultiObject;
 		
 		public function Visual_testInterface() 
@@ -148,8 +151,9 @@ package View.ViewComponent
 				arr.push([ran, point]);				
 			}
 			_model.putValue("history_win_list", arr);
-			_paytable.init();
-			_paytable.update_history();
+			_paytable.init();			
+			
+			_HistoryRecoder.init();
 			
 			//================================================betzone
 			_betzone.init();			
@@ -171,39 +175,6 @@ package View.ViewComponent
 			
 		}	
 		
-		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "00")]
-		public function test00():void
-		{			
-			//_settle.init();
-			//_tool.SetControlMc(playerzone.ItemList[0]);
-			//_tool.SetControlMc(Get(modelName.REMAIN_TIME).container);				
-			//_model.putValue(modelName.PLAYER_POKER, ["2d"]);				
-			//_model.putValue(modelName.BANKER_POKER, ["2d"]);		
-			//_model.putValue(modelName.RIVER_POKER, []);		
-			//_poker.prob_cal();
-			
-			//_paytable.prob_percentupdate();
-		}		
-		
-		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "01")]
-		public function test01():void
-		{			
-			_tool.SetControlMc(Get(modelName.HINT_MSG).container);			
-		}
-		
-		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "02")]
-		public function test02():void
-		{			
-			changeBG(ResName.Bet_Scene);
-			//================================================timer
-			//if ( !_timer.already_countDown)
-			//{
-				_model.putValue(modelName.REMAIN_TIME, 20);					
-				_timer.init();
-				_timer.display();
-			//}
-		}
-		
 		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "1")]
 		public function opencardScript():void
 		{			
@@ -218,8 +189,7 @@ package View.ViewComponent
 			//_gameinfo.opencard_parse();
 			
 			//=============================================paytable			
-			_paytable.init();
-			_paytable.opencard_parse();
+			_paytable.init();			
 			
 			//_betinfo.init();
 			
@@ -239,8 +209,8 @@ package View.ViewComponent
 			
 			
 			//================================================ simu deal
-			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player"];// , "Banker", "Player", "Banker"];
-			_regular.Call(this, { onUpdate:this.fackeDeal, onUpdateParams:[testpok] }, 25, 0, 10, "linear");						
+			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player", "Banker", "Player", "Banker"];
+			_regular.Call(this, { onUpdate:this.fackeDeal, onUpdateParams:[testpok] }, 30, 0, 10, "linear");						
 		}
 		
 		public function fackeDeal(type:Array):void

@@ -85,6 +85,8 @@ package View.ViewComponent
 				mc.gotoAndStop(2);
 			}
 			
+			if ( time <= Waring_sec ) dispatcher(new StringObject("sound_final","sound" ) );
+			
 			utilFun.SetText(GetSingleItem(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2) );			
 			
 			

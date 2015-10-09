@@ -30,8 +30,8 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var settletable:MultiObject = prepare("settletable", new MultiObject(), GetSingleItem("_view").parent.parent);		
-			settletable.Create_by_list(1, [ResName.emptymc], 0 , 0, 1, 0, 0, "Bet_");		
+			var settletable:MultiObject = create("settletable", [ResName.emptymc]);
+			settletable.Create_(1, "settletable");		
 			settletable.container.x = 1208;
 			settletable.container.y = 95;
 			settletable.container.visible = false;
@@ -41,33 +41,39 @@ package View.ViewComponent
 			settletable_title.container.x = 70;
 			settletable_title.container.y = 40;
 			settletable_title.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			settletable_title.Post_CustomizedData = [[0,0],[260,0],[420,0]];
+			settletable_title.Post_CustomizedData = [[0,0],[210,0],[360,0]];
 			settletable_title.CustomizedFun = _text.textSetting;
 			settletable_title.CustomizedData = [{size:24}, "投注內容", "押分","得分"];
 			settletable_title.Create_(3, "settletable_title");	
 			GetSingleItem("settletable_title", 2).visible = false;
 			
-			var settletable_zone:MultiObject = prepare("settletable_zone", new MultiObject(), settletable.container);		
+			var settletable_zone:MultiObject = create("settletable_zone",  [ResName.TextInfo], settletable.container);		
 			settletable_zone.container.x = 70;
-			settletable_zone.container.y = 80;		
+			settletable_zone.container.y = 80;
+			settletable_zone.Posi_CustzmiedFun = _regular.Posi_Colum_first_Setting;
+			settletable_zone.Post_CustomizedData = [8,0,35];
 			settletable_zone.CustomizedFun = _text.textSetting;
 			settletable_zone.CustomizedData = [{size:24}, "天使","惡魔","大天使8、9","大惡魔8、9","完美天使10","闇黑惡魔10","同點數","合計"];
-			settletable_zone.Create_by_list(settletable_zone.CustomizedData.length-1, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
+			settletable_zone.Create_(settletable_zone.CustomizedData.length - 1, "settletable_zone");
 			
-			var settletable_zone_bet:MultiObject = prepare("settletable_zone_bet", new MultiObject(), settletable.container);		
-			settletable_zone_bet.container.x = -250;
+			var settletable_zone_bet:MultiObject = create("settletable_zone_bet", [ResName.TextInfo], settletable.container);		
+			settletable_zone_bet.container.x = -300;
 			settletable_zone_bet.container.y = settletable_zone.container.y;		
+			settletable_zone_bet.Posi_CustzmiedFun = _regular.Posi_Colum_first_Setting;
+			settletable_zone_bet.Post_CustomizedData = [8,0,35];
 			settletable_zone_bet.CustomizedFun = _text.textSetting;
 			settletable_zone_bet.CustomizedData = [{size:24,align:_text.align_right,color:0xFF0000}, "0","0","0","0","0","0","0","0"];
-			settletable_zone_bet.Create_by_list(8, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
+			settletable_zone_bet.Create_(8, "settletable_zone_bet");
 			
 			
-			var settletable_zone_settle:MultiObject = prepare("settletable_zone_settle", new MultiObject(), settletable.container);		
-			settletable_zone_settle.container.x = -90;
+			var settletable_zone_settle:MultiObject = create("settletable_zone_settle", [ResName.TextInfo], settletable.container);		
+			settletable_zone_settle.container.x = -150;
 			settletable_zone_settle.container.y = settletable_zone.container.y;		
+			settletable_zone_settle.Posi_CustzmiedFun = _regular.Posi_Colum_first_Setting;
+			settletable_zone_settle.Post_CustomizedData = [8,0,35];
 			settletable_zone_settle.CustomizedFun = _text.colortextSetting;
 			settletable_zone_settle.CustomizedData = [{size:24,align:_text.align_right}, "0","0","1000","0","0","100000","10000"];
-			settletable_zone_settle.Create_by_list(7, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
+			settletable_zone_settle.Create_(7, "settletable_zone_settle");	
 			settletable_zone_settle.container.visible = false;
 			
 			//var settletable_desh:MultiObject = prepare("settletable_desh", new MultiObject(), settletable.container);		
@@ -89,7 +95,12 @@ package View.ViewComponent
 			//result_str_list.container.y = 404;
 			//result_str_list.Create_by_list(1, [ResName.TextInfo], 0 , 0,1,0 , 0, "Bet_");		
 			
+			put_to_lsit(settletable);
 			put_to_lsit(settletable_title);
+			put_to_lsit(settletable_zone);
+			put_to_lsit(settletable_zone_bet);
+			put_to_lsit(settletable_zone_settle);
+			
 		}		
 		
 		public function sprite_idx_setting_player(mc:*, idx:int, data:Array):void
@@ -166,7 +177,7 @@ package View.ViewComponent
 			Get("settletable_zone_settle").CustomizedFun = _text.colortextSetting;
 			Get("settletable_zone_settle").CustomizedData = font2;
 			Get("settletable_zone_settle").Create_by_list(settle_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");
-			
+			dispatcher(new StringObject("sound_get_point","sound" ) );
 			//小牌結果
 			//var historystr_model:Array = _model.getValue("result_str_list");
 			//var add_parse:String = historystr_model.join("、");

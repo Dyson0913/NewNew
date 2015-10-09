@@ -66,6 +66,11 @@ package Command
 			utilFun.SetText(mc["_Text"],data[idx])
 		}
 		
+		public function moveTo(mc:Object,  x_move:int , y_move:int, t:int,de:int,onComF:Function):void
+		{
+			Tweener.addTween(mc, { x:x_move,y:y_move, time:t, delay:de,onComplete:onComF } );
+		}
+		
 		public function FadeIn(mc:DisplayObjectContainer,  in_t:int , out_t:int, onComF:Function):void
 		{
 			Tweener.addTween(mc, { alpha:1, time:in_t, onCompleteParams:[mc,0,out_t],onComplete:onComF } );

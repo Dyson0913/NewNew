@@ -32,6 +32,9 @@ package Res
 		
 		public static const betlimit:String = "bet_limit";
 		public static const realtimeinfo:String = "realtime_info";
+		public static const betstaticarrow:String = "betstatic_arrow";
+		public static const betstaticarrow_right:String = "betstatic_arrow_right";
+		
 		
 		public static const historytable:String = "history_table";		
 		public static const bet_tableitem:String = "bet_table_item";		

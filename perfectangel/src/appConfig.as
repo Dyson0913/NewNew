@@ -62,10 +62,10 @@ package
 		public var _loader:Visual_Loder = new Visual_Loder();
 		public var _settle:Visual_Settle = new Visual_Settle();
 		public var _sencer:Visual_betZone_Sence = new Visual_betZone_Sence();		
+		public var _HistoryRecoder:Visual_HistoryRecoder = new Visual_HistoryRecoder();
 		public var _paytable:Visual_Paytable = new Visual_Paytable();		
 		public var _gameinfo:Visual_Game_Info = new Visual_Game_Info();		
 		public var _settlePanel:Visual_SettlePanel = new Visual_SettlePanel();
-		//public var _Betinfo:Visual_Betinfo = new Visual_Betinfo();
 		
 		//util
 		public var _path:Path_Generator = new Path_Generator();

@@ -60,14 +60,9 @@ package View.GameView
 		{
 			
 		}
-		
-			//result:Object
+					
 		public function FirstLoad(para:Array ):void
- 		{			
-			
-			//Logger.displayLevel = LogLevel.DEBUG;
-			//Logger.addProvider(new ArthropodLogProvider(), "Arthropod pa");
-			//utilFun.Log("para = "+para);
+ 		{					
 			
 			//_model.putValue(modelName.LOGIN_INFO,  para[0]);
 			_model.putValue(modelName.UUID,  para[0]);
@@ -100,7 +95,7 @@ package View.GameView
 			
 			utilFun.SetTime(connet, 0.1);			
 			//_test.init();
-			//dispatcher(new StringObject("Soun_Bet_BGM","Music" ) );
+			
 			//utilFun.SetTime(stre, 2);
 			//_visual_stream.init();
 			//_loader.init();

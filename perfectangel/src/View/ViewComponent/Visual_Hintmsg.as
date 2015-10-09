@@ -42,7 +42,7 @@ package View.ViewComponent
 			Get(modelName.HINT_MSG).container.visible = true;
 			GetSingleItem(modelName.HINT_MSG).gotoAndStop(1);	
 			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
-			dispatcher(new StringObject("sound_msg","sound" ) );
+			dispatcher(new StringObject("sound_start_bet","sound" ) );
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
@@ -52,9 +52,13 @@ package View.ViewComponent
 			var state:int = _model.getValue(modelName.GAMES_STATE);
 			if( state == gameState.START_OPEN) GetSingleItem(modelName.HINT_MSG).gotoAndStop(4);
 			if( state == gameState.NEW_ROUND) GetSingleItem(modelName.HINT_MSG).gotoAndStop(1);
-			if( state == gameState.END_BET) GetSingleItem(modelName.HINT_MSG).gotoAndStop(2);			
+			if ( state == gameState.END_BET) 
+			{
+				GetSingleItem(modelName.HINT_MSG).gotoAndStop(2);
+				dispatcher(new StringObject("sound_stop_bet","sound" ) );
+			}
 			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
-			dispatcher(new StringObject("sound_msg","sound" ) );
+			
 		}
 		
 		[MessageHandler(type = "ConnectModule.websocket.WebSoketInternalMsg", selector = "CreditNotEnough")]

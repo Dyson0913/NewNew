@@ -54,7 +54,7 @@ package View.Viewutil
 		public function lsit(debugitem:ArrayObject):void
 		{			
 			var item:ViewComponentInterface = debugitem.Value[0];
-			utilFun.Log("putin no "+item.getName());
+			//utilFun.Log("putin no "+item.getName());
 			
 			//"View.ViewComponent.FinancialGraph"
 			_list.push(item);

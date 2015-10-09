@@ -191,6 +191,7 @@ package View.ViewComponent
 			anipoker["_poker"].gotoAndStop(pokerid);
 			anipoker.gotoAndPlay(2);
 			
+			dispatcher(new StringObject("sound_poker_turn","sound" ) );
 			_regular.Call(anipoker, { onComplete:this.showjudge, onCompleteParams:[type.Value,mypoker.length] },1,0,1);		
 			return;
 			
@@ -259,33 +260,6 @@ package View.ViewComponent
 			move(pokertype);
 			//simple_move_push_up(pokertype);
 		}
-		
-		//[MessageHandler(type = "Model.valueObject.Intobject",selector="pokerupdate")]
-		//public function playerpokerupdate(type:Intobject):void
-		//{
-			//var Mypoker:Array =   _model.getValue(type.Value);
-			//var pokerlist:MultiObject = Get(type.Value)
-			//pokerlist.CleanList();
-			//pokerlist.CustomizedFun = pokerUtil.showPoker;
-			//pokerlist.CustomizedData = Mypoker;
-			//pokerlist.Create_by_list(Mypoker.length, [ResName.Poker], 0 , 0, Mypoker.length, 163, 123, "Bet_");
-		//}
-		
-		//[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
-		//public function round_effect():void
-		//{
-			//var playerpoker:Array =   _model.getValue(modelName.PLAYER_POKER);
-			//var best3:Array = pokerUtil.newnew_judge( playerpoker);
-			//utilFun.Log("best 3 = "+best3);
-			//var pokerlist:MultiObject = Get(modelName.PLAYER_POKER)
-			//pokerUtil.poer_shift(pokerlist.ItemList.concat(), best3);
-			//
-			//var banker:Array =   _model.getValue(modelName.BANKER_POKER);
-			//var best2:Array = pokerUtil.newnew_judge( banker);
-			//var bpokerlist:MultiObject = Get(modelName.BANKER_POKER)
-			//pokerUtil.poer_shift(bpokerlist.ItemList.concat(), best2);
-		//}
-		
 		
 		public function static_poker(pokerid:int,cardtype:int,i:int):void
 		{

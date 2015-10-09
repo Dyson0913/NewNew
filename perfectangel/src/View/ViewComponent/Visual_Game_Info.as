@@ -1,6 +1,8 @@
 package View.ViewComponent 
 {
 	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.globalization.DateTimeFormatter;
 	import flash.text.TextField;
@@ -12,7 +14,7 @@ package View.ViewComponent
 	import util.*;
 	import Command.*;
 	
-	import View.Viewutil.MultiObject;
+	import View.Viewutil.*;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
 	
@@ -58,21 +60,78 @@ package View.ViewComponent
 			game_info_data.container.x = 312;
 			game_info_data.container.y = 80;
 			
-			var betlimit:MultiObject = prepare("betlimit", new MultiObject() , GetSingleItem("_view").parent.parent);			
-			betlimit.container.x = 40;
-			betlimit.container.y = 130;	
-			betlimit.Create_by_list(1, [ResName.betlimit], 0, 0, 1, 0, 0, "time_");				
+			var betlimit:MultiObject = create("betlimit", [ResName.betlimit, ResName.betstaticarrow]);	
+			betlimit.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 0]);
+			betlimit.mousedown = local;
+			betlimit.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			betlimit.Post_CustomizedData = [[0,0],[194,164]];
+			betlimit.container.x = -12;
+			betlimit.container.y = 120;	
+			betlimit.Create_(2, "betlimit");	
 			
-			var realtimeinfo:MultiObject = prepare("realtimeinfo", new MultiObject() , GetSingleItem("_view").parent.parent);			
-			realtimeinfo.container.x = 1704;
-			realtimeinfo.container.y = 130;	
-			realtimeinfo.Create_by_list(1, [ResName.realtimeinfo], 0, 0, 1, 0, 0, "time_");			
+			var realtimeinfo:MultiObject = create("realtimeinfo", [ResName.realtimeinfo, ResName.betstaticarrow_right]);	
+			realtimeinfo.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 0]);
+			realtimeinfo.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			realtimeinfo.Post_CustomizedData = [[0, 0], [7, 164]];
+			realtimeinfo.mousedown = local_reverse;
+			realtimeinfo.container.x = 1719;
+			realtimeinfo.container.y = 120;	
+			realtimeinfo.Create_(2, "realtimeinfo");	
 			
-			//_tool.SetControlMc(realtimeinfo.container);			
-			//_tool.SetControlMc(game_info_data.ItemList[3]);			
-			//_tool.y = 200;
-			//add(_tool);	
+			put_to_lsit(betlimit);
+			put_to_lsit(realtimeinfo);
+			
+			utilFun.SetTime(triger, 2);
 		}
+		
+		private function triger():void
+		{
+			local_reverse(new MouseEvent(MouseEvent.CLICK, true, false), 0);
+			local(new MouseEvent(MouseEvent.CLICK, true, false), 0);
+		}
+		
+		public function local_reverse(e:Event, idx:int):Boolean
+		{
+			if( GetSingleItem("realtimeinfo",1).currentFrame == 1)
+			{				
+				GetSingleItem("realtimeinfo", 1).gotoAndStop(2);						
+				_regular.moveTo(Get("realtimeinfo").container,1883,Get("realtimeinfo").container.y, 1, 0, shide);						
+			}
+			else
+			{				
+				GetSingleItem("realtimeinfo").visible =  true;				
+				GetSingleItem("realtimeinfo", 1).gotoAndStop(1);			
+				_regular.moveTo(Get("realtimeinfo").container, 1719, Get("realtimeinfo").container.y, 1, 0, null);
+			}
+			return false;
+		}
+		
+		public function shide():void
+		{
+			GetSingleItem("realtimeinfo").visible = false;
+		}
+		
+		public function local(e:Event, idx:int):Boolean
+		{
+			if( GetSingleItem("betlimit",1).currentFrame == 1)
+			{				
+				GetSingleItem("betlimit", 1).gotoAndStop(2);						
+				_regular.moveTo(Get("betlimit").container,-195,Get("betlimit").container.y, 1, 0, hide);						
+			}
+			else
+			{				
+				GetSingleItem("betlimit").visible =  true;				
+				GetSingleItem("betlimit", 1).gotoAndStop(1);			
+				_regular.moveTo(Get("betlimit").container, -12, Get("betlimit").container.y, 1, 0, null);
+			}
+			return false;
+		}
+		
+		public function hide():void
+		{
+			GetSingleItem("betlimit").visible = false;
+		}
+		
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
 		public function display():void
