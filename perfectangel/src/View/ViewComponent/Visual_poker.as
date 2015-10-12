@@ -71,15 +71,19 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
 		public function Clean_poker():void
 		{		
-			Get(modelName.PLAYER_POKER).CleanList();
-			Get(modelName.PLAYER_POKER).CustomizedFun = myscale;		
-			Get(modelName.PLAYER_POKER).Create_by_list(5, [ResName.just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
-			Get(modelName.PLAYER_POKER).container.alpha = 0;			
+			var ppoker:MultiObject = Get(modelName.PLAYER_POKER);
+			ppoker.CleanList();
+			ppoker.CustomizedFun = myscale;		
+			ppoker.Create_by_list(5, [ResName.just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
+			Tweener.pauseTweens(ppoker.container);
+			ppoker.container.alpha = 0;			
 			
-			Get(modelName.BANKER_POKER).CleanList();
-			Get(modelName.BANKER_POKER).CustomizedFun = myscale;
-			Get(modelName.BANKER_POKER).Create_by_list(5, [ResName.just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
-			Get(modelName.BANKER_POKER).container.alpha = 0;
+			var bpoker:MultiObject = Get(modelName.BANKER_POKER);
+			bpoker.CleanList();
+			bpoker.CustomizedFun = myscale;
+			bpoker.Create_by_list(5, [ResName.just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
+			Tweener.pauseTweens(bpoker.container);
+			bpoker.container.alpha = 0;
 			
 			Get("mipoker").CleanList();		
 			Get("mipoker").Create_by_list(1, [ResName.Mipoker_zone], 0 , 0, 1, 130, 0, "Bet_");			

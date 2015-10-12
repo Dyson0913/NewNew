@@ -1,6 +1,5 @@
 package Model 
-{
-	import caurina.transitions.Tweener;
+{	
 	import util.utilFun;
 	
 	/**
@@ -20,12 +19,7 @@ package Model
 		public function set Isqueueing(value:Boolean):void
 		{
 			_isqueueing = value;
-			
-			//打開,再次檢查
-			if ( value == false)
-			{
-				checkqueue();
-			}
+			//utilFun.Log("set  " +_isqueueing);			
 		}
 		
 		public function MsgQueue() 
@@ -35,13 +29,14 @@ package Model
 		
 		public function push(msg:Object):void
 		{
-			_queueMsg.push(msg);
-			Tweener.addCaller(this, { time:0.1 , count: 1, onUpdate: this.checkqueue } );
+			_queueMsg.push(msg);			
+			checkqueue();
+			
 		}
 		
 		public function getMsg():Object
 		{
-			var msg:Object = _queueMsg[0]
+			var msg:Object = _queueMsg[0];			
 			_queueMsg.shift();
 			return msg;
 		}
@@ -54,12 +49,17 @@ package Model
 			{
 				if (_isqueueing) 
 				{
-					//utilFun.Log("is queing retu");
+					utilFun.Log("is queing retu");
 					return;
 				}
 				
+				//utilFun.Log("before excusive lock");
+				Isqueueing =  true;
 				dispatcher(new ModelEvent("popmsg"));
-				Tweener.addCaller(this, { time:0.1 , count: 1, onUpdate: this.checkqueue } );
+				//utilFun.Log("after pop set false");
+				Isqueueing =  false;
+				
+				utilFun.SetTime(checkqueue, 0.01);				
 			}
 			
 		}
