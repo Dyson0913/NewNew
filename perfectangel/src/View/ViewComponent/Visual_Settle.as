@@ -159,24 +159,27 @@ package View.ViewComponent
 				total += resultob.settle_amount;
 			}		
 			
-			var history:Array = _model.getValue("history_win_list");
-			var arr:Array = [];
-			if ( evel_winstate == 1) 
-			{
-				arr.push(2);
-				arr.push(eviPoint);
-			}
-			else if ( angel_winstate == 1) 
-			{
-				arr.push(3);
-				arr.push(angPoint);
-			}
-			else  arr.push(5);
+					
+			//var history:Array = _model.getValue("history_win_list");
+			//var arr:Array = [];
+			//if ( evel_winstate == 1) 
+			//{
+				//arr.push(2);
+				//arr.push(eviPoint);
+			//}
+			//else if ( angel_winstate == 1) 
+			//{
+				//arr.push(3);
+				//arr.push(angPoint);
+			//}
+			//else  arr.push(5);
+			//
+			//history.push(arr);
+			//if ( history.length > 60) history.shift();			
+			//_model.putValue("history_win_list", history);
+			//歷史記錄
+			dispatcher(new ArrayObject([evel_winstate, angel_winstate, eviPoint, angPoint], "add_history" ) );	
 			
-			history.push(arr);
-			if ( history.length > 60) history.shift();			
-			_model.putValue("history_win_list", history);
-			utilFun.Log("arr = "+ arr);
 			utilFun.Log("evillFrame = "+ evillFrame +" angelFrame "+angelFrame);
 			utilFun.Log("angPoint = "+ angPoint +" eviPoint "+eviPoint);
 			utilFun.Log("evel_winstate = "+ evel_winstate +" angel_winstate "+angel_winstate);

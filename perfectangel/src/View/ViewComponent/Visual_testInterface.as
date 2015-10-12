@@ -107,9 +107,8 @@ package View.ViewComponent
 			var script_list:MultiObject = prepare("script_list", new MultiObject() ,GetSingleItem("_view").parent.parent );			
 			script_list.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);			
 			script_list.stop_Propagation = true;
-			script_list.mousedown = script_list_test;			
-			script_list.mouseup = up;			
-			script_list.CustomizedData = [{size:18},"下注腳本","開牌腳本","結算腳本"]
+			script_list.mousedown = script_list_test;
+			script_list.CustomizedData = [{size:18},"下注腳本","開牌腳本","結算腳本","模擬封包"]
 			script_list.CustomizedFun = _text.textSetting;			
 			script_list.Create_by_list(script_list.CustomizedData.length -1, [ResName.TextInfo], 0, 0, script_list.CustomizedData.length-1, 100, 20, "Btn_");			
 			
@@ -143,14 +142,7 @@ package View.ViewComponent
 			_btn.init();
 			
 			//=============================================paytable
-			var arr:Array = _model.getValue("history_win_list");			
-			for ( var i:int = 0; i < 10; i++)
-			{
-				var ran:int = utilFun.Random(4) +1;
-				var point:int = utilFun.Random(9);			
-				arr.push([ran, point]);				
-			}
-			_model.putValue("history_win_list", arr);
+			fake_hisotry();
 			_paytable.init();			
 			
 			_HistoryRecoder.init();
@@ -260,13 +252,7 @@ package View.ViewComponent
 			//_hint.init();			
 			
 			//=============================================paytable			
-			var arr:Array = _model.getValue("history_win_list");			
-			for ( var i:int = 0; i < 1; i++)
-			{
-				var ran:int = 3;// utilFun.Random(4) +1;
-				var point:int = 2; //utilFun.Random(9);			
-				arr.push([ran, point]);				
-			}
+			fake_hisotry();
 			_paytable.init();		
 			//_paytable.update_history();
 			
@@ -289,23 +275,7 @@ package View.ViewComponent
 			
 			_settlePanel.init();
 			_settlePanel.debug();
-			utilFun.Log("ok");
-			//
-			//var fakePacket:Object =  { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 300 }, 
-			                                                                   //{"bet_type": "BetPAEvil", "settle_amount": 400, "odds": 2, "win_state": "WSPANormalWin", "bet_amount": 200 },
-																			    //{"bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 300 }, 
-																				//{"bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 400 }, 
-																				//{"bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 600 },
-																				//{"bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 500 } ], 
-																				//"game_state": "EndRoundState", 
-																				//"game_result_id": "287925",
-																				//"timestamp": 1442940663.023373,
-																				//"remain_time": 4, 
-																				//"game_type": "PerfectAngel", 
-																				//"game_round": 1, 
-																				//"game_id": "PerfectAngel-1", 
-																				//"message_type": "MsgBPEndRound",
-																				//"id": "1c0503c6614a11e5a16df23c9189e2a9"}
+			utilFun.Log("ok");		
 			
 			//var fakePacket:Object = {"result_list": [{"bet_type": "BetPAAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 100}, {"bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0}, {"bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0}], "game_state": "EndRoundState", "game_result_id": "288778", "timestamp": 1443023641.580271, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 318, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "4f17fb12620b11e5bcebf23c9189e2a9"}
 			var fakePacket:Object = { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 2, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSPANormalWin", "bet_amount": 0 }, { "bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 11, "win_state": "WSWin", "bet_amount": 0 }, { "bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 } ], "game_state": "EndRoundState", "game_result_id": "289273", "timestamp": 1443063940.564476, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 785, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "2328f8ae626911e5bcebf23c9189e2a9" }									
@@ -313,11 +283,31 @@ package View.ViewComponent
 			
 		}
 		
-		public function up(e:Event, idx:int):Boolean
-		{			
-			return true;
-		}	
+		public function fake_hisotry():void
+		{
+			var arr:Array = _model.getValue("history_win_list");			
+			for ( var i:int = 0; i < 10; i++)
+			{
+				var ran:int = utilFun.Random(4) +1;
+				var point:int = utilFun.Random(9);			
+				arr.push([ran, point]);				
+			}
+			_model.putValue("history_win_list", arr);
+		}
 		
+		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "3")]
+		public function sim_package():void
+		{
+			//fake hisoty			
+			var evel_winstate:int = utilFun.Random(2);
+			var angel_winstate:int = utilFun.Random(2);			
+			var eviPoint:int = utilFun.Random(9);			
+			var angPoint:int = utilFun.Random(9);				
+			dispatcher(new ArrayObject([evel_winstate, angel_winstate,eviPoint,angPoint],"add_history" ) );	
+			
+			_HistoryRecoder.update_history();
+		}
+	
 	}
 
 }

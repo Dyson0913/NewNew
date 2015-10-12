@@ -174,6 +174,7 @@ package ConnectModule.websocket
 					case Message.MSG_TYPE_STATE_INFO:
 					{
 						
+						dispatcher(new ValueObject(  result.game_round, "game_round") );
 						dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );						
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );								
 							

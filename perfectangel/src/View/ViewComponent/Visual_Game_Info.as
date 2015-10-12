@@ -139,10 +139,13 @@ package View.ViewComponent
 			Get("betlimit").container.visible = true;
 			Get("realtimeinfo").container.visible = true;
 			
-			utilFun.Clear_ItemChildren(Get("game_title_info_data").ItemList[1]);			
-			var round_code:int = _opration.operator("game_round", DataOperation.add);
-			var textfi:TextField = _text.dynamic_text(round_code.toString(),{size:18});
-			Get("game_title_info_data").ItemList[1].addChild(textfi);	
+			//utilFun.Clear_ItemChildren(GetSingleItem("game_title_info_data"));			
+			var round_code:int = _model.getValue("game_round"); //_opration.operator("game_round", DataOperation.add);
+			utilFun.Log("game_round ="+_model.getValue("game_round"));
+			//var textfi:TextField = _text.dynamic_text(round_code.toString(),{size:18});
+			//GetSingleItem("game_title_info_data").addChild(textfi);	
+			//
+			GetSingleItem("game_title_info_data", 0).getChildByName("Dy_Text").text = round_code.toString();
 		}		
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]

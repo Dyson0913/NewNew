@@ -48,7 +48,8 @@ package View.ViewBase
 		
 		public function textSetting(mc:MovieClip, idx:int, data:Array):void
 		{						
-			var str:TextField = dynamic_text(data[idx+1],data[0]);			
+			var str:TextField = dynamic_text(data[idx + 1], data[0]);			
+			str.name = "Dy_Text";
 			mc.addChild(str);
 		}
 		

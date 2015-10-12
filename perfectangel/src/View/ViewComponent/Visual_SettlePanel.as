@@ -177,6 +177,9 @@ package View.ViewComponent
 			Get("settletable_zone_settle").CustomizedFun = _text.colortextSetting;
 			Get("settletable_zone_settle").CustomizedData = font2;
 			Get("settletable_zone_settle").Create_by_list(settle_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");
+			
+			if ( _betCommand.all_betzone_totoal() == 0) return;
+			
 			dispatcher(new StringObject("sound_get_point","sound" ) );
 			//小牌結果
 			//var historystr_model:Array = _model.getValue("result_str_list");
