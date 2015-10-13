@@ -201,7 +201,7 @@ package View.ViewComponent
 			
 			
 			//================================================ simu deal
-			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player", "Banker", "Player", "Banker"];
+			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player"];// , "Banker", "Player", "Banker"];
 			_regular.Call(this, { onUpdate:this.fackeDeal, onUpdateParams:[testpok] }, 30, 0, 10, "linear");						
 		}
 		

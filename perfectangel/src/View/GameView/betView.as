@@ -93,24 +93,23 @@ package View.GameView
 			
 			_HistoryRecoder.init();
 			_gameinfo.init();
-			
+			_settlePanel.init();
 			_paytable.init();
-						
+			
 			_time.init();			
 		   _hint.init();
 			
 		  
-		   
+		   _pokerhandler.init();
 			_betzone.init();
 			_coin_stack.init();
 			
-			_pokerhandler.init();
+			
 			_settle.init();
 			_sencer.init();	
 			_coin.init();
-			_btn.init();
+			_btn.init();		
 			
-			_settlePanel.init();
 			
 			//dispatcher(new StringObject("Soun_Bet_BGM","Music" ) );
 		}

@@ -154,13 +154,30 @@ package View.ViewComponent
 				
 				if( type.Value == modelName.PLAYER_POKER)
 				{
-					Get("mipoker").container.x = 1010;
-					Get("mipoker").container.y = 590;
+					if( _model.getValue("playerNew"))
+					{
+						Get("mipoker").container.x = 590;
+						Get("mipoker").container.y = 460;
+					}
+					else
+					{
+						Get("mipoker").container.x = 640;
+						Get("mipoker").container.y = 780;
+					}
 				}
 				if( type.Value == modelName.BANKER_POKER)
 				{
-					Get("mipoker").container.x = 490;
-					Get("mipoker").container.y = 590;
+					if( _model.getValue("bankerNew"))
+					{
+						Get("mipoker").container.x = 960;
+						Get("mipoker").container.y = 460;
+					}
+					else
+					{
+						Get("mipoker").container.x = 1480;
+						Get("mipoker").container.y = 780;
+					}
+					
 				}
 				
 				var mipoker:MultiObject = Get("mipoker");
@@ -168,10 +185,10 @@ package View.ViewComponent
 				var pokerf:MovieClip = utilFun.GetClassByString(ResName.Poker);
 				var pokerb:MovieClip = utilFun.GetClassByString(ResName.poker_back);
 				var pokerm:MovieClip = utilFun.GetClassByString(ResName.pokermask);
-				pokerb.x  = 140;
-				pokerb.y  = 64;
-				pokerf.x = 140;
-				pokerf.y  = 64;
+				pokerb.x  = 70;
+				pokerb.y  = 24;
+				pokerf.x = pokerb.x;
+				pokerf.y  = pokerb.y;
 				pokerm.x = 136.35;
 				pokerm.y = 185.8;
 				pokerf.gotoAndStop(pokerid);
@@ -179,10 +196,11 @@ package View.ViewComponent
 				pokerf.addChild(pokerm);
 				mc.addChild(pokerf);
 				mc.addChild(pokerb);
+				//Tweener.addTween(mipoker.container, { alpha:1, time:1 } );
 				Tweener.addTween(mipoker.container, { alpha:1, time:1, onCompleteParams:[pokerf,pokerid,type.Value],onComplete:this.poker_mi_ani } );
 				
 				//_tool.SetControlMc(paytable.ItemList[1]);
-				//_tool.SetControlMc(mipoker.container);
+				//_tool.SetControlMc(pokerb);
 				//_tool.y = 200;
 				//add(_tool);			
 				return;
@@ -245,6 +263,7 @@ package View.ViewComponent
 		public function sec_wait_to_see(pokerf:MovieClip, pokerid:int, pokertype:int):void
 		{
 			//staty 0.5 to check 
+			//Tweener.addTween(pokerf, { delay:0.5 } );
 			Tweener.addTween(pokerf, { delay:0.5, transition:"easeInSine",onCompleteParams:[pokerid,pokertype],onComplete: this.showfinal } );
 		}
 		
