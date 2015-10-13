@@ -159,24 +159,6 @@ package View.ViewComponent
 				total += resultob.settle_amount;
 			}		
 			
-					
-			//var history:Array = _model.getValue("history_win_list");
-			//var arr:Array = [];
-			//if ( evel_winstate == 1) 
-			//{
-				//arr.push(2);
-				//arr.push(eviPoint);
-			//}
-			//else if ( angel_winstate == 1) 
-			//{
-				//arr.push(3);
-				//arr.push(angPoint);
-			//}
-			//else  arr.push(5);
-			//
-			//history.push(arr);
-			//if ( history.length > 60) history.shift();			
-			//_model.putValue("history_win_list", history);
 			//歷史記錄
 			dispatcher(new ArrayObject([evel_winstate, angel_winstate, eviPoint, angPoint], "add_history" ) );	
 			
@@ -243,32 +225,40 @@ package View.ViewComponent
 				result_str.push("天使，惡魔無賴");
 			}
 			
-				//押注及得分
+			//押注及得分
 			_model.putValue("result_settle_amount",settle_amount);
 			_model.putValue("result_zonebet_amount",zonebet_amount);
 			_model.putValue("result_total", total);
 			_model.putValue("result_str_list", result_str);
 			
-			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 2, 1, "linear");
+			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 0, 1, "linear");
 			
 		}
 		
 		public function showAni(evel_winstate:int,angel_winstate:int):void
 		{
-			//return;
-			//TODO       大天使,(完美)
-			//                XX幾點
 			if( evel_winstate ==1)
 			{
-				GetSingleItem("zone", 0)["ani"].gotoAndPlay(2);				
-			}
-			
-			if ( angel_winstate == 1)
+				_regular.Call(this, { onComplete:this.angel_show,onCompleteParams:[0] }, 1, 2, 1, "linear");				
+				dispatcher(new StringObject("sound_evil_win","sound" ) );
+			}			
+			else if ( angel_winstate == 1)
 			{
-				GetSingleItem("zone", 1)["ani"].gotoAndPlay(2);
+				_regular.Call(this, { onComplete:this.angel_show,onCompleteParams:[1] }, 1, 2, 1, "linear");				
+				dispatcher(new StringObject("sound_angel_win","sound" ) );
+			}
+			else if ( angel_winstate == 0 && evel_winstate== 0)
+			{
+				dispatcher(new StringObject("sound_None_win","sound" ) );
+				
 			}
 			
 			_regular.Call(this, { onComplete:this.show_ok }, 1, 2, 1, "linear");
+		}
+		
+		private function angel_show(type:int):void
+		{
+			GetSingleItem("zone", type)["ani"].gotoAndPlay(2);
 		}
 		
 		public function show_ok():void

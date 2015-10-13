@@ -44,6 +44,10 @@ package Command
 			SoundAS.addSound("sound_start_bet", new sound_start_bet());			
 			SoundAS.addSound("sound_get_point", new sound_get_point());	
 			
+			SoundAS.addSound("sound_evil_win", new sound_evil_win());	
+			SoundAS.addSound("sound_angel_win", new sound_angel_win());	
+			SoundAS.addSound("sound_None_win", new sound_None_win());	
+			
 			//create lobbycall back
 			var lobbyevent:Function =  _model.getValue(modelName.HandShake_chanel);			
 			if ( lobbyevent != null)

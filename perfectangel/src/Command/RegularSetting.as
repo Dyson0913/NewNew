@@ -118,9 +118,10 @@ package Command
 		
 		//_regular.Call(Get("aa").container, { onUpdate:this.test_ok,onUpdateParams:[Get("aa").container] }, 1, 0, 5, "linear");
 		//_regular.Call(Get("aa").container, { onComplete:this.test_ok,onCompleteParams:[Get("aa").container] }, 1, 0, 1, "linear");
-		public function Call(mc:Object,pa:Object , t:int,delay:int =0,cnt:int = 1,transition_p:String = "linear"):void
+		public function Call(mc:Object,pa:Object , t:int,de:int =0,cnt:int = 1,transition_p:String = "linear"):void
 		{
 			var tweenOb:Object  = { time:t,
+													  delay:de,
 													  count:cnt,
 													  transition:transition_p
 													};
