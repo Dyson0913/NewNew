@@ -154,30 +154,13 @@ package View.ViewComponent
 				
 				if( type.Value == modelName.PLAYER_POKER)
 				{
-					if( _model.getValue("playerNew"))
-					{
-						Get("mipoker").container.x = 590;
-						Get("mipoker").container.y = 460;
-					}
-					else
-					{
-						Get("mipoker").container.x = 640;
-						Get("mipoker").container.y = 780;
-					}
+					Get("mipoker").container.x = 640;
+					Get("mipoker").container.y = 780;
 				}
 				if( type.Value == modelName.BANKER_POKER)
 				{
-					if( _model.getValue("bankerNew"))
-					{
-						Get("mipoker").container.x = 960;
-						Get("mipoker").container.y = 460;
-					}
-					else
-					{
-						Get("mipoker").container.x = 1480;
-						Get("mipoker").container.y = 780;
-					}
-					
+					Get("mipoker").container.x = 930;
+					Get("mipoker").container.y = 780;					
 				}
 				
 				var mipoker:MultiObject = Get("mipoker");

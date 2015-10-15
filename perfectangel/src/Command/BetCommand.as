@@ -245,19 +245,6 @@ package Command
 			return arr;
 		}
 		
-		public function get_my_bet_info(type:String):Array
-		{
-			var arr:Array = _Bet_info.getValue("self");			
-			var data:Array = [];
-			
-			for ( var i:int = 0; i < arr.length ; i++)
-			{
-				var bet_ob:Object = arr[i];
-				if ( type == "Type") data.push(bet_ob["betType"]);				
-			}
-			return data;
-		}
-		
 		public function get_my_betlist():Array
 		{		
 			return _Bet_info.getValue("self");		

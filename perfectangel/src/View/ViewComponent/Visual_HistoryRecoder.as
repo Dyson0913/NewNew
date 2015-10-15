@@ -80,6 +80,7 @@ package View.ViewComponent
 			var frame:int = info[0];
 			if (  info[0] !=5)
 			{				
+				if ( info[1] == 0) info[1] == 10;
 				mc["_Text"].text = info[1];
 			}
 			mc.gotoAndStop(frame);
