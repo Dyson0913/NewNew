@@ -172,7 +172,7 @@ package View.ViewComponent
 		{			
 			_model.putValue(modelName.PLAYER_POKER, []);				
 			_model.putValue(modelName.BANKER_POKER, []);					
-			_model.putValue("scirpt_pai", ["9d","4c","5s","7s","4s","1s","6d","3s","5c","6h"]);		
+			_model.putValue("scirpt_pai", ["9d","4c","5s","7s","4s","1s","7d","3s","5c","6h"]);		
 			
 			changeBG(ResName.Bet_Scene);
 			

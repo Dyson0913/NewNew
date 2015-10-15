@@ -168,7 +168,7 @@ package View.ViewComponent
 				var pokerf:MovieClip = utilFun.GetClassByString(ResName.Poker);
 				var pokerb:MovieClip = utilFun.GetClassByString(ResName.poker_back);
 				var pokerm:MovieClip = utilFun.GetClassByString(ResName.pokermask);
-				pokerb.x  = 70;
+				pokerb.x  = 40;
 				pokerb.y  = 24;
 				pokerf.x = pokerb.x;
 				pokerf.y  = pokerb.y;
@@ -179,13 +179,14 @@ package View.ViewComponent
 				pokerf.addChild(pokerm);
 				mc.addChild(pokerf);
 				mc.addChild(pokerb);
-				//Tweener.addTween(mipoker.container, { alpha:1, time:1 } );
+				
 				Tweener.addTween(mipoker.container, { alpha:1, time:1, onCompleteParams:[pokerf,pokerid,type.Value],onComplete:this.poker_mi_ani } );
 				
-				//_tool.SetControlMc(paytable.ItemList[1]);
+				
 				//_tool.SetControlMc(pokerb);
 				//_tool.y = 200;
-				//add(_tool);			
+				//add(_tool);
+				
 				return;
 			}
 			
