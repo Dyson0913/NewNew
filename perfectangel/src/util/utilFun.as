@@ -275,6 +275,11 @@ package util
 			return Frame + 1;
 		}
 		
+		public static function jumpFrame(CurFrame:int,startframe:int, FrameCycle:int):int
+		{
+			if ( CurFrame != FrameCycle) return FrameCycle;
+			return startframe;
+		}
 		
 		//回傳match完patten後的字串
 		public static function Regex_CutPatten(str:String, pattern:RegExp):String

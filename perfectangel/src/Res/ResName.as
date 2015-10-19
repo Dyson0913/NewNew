@@ -34,7 +34,7 @@ package Res
 		public static const realtimeinfo:String = "realtime_info";
 		public static const betstaticarrow:String = "betstatic_arrow";
 		public static const betstaticarrow_right:String = "betstatic_arrow_right";
-		
+		public static const lightqueue:String = "light_queue";
 		
 		public static const historytable:String = "history_table";		
 		public static const bet_tableitem:String = "bet_table_item";		
@@ -53,6 +53,7 @@ package Res
 		public static const evil_per:String = "per_evil";
 		public static const angel_per:String = "per_angel";
 		public static const samepoint:String = "same_point";
+		public static const bothNone:String = "both_None";
 		
 		public static const open_tableitem:String = "open_table_item";		
 		public static const rebet_btn:String = "btn_rebet";
@@ -67,6 +68,7 @@ package Res
 		
 		public static const paytablemain:String = "paytable_main"		
 		public static const paytable_baridx:String = "paytable_bar_idx";
+		public static const light_wintype:String = "lightqueue_wintype";
 		
 		
 		public function ResName() 

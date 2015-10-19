@@ -5,6 +5,7 @@ package Command
 	
 	import util.*;
 	import View.GameView.*;
+	
 	/**
 	 * state event
 	 * @author hhg4092
@@ -16,7 +17,6 @@ package Command
 		
 		[Inject]
 		public var _model:Model;
-		
 		
 		public function StateCommand() 
 		{

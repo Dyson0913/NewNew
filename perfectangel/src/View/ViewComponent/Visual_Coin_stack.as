@@ -40,17 +40,14 @@ package View.ViewComponent
 			var avaliblezone:Array = _model.getValue(modelName.AVALIBLE_ZONE);
 			//stick cotainer  			
 			var coin_xy:Array = _model.getValue(modelName.COIN_STACK_XY);
-			var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), GetSingleItem("_view").parent.parent);
+			var coinstack:MultiObject = create("coinstakeZone",  [ResName.emptymc]);
 			coinstack.container.x = 1081 ;
 			coinstack.container.y = 657 ;
 			coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
 			coinstack.Post_CustomizedData = coin_xy ;
-			coinstack.Create_by_list(avaliblezone.length, [ResName.emptymc], 0, 0, avaliblezone.length, 0, 0, "time_");		
+			coinstack.Create_(avaliblezone.length, "coinstakeZone");	
 			
-			//_tool.SetControlMc(coinstack.ItemList[6]);
-			//_tool.SetControlMc(coinstack.container);
-			//_tool.y  = 200;
-			//add(_tool);		
+			put_to_lsit(coinstack);
 			
 		}
 		

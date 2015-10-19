@@ -15,6 +15,8 @@ package View.ViewComponent
 	import Res.ResName;
 	import caurina.transitions.Tweener;
 	
+	import View.GameView.gameState;
+	
 	/**
 	 * betzone present way
 	 * @author ...
@@ -36,16 +38,16 @@ package View.ViewComponent
 		public function init():void
 		{			
 			//賠率提示
-			var paytable:MultiObject = prepare("paytable", new MultiObject() ,  GetSingleItem("_view").parent.parent);
+			var paytable:MultiObject = create("paytable", [ResName.paytablemain]);
 			paytable.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 1]);			
-			paytable.container.x = 240;
-			paytable.container.y =  124;
-			paytable.Create_by_list(1, [ResName.paytablemain], 0, 0, 1, 0, 0, "time_");
+			paytable.container.x = 251.8;
+			paytable.container.y =  126.35;
+			paytable.Create_(1, "paytable");
 		
-			var paytable_baridx:MultiObject = prepare("paytable_baridx", new MultiObject() ,  GetSingleItem("_view").parent.parent);
-			paytable_baridx.container.x = 240;
-			paytable_baridx.container.y =  134;
-			paytable_baridx.Create_by_list(1, [ResName.paytable_baridx], 0, 0, 1, 0, 0, "time_");			
+			var paytable_baridx:MultiObject = create("paytable_baridx",  [ResName.paytable_baridx]);
+			paytable_baridx.container.x = paytable.container.x;
+			paytable_baridx.container.y = paytable.container.y;
+			paytable_baridx.Create_(1,  "paytable_baridx");	
 			//paytable_baridx.ItemList[0].gotoAndStop(2);
 			
 		}
@@ -69,6 +71,8 @@ package View.ViewComponent
 			
 			GetSingleItem("paytable_baridx").gotoAndStop(frame);			
 		}
+		
+		
 	}
 
 }

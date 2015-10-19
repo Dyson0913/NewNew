@@ -98,6 +98,15 @@ package View.ViewBase
 			return null;
 		}
 		
+		protected function setFrame(name:*, frame:int):void
+		{
+			var a:MultiObject = Get(name);
+			for ( var i:int = 0; i <  a.ItemList.length; i++)
+			{				
+				GetSingleItem(name, i).gotoAndStop(frame);
+			}
+		}
+		
 		protected function changeBG(name:String):void
 		{
 			utilFun.Clear_ItemChildren(GetSingleItem("_view"));

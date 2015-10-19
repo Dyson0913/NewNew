@@ -39,8 +39,8 @@ package Command
 			_model.putValue("coin_list", [100, 500, 1000, 5000, 10000]);
 			_model.putValue("after_bet_credit", 0);
 			
-			var betzone:Array = [0, 1, 2, 3, 4, 5];
-			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel"];// , 6, 7, 8];
+			var betzone:Array = [0, 1, 2, 3, 4, 5];// , 6, 7];
+			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel","betAA","betBB"];
 			
 		    var bet_name_to_idx:DI = new DI();
 			var bet_idx_to_name:DI = new DI();
@@ -67,7 +67,7 @@ package Command
 			//bet_idx_to_name.putValue(5, "BetPAPerfectAngel");			
 			
 			
-			var allzone:Array =  [ResName.evilZone, ResName.angelZone, ResName.evil_big, ResName.angel_big, ResName.evil_per, ResName.angel_per,ResName.samepoint];			
+			var allzone:Array =  [ResName.evilZone, ResName.angelZone, ResName.evil_big, ResName.angel_big, ResName.evil_per, ResName.angel_per,ResName.samepoint,ResName.bothNone];			
 			var avaliblezone:Array = [];
 			var avaliblezone_s:Array = [];
 			for each (var k:int in betzone)
@@ -80,9 +80,9 @@ package Command
 			_model.putValue(modelName.AVALIBLE_ZONE_SENCE, avaliblezone_s);
 			_model.putValue(modelName.AVALIBLE_ZONE_IDX, betzone);
 			
-			var betzone_po:Array = [ [0, 0], [-623, 0],  [318, 10], [-840, 14], [341, 164], [-880, 167] ,[-274,28]];
+			var betzone_po:Array = [ [0, 0], [-623, 0],  [318, 10], [-840, 14], [341, 164], [-880, 167] ,[-274,148],[-264,18]];
 			_model.putValue(modelName.AVALIBLE_ZONE_XY, betzone_po);
-			_model.putValue(modelName.COIN_STACK_XY,   [ [140, 210], [-483, 210],  [408, 80], [-760, 94], [451, 264], [-800, 267] ,[-174,238]]);
+			_model.putValue(modelName.COIN_STACK_XY,   [ [140, 210], [-483, 210],  [408, 80], [-760, 94], [451, 264], [-800, 267] ,[-174,238],[-174,68]]);
 			
 			var _idx_to_result_idx:DI = new DI();
 			

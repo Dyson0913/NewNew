@@ -87,7 +87,7 @@ package View.ViewComponent
 			
 			if ( CONFIG::debug ) 
 			{
-				_betCommand.betTypeMain(e, idx);
+				_betCommand.bet_local(e, idx);
 			}		
 			else
 			{				

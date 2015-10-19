@@ -17,10 +17,8 @@ package View.ViewComponent
 	import View.Viewutil.*;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
-	
-	import flash.text.TextFormat;
-	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormatAlign;
+
+	import View.GameView.gameState;
 	
 	/**
 	 * Visual_Game_Info present way
@@ -78,8 +76,19 @@ package View.ViewComponent
 			realtimeinfo.container.y = 120;	
 			realtimeinfo.Create_(2, "realtimeinfo");	
 			
+			var lightqueue:MultiObject = create("lightqueue", [ResName.lightqueue]);			
+			lightqueue.container.x = 711.65;
+			lightqueue.container.y = 90.90;	
+			lightqueue.Create_(1, "lightqueue");	
+			
+			var light_wintype:MultiObject = create("lightqueue_wintype",  [ResName.light_wintype]);
+			light_wintype.container.x = 208.45;
+			light_wintype.container.y = 403.95;
+			light_wintype.Create_(1,  "lightqueue_wintype");	
+			
 			put_to_lsit(betlimit);
 			put_to_lsit(realtimeinfo);
+			put_to_lsit(lightqueue);
 			
 			utilFun.SetTime(triger, 2);
 		}
@@ -138,21 +147,94 @@ package View.ViewComponent
 		{
 			Get("betlimit").container.visible = true;
 			Get("realtimeinfo").container.visible = true;
-			
-			//utilFun.Clear_ItemChildren(GetSingleItem("game_title_info_data"));			
-			var round_code:int = _model.getValue("game_round"); //_opration.operator("game_round", DataOperation.add);
-			utilFun.Log("game_round ="+_model.getValue("game_round"));
-			//var textfi:TextField = _text.dynamic_text(round_code.toString(),{size:18});
-			//GetSingleItem("game_title_info_data").addChild(textfi);	
-			//
+						
+			//round code
+			var round_code:int = _model.getValue("game_round");
 			GetSingleItem("game_title_info_data", 0).getChildByName("Dy_Text").text = round_code.toString();
+			
+			//跑燈
+			GetSingleItem("lightqueue").gotoAndStop(1);
+			
+			//
+			Tweener.pauseTweens(GetSingleItem("lightqueue_wintype"));
+			GetSingleItem("lightqueue_wintype").gotoAndStop(1);
+			
 		}		
+		
+		public function light_queue_effect(stop_point:int):void
+		{			
+			GetSingleItem("lightqueue_wintype").gotoAndStop(2);
+			//normal
+			Tweener.addCaller( this, { time:5 , count: 120 , transition:"easeInQuad", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.lligth_start } );
+			
+			
+		}
+		
+		private function light_effect():void
+		{
+			var idx:int = _model.getValue("lightqueue_idx");
+			idx++;			
+			if ( idx == 12) idx = 0;
+			//utilFun.Log("light idx ="+idx);
+			_model.putValue("lightqueue_idx", idx);
+			GetSingleItem("lightqueue")["_light_" + idx].gotoAndPlay(2);
+		}
+		
+		
+		private function lligth_start():void
+		{			
+			var idx:int = _model.getValue("light_idx");
+			
+			if (idx < 13)
+			{
+				GetSingleItem("lightqueue_wintype").gotoAndStop(3);
+				GetSingleItem("lightqueue_wintype")["_win_type"].gotoAndStop(idx);
+				var frame:int = 0;
+				if ( idx <= 7) frame = 5;
+				else if ( idx == 8 || idx ==9) frame = 4;
+				else if ( idx == 10 ) frame = 3;
+				else if ( idx == 11 ) frame = 2;
+				else if ( idx == 12 ) frame = 1;
+				GetSingleItem("lightqueue_wintype")["_win_odds"].gotoAndStop(frame);
+				
+				
+				//normal frequen
+				_regular.Twinkle_by_JumpFrame(GetSingleItem("lightqueue_wintype"), 20, 20, 3, 4);
+				
+				//win
+				//_regular.Twinkle_by_JumpFrame(GetSingleItem("lightqueue_wintype"), 20, 180, 3, 4);
+			}
+			else
+			{
+				GetSingleItem("lightqueue_wintype").gotoAndStop(5);
+			}			
+		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
 		public function opencard_parse():void
 		{			
 			Get("betlimit").container.visible = false;
-			Get("realtimeinfo").container.visible = false;
+			Get("realtimeinfo").container.visible = false;	
+			
+			var state:int = _model.getValue(modelName.GAMES_STATE);		
+			if ( state == gameState.END_BET)
+			{			
+				GetSingleItem("lightqueue").gotoAndStop(2);
+			}
+			else 
+			{				
+				GetSingleItem("lightqueue").gotoAndStop(1);			
+				lligth_start();
+				return;
+			}
+			
+			
+			//跑馬effect 1~13
+			var rand:int = _model.getValue("light_idx");			
+			light_queue_effect(rand);
+			
+			//TEMP idx
+			_model.putValue("lightqueue_idx", 0);
 		}
 	}
 

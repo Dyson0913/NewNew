@@ -38,27 +38,18 @@ package View.ViewComponent
 			var zone_xy:Array = _model.getValue(modelName.AVALIBLE_ZONE_XY);
 			
 			var avaliblezone:Array = _model.getValue(modelName.AVALIBLE_ZONE);			
-			_betzone= prepare("betzone", new MultiObject() ,  GetSingleItem("_view").parent.parent);
+			_betzone = create("betzone", avaliblezone);
 			_betzone.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
 			_betzone.Post_CustomizedData = zone_xy;
 			_betzone.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,2,0]);			
-			_betzone.Create_by_list(avaliblezone.length,avaliblezone, 0, 0, avaliblezone.length, 0, 0, "time_");			
+			_betzone.Create_(avaliblezone.length, "betzone");
 			_betzone.container.x = 1081;
 			_betzone.container.y = 657;
 			
-			//_betzone.ItemList[0].gotoAndStop(2);
-			//_betzone.ItemList[1].gotoAndStop(2);
-			//_betzone.ItemList[2].gotoAndStop(2);
-			//_betzone.ItemList[3].gotoAndStop(2);
-			//_betzone.ItemList[4].gotoAndStop(2);
-			//_betzone.ItemList[5].gotoAndStop(2);
-			//_betzone.ItemList[6].gotoAndStop(2);
-			//_betzone.ItemList[7].gotoAndStop(2);
-			//_betzone.ItemList[8].gotoAndStop(2);
+			setFrame("betzone", 2);
 			
-			//_tool.SetControlMc(_betzone.ItemList[6]);
-			//_tool.SetControlMc(_betzone.container);		
-			//add(_tool);						
+			put_to_lsit(_betzone);
+			
 		}		
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
