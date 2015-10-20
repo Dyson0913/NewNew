@@ -196,18 +196,8 @@ package View.ViewComponent
 		
 		private function ready_to_stop():void
 		{
-			utilFun.Log("ready_to_stop");
-			var idx:int = _model.getValue("lightqueue_idx");
-			utilFun.Log("ready_to_stop ="+idx);
-			if ( idx <= 12) 
-			{
-				if( idx == 12) idx = 0;
-				GetSingleItem("lightqueue")["_light_" + idx].gotoAndStop(2);				
-			}
-			
 			lligth_start();
 		}
-		
 		
 		private function light_effect():void
 		{
@@ -218,8 +208,6 @@ package View.ViewComponent
 			_model.putValue("lightqueue_idx", idx);
 			GetSingleItem("lightqueue")["_light_" + idx].gotoAndPlay(3);
 		}
-		
-		
 		
 		private function lligth_start():void
 		{			
@@ -239,9 +227,9 @@ package View.ViewComponent
 				
 				utilFun.Log("libht idx = "+idx);
 				//light ball up
-				if ( idx == 0) idx == 12;
+				if ( idx == 12) idx = 0;
 				_model.putValue("last_ligt_ball_idx", idx);
-				GetSingleItem("lightqueue")["_light_" + (idx)].gotoAndStop(2);
+				GetSingleItem("lightqueue")["_light_" + idx].gotoAndStop(2);
 				
 				//normal frequen
 				_regular.Twinkle_by_JumpFrame(GetSingleItem("lightqueue_wintype"), 20, 20, 3, 4);

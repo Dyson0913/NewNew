@@ -78,8 +78,6 @@ package View.GameView
 			
 			_model.putValue(modelName.Game_Name, "PerfectAngel");
 			
-			//跑馬effect 1~13
-			var rand:int = 0;// utilFun.Random(12) +1;
 			
 			_model.putValue("light_idx", 0);
 			_model.putValue("last_ligt_ball_idx", 0);

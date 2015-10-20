@@ -483,7 +483,7 @@ package View.ViewComponent
 			var mypoker:Array =   _model.getValue(type.Value);
 			utilFun.Log("extra_poker = " + mypoker[0]);	
 			var pokerid:int = 0;	
-			var point:String =  strpoker.substr(0, 1);
+			var point:String =   mypoker[0].substr(0, 1);
 			if ( point == "i") pokerid = 10;
 			else if ( point == "j") pokerid = 11;
 			else if ( point == "q") pokerid = 12;
