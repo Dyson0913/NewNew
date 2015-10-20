@@ -481,9 +481,16 @@ package View.ViewComponent
 		{
 			
 			var mypoker:Array =   _model.getValue(type.Value);
-			utilFun.Log("extra_poker = "+mypoker[0]);
-			var pokerid:int = pokerUtil.pokerTrans(mypoker[mypoker.length - 1])		
-			pokerid = (pokerid /4) +1;
+			utilFun.Log("extra_poker = " + mypoker[0]);	
+			var pokerid:int = 0;	
+			var point:String =  strpoker.substr(0, 1);
+			if ( point == "i") pokerid = 10;
+			else if ( point == "j") pokerid = 11;
+			else if ( point == "q") pokerid = 12;
+			else if ( point == "k") pokerid = 13;
+			else pokerid = parseInt(point);
+			
+			
 			utilFun.Log("pokerid = "+pokerid);
 			_model.putValue("light_idx", pokerid);
 			

@@ -168,7 +168,7 @@ package View.ViewComponent
 			GetSingleItem("lightqueue_wintype").gotoAndStop(2);
 			
 			//normal
-			Tweener.addCaller( this, { time:1 , count: 12 , transition:"linear", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.randon_loop } );
+			Tweener.addCaller( this, { time:1 , count: 48 , transition:"easeOutQuint", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.randon_loop } );
 			
 			//起動 effect easeOutQuint
 			//stop  effect easeInQuint
@@ -180,7 +180,7 @@ package View.ViewComponent
 		{
 			utilFun.Log("randon_loop");
 			//var ra:int = 4;// utilFun.Random(4) + 1;
-			Tweener.addCaller( this, { time:4 , count: 48 , transition:"linear", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.ready_reduce } );
+			Tweener.addCaller( this, { time:1 , count: 60 , transition:"linear", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.ready_reduce } );
 		}
 		
 		private function ready_reduce():void
@@ -189,6 +189,7 @@ package View.ViewComponent
 			utilFun.Log("ready_reduce");
 			var target:int = _model.getValue("light_idx");
 			utilFun.Log("target =" + target);
+			if ( target == 13) target = 12;
 			Tweener.addCaller( this, { time:5 , count: 60 + target, transition:"easeInExpo", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.ready_to_stop } );
 			//best easeInQuint
 		}
@@ -197,9 +198,13 @@ package View.ViewComponent
 		{
 			utilFun.Log("ready_to_stop");
 			var idx:int = _model.getValue("lightqueue_idx");
-			if ( idx == 12) idx = 0;
-			GetSingleItem("lightqueue")["_light_" + idx].gotoAndStop(2);
-						
+			utilFun.Log("ready_to_stop ="+idx);
+			if ( idx <= 12) 
+			{
+				if( idx == 12) idx = 0;
+				GetSingleItem("lightqueue")["_light_" + idx].gotoAndStop(2);				
+			}
+			
 			lligth_start();
 		}
 		
