@@ -86,9 +86,10 @@ package View.ViewComponent
 			light_wintype.container.y = 403.95;
 			light_wintype.Create_(1,  "lightqueue_wintype");	
 			
+			
 			put_to_lsit(betlimit);
 			put_to_lsit(realtimeinfo);
-			put_to_lsit(lightqueue);
+			//put_to_lsit(lightqueue);
 			
 			utilFun.SetTime(triger, 2);
 		}
@@ -153,9 +154,10 @@ package View.ViewComponent
 			GetSingleItem("game_title_info_data", 0).getChildByName("Dy_Text").text = round_code.toString();
 			
 			//跑燈
-			GetSingleItem("lightqueue").gotoAndStop(1);
+			GetSingleItem("lightqueue").gotoAndStop(1);			
+			GetSingleItem("lightqueue")["_light_" + _model.getValue("last_ligt_ball_idx")].gotoAndStop(1);
 			
-			//
+			//倍率跑馬
 			Tweener.pauseTweens(GetSingleItem("lightqueue_wintype"));
 			GetSingleItem("lightqueue_wintype").gotoAndStop(1);
 			
@@ -164,11 +166,43 @@ package View.ViewComponent
 		public function light_queue_effect(stop_point:int):void
 		{			
 			GetSingleItem("lightqueue_wintype").gotoAndStop(2);
+			
 			//normal
-			Tweener.addCaller( this, { time:5 , count: 120 , transition:"easeInQuad", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.lligth_start } );
+			Tweener.addCaller( this, { time:1 , count: 12 , transition:"linear", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.randon_loop } );
+			
+			//起動 effect easeOutQuint
+			//stop  effect easeInQuint
 			
 			
 		}
+		
+		private function randon_loop():void
+		{
+			utilFun.Log("randon_loop");
+			//var ra:int = 4;// utilFun.Random(4) + 1;
+			Tweener.addCaller( this, { time:4 , count: 48 , transition:"linear", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.ready_reduce } );
+		}
+		
+		private function ready_reduce():void
+		{			
+			
+			utilFun.Log("ready_reduce");
+			var target:int = _model.getValue("light_idx");
+			utilFun.Log("target =" + target);
+			Tweener.addCaller( this, { time:5 , count: 60 + target, transition:"easeInExpo", onUpdateParams:[], onUpdate: this.light_effect, onComplete:this.ready_to_stop } );
+			//best easeInQuint
+		}
+		
+		private function ready_to_stop():void
+		{
+			utilFun.Log("ready_to_stop");
+			var idx:int = _model.getValue("lightqueue_idx");
+			if ( idx == 12) idx = 0;
+			GetSingleItem("lightqueue")["_light_" + idx].gotoAndStop(2);
+						
+			lligth_start();
+		}
+		
 		
 		private function light_effect():void
 		{
@@ -177,8 +211,9 @@ package View.ViewComponent
 			if ( idx == 12) idx = 0;
 			//utilFun.Log("light idx ="+idx);
 			_model.putValue("lightqueue_idx", idx);
-			GetSingleItem("lightqueue")["_light_" + idx].gotoAndPlay(2);
+			GetSingleItem("lightqueue")["_light_" + idx].gotoAndPlay(3);
 		}
+		
 		
 		
 		private function lligth_start():void
@@ -197,6 +232,11 @@ package View.ViewComponent
 				else if ( idx == 12 ) frame = 1;
 				GetSingleItem("lightqueue_wintype")["_win_odds"].gotoAndStop(frame);
 				
+				utilFun.Log("libht idx = "+idx);
+				//light ball up
+				if ( idx == 0) idx == 12;
+				_model.putValue("last_ligt_ball_idx", idx);
+				GetSingleItem("lightqueue")["_light_" + (idx)].gotoAndStop(2);
 				
 				//normal frequen
 				_regular.Twinkle_by_JumpFrame(GetSingleItem("lightqueue_wintype"), 20, 20, 3, 4);
@@ -223,7 +263,7 @@ package View.ViewComponent
 			}
 			else 
 			{				
-				GetSingleItem("lightqueue").gotoAndStop(1);			
+				GetSingleItem("lightqueue").gotoAndStop(2);			
 				lligth_start();
 				return;
 			}

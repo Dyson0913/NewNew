@@ -476,6 +476,19 @@ package View.ViewComponent
 			mc.x = x+(1 + Math.random() * 5 );		
 		}	
 		
+		[MessageHandler(type = "Model.valueObject.Intobject", selector = "Extra_poker")]
+		public function extra_poker(type:Intobject):void
+		{
+			
+			var mypoker:Array =   _model.getValue(type.Value);
+			utilFun.Log("extra_poker = "+mypoker[0]);
+			var pokerid:int = pokerUtil.pokerTrans(mypoker[mypoker.length - 1])		
+			pokerid = (pokerid /4) +1;
+			utilFun.Log("pokerid = "+pokerid);
+			_model.putValue("light_idx", pokerid);
+			
+		}
+		
 	}
 
 }

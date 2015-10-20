@@ -24,10 +24,19 @@ package Model
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
 		public function recoding():void
 		{
-			if ( CONFIG::release ) return;
+			
+			if ( CONFIG::release ) 
+			{
+				
+				return;
+			}
 			
 			write();
-			if( !_start) switch_recode(true);
+			if ( !_start) 
+			{
+				
+				switch_recode(true);
+			}
 		}
 		
 		[MessageHandler(type="Model.valueObject.ArrayObject",selector="pack_recoder")]
@@ -41,8 +50,12 @@ package Model
 		
 		public function write():void
 		{
-			if ( !_start ) return;
-			
+			if ( !_start ) 
+			{
+				
+				return;
+			}
+						
 			var file:FileReference = new FileReference();
 			
 			//var myob:Object = { size:1, aaa:3 };
@@ -66,8 +79,7 @@ package Model
 		}
 		
 		public function recode(ob:Object):void
-		{
-			utilFun.Log("recoe !");
+		{			
 			_recodeData.push(ob);			
 		}
 	

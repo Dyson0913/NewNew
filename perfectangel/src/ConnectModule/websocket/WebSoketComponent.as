@@ -116,6 +116,9 @@ package ConnectModule.websocket
 						//dispatcher( new ValueObject(result.cards_info["banker_card_list"], modelName.BANKER_POKER) );                        
 						_model.putValue(modelName.PLAYER_POKER, result.cards_info["player_card_list"]);
 						_model.putValue(modelName.BANKER_POKER, result.cards_info["banker_card_list"]);
+						_model.putValue(modelName.EXTRA_POKER, result.cards_info["extra_card_list"]);
+
+						dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));	
 						
 						dispatcher(new Intobject(modelName.Bet, ViewCommand.SWITCH) );							
 						
@@ -134,7 +137,7 @@ package ConnectModule.websocket
 						dispatcher(new ValueObject(  result.game_id, "game_id") );
 						
 						var card:Array = result.card_list;
-						var card_type:String = result.card_type
+						var card_type:String = result.card_type;
 						var mypoker:Array;
 						if ( card_type == "Player")
 						{										
@@ -150,9 +153,15 @@ package ConnectModule.websocket
 							
 							_model.putValue(modelName.BANKER_POKER, mypoker);
 							//dispatcher( new ValueObject(card, modelName.BANKER_POKER) );
-							dispatcher(new Intobject(modelName.BANKER_POKER, "poker_mi"));
-							
+							dispatcher(new Intobject(modelName.BANKER_POKER, "poker_mi"));							
 						}
+						else if (card_type == "Extra")
+						{
+							utilFun.Log("pack = Extra");
+							_model.putValue(modelName.EXTRA_POKER, card);
+							dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));	
+						}
+						
 					}
 					break;
 						

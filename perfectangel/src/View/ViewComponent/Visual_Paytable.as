@@ -63,11 +63,11 @@ package View.ViewComponent
 			if ( wintype == "") return ;
 			
 			var frame:int = 1;
-			if (wintype ==  "WSWin" || wintype == "WSPANormalWin") frame = 6
-			else if ( wintype == "WSPATwoPointWin") frame = 5
-			else if ( wintype == "WSPAOnePointWin")	frame = 4
-			else if ( wintype == "WSPAFourOfAKindWin") frame = 2
-			else if ( wintype == "WSPAFiveWawaWin") frame = 3;
+			if (wintype ==  "WSWin" || wintype == "WSPANormalWin" || wintype == "WSPAExSmallWin") frame = 6
+			else if ( wintype == "WSPAExSmallWin" ||  wintype == "WSPAExBigAngelWin" || wintype == "WSPAExBigEvilWin") frame = 5
+			else if ( wintype == "WSPAExPerfectAngelWin" || wintype == "WSPAExUnbeatenEvilWin")	frame = 4
+			else if ( wintype == "WSPAFourOfAKindWin" || wintype == "WSPAExFourOfAKindWin") frame = 2
+			else if ( wintype == "WSPAFiveWawaWin" || wintype == "WSPAExFiveWawaWin") frame = 3;
 			
 			GetSingleItem("paytable_baridx").gotoAndStop(frame);			
 		}
