@@ -117,14 +117,16 @@ package ConnectModule.websocket
 						_model.putValue(modelName.PLAYER_POKER, result.cards_info["player_card_list"]);
 						_model.putValue(modelName.BANKER_POKER, result.cards_info["banker_card_list"]);
 						_model.putValue(modelName.EXTRA_POKER, result.cards_info["extra_card_list"]);
-
-						dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));	
+						
 						
 						dispatcher(new Intobject(modelName.Bet, ViewCommand.SWITCH) );							
 						
+						
+						
 						dispatcher(new ModelEvent("update_state"));
 						dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
-						dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));						
+						dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));	
+						dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));	
 					}
 					break;		
 					

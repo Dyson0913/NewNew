@@ -207,6 +207,10 @@ package View.ViewComponent
 			//utilFun.Log("light idx ="+idx);
 			_model.putValue("lightqueue_idx", idx);
 			GetSingleItem("lightqueue")["_light_" + idx].gotoAndPlay(3);
+			
+			//sound
+			dispatcher(new StringObject("sound_light_stop","sound" ) );
+			
 		}
 		
 		private function lligth_start():void
@@ -249,18 +253,34 @@ package View.ViewComponent
 			Get("betlimit").container.visible = false;
 			Get("realtimeinfo").container.visible = false;	
 			
-			var state:int = _model.getValue(modelName.GAMES_STATE);		
-			if ( state == gameState.END_BET)
-			{			
+		}
+		
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "run_light")]
+		public function run():void
+		{
+			var check:Array =   _model.getValue(modelName.PLAYER_POKER);	
+			if ( check.length == 0)
+			{
 				GetSingleItem("lightqueue").gotoAndStop(2);
 			}
-			else 
-			{				
+			else
+			{
 				GetSingleItem("lightqueue").gotoAndStop(2);			
 				lligth_start();
 				return;
 			}
-			
+			//var state:int = _model.getValue(modelName.GAMES_STATE);		
+			//if ( state == gameState.START_OPEN)
+			//{			
+				//GetSingleItem("lightqueue").gotoAndStop(2);
+			//}
+			//else 
+			//{				
+				//GetSingleItem("lightqueue").gotoAndStop(2);			
+				//lligth_start();
+				//return;
+			//}
 			
 			//跑馬effect 1~13
 			var rand:int = _model.getValue("light_idx");			
@@ -269,6 +289,8 @@ package View.ViewComponent
 			//TEMP idx
 			_model.putValue("lightqueue_idx", 0);
 		}
+			
+		
 	}
 
 }

@@ -494,6 +494,7 @@ package View.ViewComponent
 			utilFun.Log("pokerid = "+pokerid);
 			_model.putValue("light_idx", pokerid);
 			
+			dispatcher(new ModelEvent("run_light"));
 		}
 		
 	}
