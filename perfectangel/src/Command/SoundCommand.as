@@ -44,6 +44,7 @@ package Command
 			SoundAS.addSound("sound_start_bet", new sound_start_bet());			
 			SoundAS.addSound("sound_get_point", new sound_get_point());	
 			SoundAS.addSound("sound_light_stop", new sound_light_stop());	
+			SoundAS.addSound("sound_odd_show", new sound_odd_show());	
 			
 			SoundAS.addSound("sound_evil_win", new sound_evil_win());	
 			SoundAS.addSound("sound_angel_win", new sound_angel_win());	

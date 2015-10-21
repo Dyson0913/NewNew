@@ -236,7 +236,13 @@ package View.ViewComponent
 				GetSingleItem("lightqueue")["_light_" + idx].gotoAndStop(2);
 				
 				//normal frequen
-				_regular.Twinkle_by_JumpFrame(GetSingleItem("lightqueue_wintype"), 20, 20, 3, 4);
+				_regular.Twinkle_by_JumpFrame(GetSingleItem("lightqueue_wintype"), 30, 30, 3, 4);
+				
+				if (  _model.getValue("effect_sound") )
+				{
+					//sound
+					dispatcher(new StringObject("sound_odd_show", "sound" ) );
+				}
 				
 				//win
 				//_regular.Twinkle_by_JumpFrame(GetSingleItem("lightqueue_wintype"), 20, 180, 3, 4);
@@ -260,13 +266,16 @@ package View.ViewComponent
 		public function run():void
 		{
 			var check:Array =   _model.getValue(modelName.PLAYER_POKER);	
+			
 			if ( check.length == 0)
 			{
 				GetSingleItem("lightqueue").gotoAndStop(2);
+				_model.putValue("effect_sound", 1);
 			}
 			else
 			{
 				GetSingleItem("lightqueue").gotoAndStop(2);			
+				_model.putValue("effect_sound", 0);
 				lligth_start();
 				return;
 			}

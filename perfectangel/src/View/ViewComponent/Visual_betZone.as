@@ -46,7 +46,7 @@ package View.ViewComponent
 			_betzone.container.x = 1081;
 			_betzone.container.y = 657;
 			
-			setFrame("betzone", 2);
+			//setFrame("betzone", 2);
 			
 			put_to_lsit(_betzone);
 			

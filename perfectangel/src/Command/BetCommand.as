@@ -39,8 +39,19 @@ package Command
 			_model.putValue("coin_list", [100, 500, 1000, 5000, 10000]);
 			_model.putValue("after_bet_credit", 0);
 			
-			var betzone:Array = [0, 1, 2, 3, 4, 5];// , 6, 7];
-			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel","betAA","betBB"];
+			//顥示與注區mapping
+			var _idx_to_result_idx:DI = new DI();			
+			_idx_to_result_idx.putValue("0", 1);
+			_idx_to_result_idx.putValue("1", 0);
+			_idx_to_result_idx.putValue("2", 3);
+			_idx_to_result_idx.putValue("3", 2);
+			_idx_to_result_idx.putValue("4", 5);
+			_idx_to_result_idx.putValue("5", 4);
+			_idx_to_result_idx.putValue("6", 6);
+			_model.putValue("idx_to_result_idx", _idx_to_result_idx);
+			
+			var betzone:Array = [0, 1, 2, 3, 4, 5 , 6];// , 7];
+			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel","BetPATiePoint","betBB"];
 			
 		    var bet_name_to_idx:DI = new DI();
 			var bet_idx_to_name:DI = new DI();
@@ -49,15 +60,15 @@ package Command
 				bet_name_to_idx.putValue(betzone_name[i], i);
 				bet_idx_to_name.putValue(i, betzone_name[i]);
 			}
-		    //bet_name_to_idx.putValue("BetPAEvil", 0);
+			
+			_model.putValue("Bet_name_to_idx", bet_name_to_idx);		
+			_model.putValue("Bet_idx_to_name", bet_idx_to_name);
+			//bet_name_to_idx.putValue("BetPAEvil", 0);
 		    //bet_name_to_idx.putValue("BetPAAngel", 1);			
 		    //bet_name_to_idx.putValue("BetPABigEvil", 2);
 			//bet_name_to_idx.putValue("BetPABigAngel", 3);
 			//bet_name_to_idx.putValue("BetPAUnbeatenEvil", 4);
 			//bet_name_to_idx.putValue("BetPAPerfectAngel", 5);		
-			
-			_model.putValue("Bet_name_to_idx", bet_name_to_idx);		
-			_model.putValue("Bet_idx_to_name", bet_idx_to_name);
 			//
 			//bet_idx_to_name.putValue(0, "BetPAEvil");
 			//bet_idx_to_name.putValue(1, "BetPAAngel");
@@ -84,25 +95,6 @@ package Command
 			_model.putValue(modelName.AVALIBLE_ZONE_XY, betzone_po);
 			_model.putValue(modelName.COIN_STACK_XY,   [ [140, 210], [-483, 210],  [408, 80], [-760, 94], [451, 264], [-800, 267] ,[-174,238],[-174,68]]);
 			
-			var _idx_to_result_idx:DI = new DI();
-			
-			_idx_to_result_idx.putValue("0", 1);
-			_idx_to_result_idx.putValue("1", 0);
-			_idx_to_result_idx.putValue("2", 3);
-			_idx_to_result_idx.putValue("3", 2);
-			_idx_to_result_idx.putValue("4", 5);
-			_idx_to_result_idx.putValue("5", 4);
-			_model.putValue("idx_to_result_idx", _idx_to_result_idx);		
-			
-			var poer_msg:DI = new DI();		
-			poer_msg.putValue("WSLost", "無賴");
-			poer_msg.putValue("WSWin", "點贏");
-			poer_msg.putValue("WSPANormalWin", "點贏");
-			poer_msg.putValue("WSPAOnePointWin", "一點贏");
-			poer_msg.putValue("WSPATwoPointWin", "二點贏");
-			poer_msg.putValue("WSPAFiveWawaWin", "五公贏");
-			poer_msg.putValue("WSPAFourOfAKindWin", "四條贏");		
-			_model.putValue(modelName.BIG_POKER_TEXT , poer_msg);
 			
 			var state:DI = new DI();
 			state.putValue("NewRoundState", gameState.NEW_ROUND);

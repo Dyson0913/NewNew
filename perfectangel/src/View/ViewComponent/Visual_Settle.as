@@ -69,8 +69,7 @@ package View.ViewComponent
 			
 			var name_to_idx:DI = _model.getValue("Bet_name_to_idx");
 			var idx_to_name:DI = _model.getValue("Bet_idx_to_name");
-			var idx_to_result_idx:DI = _model.getValue("idx_to_result_idx");
-			var win_text:DI = _model.getValue(modelName.BIG_POKER_TEXT);
+			var idx_to_result_idx:DI = _model.getValue("idx_to_result_idx");			
 			var settle_amount:Array = [0, 0, 0, 0, 0, 0, 0];
 			var zonebet_amount:Array = [0, 0, 0, 0, 0, 0, 0];
 			var total:int = 0;

@@ -54,8 +54,7 @@ package View.ViewComponent
 			var mybtn_group:MultiObject = create("mybtn_group",  [ ResName.rebet_btn]);
 			mybtn_group.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);
 			mybtn_group.container.x = 1710;
-			mybtn_group.container.y = 950;
-			mybtn_group.CustomizedFun = scal;			
+			mybtn_group.container.y = 950;			
 			mybtn_group.Create_(1,"mybtn_group");
 			mybtn_group.rollout = test_reaction;
 			mybtn_group.rollover = test_reaction;

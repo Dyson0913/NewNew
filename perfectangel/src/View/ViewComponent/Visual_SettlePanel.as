@@ -137,8 +137,7 @@ package View.ViewComponent
 				var map:int = maping.getValue(zone[i]);				 
 				mylist.splice(map, 0,_betCommand.get_total_bet(zone[i]));
 			}
-			//同點數
-			mylist.push(0);
+			
 			mylist.push(_betCommand.all_betzone_totoal());
 			
 			var font:Array = [{size:24,align:_text.align_right,color:0xFF0000}];
@@ -168,8 +167,7 @@ package View.ViewComponent
 			Get("settletable_zone_bet").Create_by_list(zone_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
 			
 			//總結
-			var settle_amount:Array = _model.getValue("result_settle_amount");
-			//TODO same point			
+			var settle_amount:Array = _model.getValue("result_settle_amount");			
 			settle_amount.push( _model.getValue("result_total"));
 			var font2:Array = [{size:24,align:_text.align_right}];
 			font2 = font2.concat(settle_amount);		
