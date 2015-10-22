@@ -23,6 +23,8 @@ package View.ViewComponent
 		[Inject]
 		public var _betCommand:BetCommand;
 		
+		public const extrapay:String = "extra_pay";	
+		
 		public function Visual_SettlePanel() 
 		{
 			
@@ -75,31 +77,19 @@ package View.ViewComponent
 			settletable_zone_settle.CustomizedData = [{size:24,align:_text.align_right}, "0","0","1000","0","0","100000","10000"];
 			settletable_zone_settle.Create_(7, "settletable_zone_settle");	
 			settletable_zone_settle.container.visible = false;
-			
-			//var settletable_desh:MultiObject = prepare("settletable_desh", new MultiObject(), settletable.container);		
-			//settletable_desh.container.x = 70;
-			//settletable_desh.container.y = 308;		
-			//settletable_desh.CustomizedFun = _text.textSetting;
-			//settletable_desh.CustomizedData = [{size:24},"---------------------------------------------"];
-			//settletable_desh.Create_by_list(1, [ResName.TextInfo], 0 , 0, 1, 7, 0, "Bet_");			
-			
-			//var settletable_H_desh:MultiObject = prepare("settletable_H_desh", new MultiObject(), settletable.container);		
-			//settletable_H_desh.container.x = 564;
-			//settletable_H_desh.container.y = 90;		
-			//settletable_H_desh.CustomizedFun = _text.textSetting;
-			//settletable_H_desh.CustomizedData = [ { size:24 }, "|", "|", "|", "|", "|", "|", "|", "|", "|", "|", "|", "|", "|", "|"];
-			//settletable_H_desh.Create_by_list(14, [ResName.TextInfo], 0 , 0, 1, 0, 26, "Bet_");
-			
-			//var result_str_list:MultiObject = prepare("result_str_list", new MultiObject() , settletable.container);			
-			//result_str_list.container.x = 397;
-			//result_str_list.container.y = 404;
-			//result_str_list.Create_by_list(1, [ResName.TextInfo], 0 , 0,1,0 , 0, "Bet_");		
+			//
+			//var extrapay:MultiObject = create("extrapay", [extrapay], settletable.container);
+			//extrapay.Create_(1, "extrapay");		
+			//extrapay.container.x = 484;
+			//extrapay.container.y = 58;
+			//35
 			
 			put_to_lsit(settletable);
 			put_to_lsit(settletable_title);
 			put_to_lsit(settletable_zone);
 			put_to_lsit(settletable_zone_bet);
 			put_to_lsit(settletable_zone_settle);
+			//put_to_lsit(extrapay);
 			
 		}		
 		
@@ -175,6 +165,18 @@ package View.ViewComponent
 			Get("settletable_zone_settle").CustomizedFun = _text.colortextSetting;
 			Get("settletable_zone_settle").CustomizedData = font2;
 			Get("settletable_zone_settle").Create_by_list(settle_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");
+			
+			
+			//外贈結果
+			//var point:int = _model.getValue("light_idx");
+			//if ( point <= 12)
+			//{
+				//angel extra string 
+				//
+				//_model.putValue("eviPoint", eviPoint);
+				//_model.putValue("angPoint", angPoint);
+			//}			
+			//var wintype:String = _model.getValue("wintype");
 			
 			
 			if ( _betCommand.all_betzone_totoal() == 0) return;
