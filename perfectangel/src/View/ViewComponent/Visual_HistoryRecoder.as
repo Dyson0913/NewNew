@@ -36,7 +36,7 @@ package View.ViewComponent
 		public function init():void
 		{			
 			var historytable:MultiObject = create("Historytable", [ResName.historytable]);
-			historytable.container.x = 1300;
+			historytable.container.x = 1310;
 			historytable.container.y =  140;
 			historytable.Create_(1, "Historytable");
 			
