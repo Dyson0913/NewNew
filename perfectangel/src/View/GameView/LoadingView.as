@@ -97,8 +97,8 @@ package View.GameView
 			view.Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "a_");
 			_tool = new AdjustTool();
 			
-			//utilFun.SetTime(connet, 0.1);			
-			_test.init();
+			utilFun.SetTime(connet, 0.1);			
+			//_test.init();
 			
 			//utilFun.SetTime(stre, 2);
 			//_visual_stream.init();
