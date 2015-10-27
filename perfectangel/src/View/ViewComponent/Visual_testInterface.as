@@ -172,7 +172,7 @@ package View.ViewComponent
 		{			
 			_model.putValue(modelName.PLAYER_POKER, []);				
 			_model.putValue(modelName.BANKER_POKER, []);					
-			_model.putValue("scirpt_pai", ["9d","4c","5s","7s","4s","1s","7d","3s","5c","6h"]);		
+			_model.putValue("scirpt_pai", ["kd","4c","4s","7s","3s","1s","3d","3s","6c","6h"]);		
 			
 			changeBG(ResName.Bet_Scene);
 			
@@ -203,13 +203,12 @@ package View.ViewComponent
 			dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
 			
 			//================================================ simu deal
-			//var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player"];// , "Banker", "Player", "Banker"];
-			//_regular.Call(this, { onUpdate:this.fackeDeal, onUpdateParams:[testpok] }, 30, 0, 10, "linear");						
+			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player" ];// , "Banker", "Player", "Banker"];
+			_regular.Call(this, { onUpdate:this.fackeDeal, onUpdateParams:[testpok] }, 30, 0, 10, "linear");						
 		}
 		
 		public function fackeDeal(type:Array):void
-		{
-			utilFun.Log("fackeDeal = "+fackeDeal);
+		{			
 			var cardlist:Array = _model.getValue("scirpt_pai");
 			
 			var card_type:String = type[0];

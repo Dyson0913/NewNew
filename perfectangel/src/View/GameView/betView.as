@@ -108,7 +108,7 @@ package View.GameView
 			_settle.init();
 			_sencer.init();	
 			_coin.init();
-			_btn.init();		
+			_btn.init();			
 			
 			
 			//dispatcher(new StringObject("Soun_Bet_BGM","Music" ) );

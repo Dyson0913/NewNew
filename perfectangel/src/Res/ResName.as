@@ -18,9 +18,9 @@ package Res
 		public static const flippoker:String = "flip_poker"
 		public static const flippoker_long:String = "flip_poker_long"
 		public static const flippoker_easy:String = "flip_poker_easy"
-		public static const Mipoker_zone:String = "Mi_poker_zone"
+		
 		public static const pokermask:String = "poker_mask"
-		public static const just_turnpoker:String = "just_turn_poker"
+		
 		
 		//public static const playerInfo:String = "playerinfo";
 		public static const Timer:String = "countDowntimer";
@@ -55,7 +55,7 @@ package Res
 		public static const samepoint:String = "same_point";
 		public static const bothNone:String = "both_None";
 		
-		public static const open_tableitem:String = "open_table_item";		
+		
 		public static const rebet_btn:String = "btn_rebet";
 		public static const betcancel_btn:String = "btn_betcancel";
 		public static const paytable_btn:String = "btn_paytable";

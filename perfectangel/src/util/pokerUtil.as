@@ -102,6 +102,7 @@ package util
 			mc.gotoAndStop(myidx);
 		}	
 		
+		
 		public static function newnew_judge(pok:Array,po:Array):Array
 		{		
 			//var pok:Array = ["kc", "1h", "jd", "9h", "jh"];

@@ -42,7 +42,7 @@ package View.ViewComponent
 		{
 			var zone:MultiObject = create("zone",  [ResName.state_evil, ResName.state_angel]);	
 			zone.container.x = 1391;
-			zone.container.y = 446;			
+			zone.container.y = 486;			
 			zone.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			zone.Post_CustomizedData = [2, -850, 0];
 			zone.Create_(2,"zone");
@@ -53,11 +53,7 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
 		public function Clean():void
 		{		
-			var a:MultiObject = Get("zone");
-			for ( var i:int = 0; i <  a.ItemList.length; i++)
-			{				
-				GetSingleItem("zone", i).gotoAndStop(1);
-			}
+			setFrame("zone", 1);			
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
@@ -239,7 +235,7 @@ package View.ViewComponent
 			if( evel_winstate ==1)
 			{
 				_regular.Call(this, { onComplete:this.angel_show,onCompleteParams:[0] }, 1, 2, 1, "linear");				
-				dispatcher(new StringObject("sound_evil_win","sound" ) );
+				dispatcher(new StringObject("sound_angel_win","sound" ) );
 			}			
 			else if ( angel_winstate == 1)
 			{
