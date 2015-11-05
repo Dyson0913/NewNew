@@ -80,9 +80,7 @@ package View.GameView
 			
 			
 			_model.putValue("light_idx", 0);
-			_model.putValue("last_ligt_ball_idx", 0);
-			
-			_model.putValue("history_win_list", []);		
+			_model.putValue("last_ligt_ball_idx", 0);			
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));			
 		}

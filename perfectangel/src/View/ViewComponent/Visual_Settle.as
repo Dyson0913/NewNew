@@ -152,10 +152,7 @@ package View.ViewComponent
 				settle_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type) )] =  resultob.settle_amount;
 				zonebet_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type)) ]  = resultob.bet_amount;
 				total += resultob.settle_amount;
-			}		
-			
-			//歷史記錄
-			dispatcher(new ArrayObject([evel_winstate, angel_winstate, eviPoint, angPoint], "add_history" ) );	
+			}
 			
 			utilFun.Log("evillFrame = "+ evillFrame +" angelFrame "+angelFrame);
 			utilFun.Log("angPoint = "+ angPoint +" eviPoint "+eviPoint);

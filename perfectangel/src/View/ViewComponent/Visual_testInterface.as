@@ -302,13 +302,13 @@ package View.ViewComponent
 		public function sim_package():void
 		{
 			//fake hisoty			
-			var evel_winstate:int = utilFun.Random(2);
-			var angel_winstate:int = utilFun.Random(2);			
-			var eviPoint:int = utilFun.Random(9);			
-			var angPoint:int = utilFun.Random(9);				
-			dispatcher(new ArrayObject([evel_winstate, angel_winstate,eviPoint,angPoint],"add_history" ) );	
-			
-			_HistoryRecoder.update_history();
+			//var evel_winstate:int = utilFun.Random(2);
+			//var angel_winstate:int = utilFun.Random(2);			
+			//var eviPoint:int = utilFun.Random(9);			
+			//var angPoint:int = utilFun.Random(9);				
+			//dispatcher(new ArrayObject([evel_winstate, angel_winstate,eviPoint,angPoint],"add_history" ) );	
+			//
+			//_HistoryRecoder.update_history();
 		}
 	
 	}
