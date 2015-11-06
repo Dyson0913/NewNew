@@ -105,7 +105,11 @@ package ConnectModule.websocket
 						if( _model.getValue(modelName.HandShake_chanel) == null )  dispatcher(new ValueObject( result.inside_game_info.player_info.credit, modelName.CREDIT) );					
 						
 						
-						dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );						
+						dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );
+							if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.NEW_ROUND)
+						{
+						    dispatcher(new ValueObject(  result.record_list, "history_list") );
+						}
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
 						
 						dispatcher(new ValueObject(  result.game_round, "game_round") );
