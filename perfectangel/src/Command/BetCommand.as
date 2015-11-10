@@ -48,10 +48,11 @@ package Command
 			_idx_to_result_idx.putValue("4", 5);
 			_idx_to_result_idx.putValue("5", 4);
 			_idx_to_result_idx.putValue("6", 6);
+			_idx_to_result_idx.putValue("7", 7);
 			_model.putValue("idx_to_result_idx", _idx_to_result_idx);
 			
-			var betzone:Array = [0, 1, 2, 3, 4, 5 , 6];// , 7];
-			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel","BetPATiePoint","betBB"];
+			var betzone:Array = [0, 1, 2, 3, 4, 5 , 6 , 7];
+			var betzone_name:Array = ["BetPAEvil", "BetPAAngel", "BetPABigEvil", "BetPABigAngel", "BetPAUnbeatenEvil", "BetPAPerfectAngel","BetPATiePoint","BetPABothNone"];
 			
 		    var bet_name_to_idx:DI = new DI();
 			var bet_idx_to_name:DI = new DI();
@@ -62,20 +63,7 @@ package Command
 			}
 			
 			_model.putValue("Bet_name_to_idx", bet_name_to_idx);		
-			_model.putValue("Bet_idx_to_name", bet_idx_to_name);
-			//bet_name_to_idx.putValue("BetPAEvil", 0);
-		    //bet_name_to_idx.putValue("BetPAAngel", 1);			
-		    //bet_name_to_idx.putValue("BetPABigEvil", 2);
-			//bet_name_to_idx.putValue("BetPABigAngel", 3);
-			//bet_name_to_idx.putValue("BetPAUnbeatenEvil", 4);
-			//bet_name_to_idx.putValue("BetPAPerfectAngel", 5);		
-			//
-			//bet_idx_to_name.putValue(0, "BetPAEvil");
-			//bet_idx_to_name.putValue(1, "BetPAAngel");
-			//bet_idx_to_name.putValue(2, "BetPABigEvil");
-			//bet_idx_to_name.putValue(3, "BetPABigAngel");
-			//bet_idx_to_name.putValue(4, "BetPAUnbeatenEvil");			
-			//bet_idx_to_name.putValue(5, "BetPAPerfectAngel");			
+			_model.putValue("Bet_idx_to_name", bet_idx_to_name);			
 			
 			
 			var allzone:Array =  [ResName.evilZone, ResName.angelZone, ResName.evil_big, ResName.angel_big, ResName.evil_per, ResName.angel_per,ResName.samepoint,ResName.bothNone];			
