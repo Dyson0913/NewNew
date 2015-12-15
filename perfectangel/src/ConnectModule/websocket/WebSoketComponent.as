@@ -106,10 +106,15 @@ package ConnectModule.websocket
 						
 						
 						dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );
-							if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.NEW_ROUND)
+						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.NEW_ROUND)
 						{
 						    dispatcher(new ValueObject(  result.record_list, "history_list") );
 						}
+						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.START_BET) 
+						{
+							dispatcher(new ValueObject(  result.record_list, "history_list") );							
+						}
+						
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
 						
 						dispatcher(new ValueObject(  result.game_round, "game_round") );
@@ -189,11 +194,18 @@ package ConnectModule.websocket
 					{
 						
 						dispatcher(new ValueObject(  result.game_round, "game_round") );
-						dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );
+						
 						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.NEW_ROUND)
 						{
 						    dispatcher(new ValueObject(  result.record_list, "history_list") );
 						}
+						
+						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.START_BET ) 
+						{
+							//收到startBet 再更新時間							
+							dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );							
+						}
+						
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );								
 							
 						dispatcher(new ModelEvent("update_state"));					
@@ -203,11 +215,6 @@ package ConnectModule.websocket
 					case Message.MSG_TYPE_ROUND_INFO:
 					{							
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
-						
-						//dispatcher(new ModelEvent("update_state"));
-						
-						//dispatcher( new ValueObject(result.bet_amount,modelName.BET_AMOUNT));
-						//dispatcher( new ValueObject(result.settle_amount, modelName.SETTLE_AMOUNT));
 						
 						dispatcher( new ValueObject(result.result_list, modelName.ROUND_RESULT));
 						dispatcher(new ModelEvent("round_result"));						

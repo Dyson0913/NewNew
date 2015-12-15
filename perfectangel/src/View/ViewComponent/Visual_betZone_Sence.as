@@ -48,8 +48,8 @@ package View.ViewComponent
 			utilFun.Log("betzone snece ok");
 		}		
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
-		public function display():void
+		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
+		public function start_bet():void
 		{
 			var betzone:MultiObject = Get("betzone_s");
 			betzone.mousedown = bet_sencer;

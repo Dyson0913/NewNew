@@ -86,6 +86,7 @@ package Command
 			
 			var state:DI = new DI();
 			state.putValue("NewRoundState", gameState.NEW_ROUND);
+			state.putValue("StartBetState", gameState.START_BET);
 			state.putValue("EndBetState", gameState.END_BET);
 			state.putValue("OpenState", gameState.START_OPEN);
 			state.putValue("EndRoundState", gameState.END_ROUND);			

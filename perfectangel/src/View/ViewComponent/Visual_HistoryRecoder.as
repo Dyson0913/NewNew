@@ -60,6 +60,13 @@ package View.ViewComponent
 			update_history();
 		}
 		
+		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
+		public function star_bet():void
+		{			
+			Get("Historytable").container.visible = true;			
+			update_history();
+		}
+		
 		public function update_history():void
 		{			
 			for ( var i:int = 0; i < 60; i ++)

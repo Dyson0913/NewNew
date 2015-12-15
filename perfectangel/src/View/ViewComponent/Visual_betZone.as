@@ -55,12 +55,15 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
 		public function display():void
 		{			
+			Get("tableitem").container.visible = true;			
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
+		public function start_bet():void
+		{
 			_betzone.mousedown = _betCommand.empty_reaction;					
 			_betzone.rollout = _betCommand.empty_reaction;
-			_betzone.rollover = _betCommand.empty_reaction;
-			
-			Get("tableitem").container.visible = true;
-			
+			_betzone.rollover = _betCommand.empty_reaction;			
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
