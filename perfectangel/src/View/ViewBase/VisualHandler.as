@@ -4,17 +4,15 @@ package View.ViewBase
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import Model.Model;
 	import Command.*;
 	import Interface.ViewComponentInterface;
 	import Model.valueObject.ArrayObject;
 	import util.*;
 	import Model.*;
-	import View.Viewutil.AdjustTool;
-	import View.Viewutil.MultiObject;
-	import View.Viewutil.TestEvent;
-	import View.Viewutil.Visual_debugTool;
-	
+	import View.Viewutil.*;
+	import View.GameView.gameState;
 	/**
 	 * handle display item how to presentation
 	 * * @author hhg
@@ -39,7 +37,12 @@ package View.ViewBase
 		public var _opration:DataOperation;
 		
 		[Inject]
+		public var _text:Visual_Text;
+		
+		[Inject]
 		public var _debugTool:Visual_debugTool;
+		
+		private var _my_appear_state:Array = [];
 		
 		private var _miss_id:Array = [];
 		
@@ -107,6 +110,11 @@ package View.ViewBase
 			}
 		}
 		
+		public function empty_reaction(e:Event, idx:int):Boolean
+		{			
+			return true;
+		}
+		
 		protected function changeBG(name:String):void
 		{
 			var view:MultiObject = Get("_view");
@@ -143,7 +151,57 @@ package View.ViewBase
 			sp.name  = name;
 			ob.setContainer(sp);
 			return utilFun.prepare(name,ob , _viewcom.currentViewDI , Stick_in_container);
-		}		
+		}
+		
+			[MessageHandler(type = "Model.ModelEvent", selector = "new_round")]
+		public function new_round():void
+		{			
+			if ( _my_appear_state.indexOf(gameState.NEW_ROUND) !=-1) appear();
+			else disappear();
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
+		public function star_bet():void
+		{			
+			if ( _my_appear_state.indexOf(gameState.START_BET) !=-1) appear();
+			else disappear();
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "stop_bet")]
+		public function end_bet():void
+		{		
+			if ( _my_appear_state.indexOf(gameState.END_BET) !=-1 )  appear();
+			else disappear();
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "open_card")]
+		public function open_card():void
+		{		
+			if ( _my_appear_state.indexOf(gameState.START_OPEN) !=-1 )  appear();
+			else disappear();
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "settle")]
+		public function settle():void
+		{		
+			if ( _my_appear_state.indexOf(gameState.END_ROUND) !=-1 )  appear();
+			else disappear();
+		}
+		
+		protected function state_parse(appear_state:Array):void
+		{
+			_my_appear_state.push.apply(_my_appear_state, appear_state);			
+		}
+		
+		public function appear():void
+		{
+			
+		}
+		
+		public function disappear():void
+		{
+			
+		}
 	}
 
 }

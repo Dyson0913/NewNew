@@ -38,10 +38,10 @@ package View.GameView
 		public var _btn:Visual_BtnHandle;
 		
 		[Inject]
-		public var _pokerhandler:Visual_poker;
+		public var _poker:Visual_poker;
 		
 		[Inject]
-		public var _time:Visual_timer;
+		public var _timer:Visual_timer;
 		
 		[Inject]
 		public var _hint:Visual_Hintmsg;
@@ -96,11 +96,11 @@ package View.GameView
 			_settlePanel.init();
 			_paytable.init();
 			
-			_time.init();			
+			_timer.init();			
 		   _hint.init();
 			
 		  
-		   _pokerhandler.init();
+		   _poker.init();
 			_betzone.init();
 			_coin_stack.init();
 			

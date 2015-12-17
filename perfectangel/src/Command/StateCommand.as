@@ -30,12 +30,12 @@ package Command
 			if ( state  == gameState.NEW_ROUND)
 			{				
 				dispatcher(new ModelEvent("clearn"));
-				dispatcher(new ModelEvent("display"));			
+				dispatcher(new ModelEvent("new_round"));
 			}
 			else if ( state == gameState.START_BET) dispatcher(new ModelEvent("start_bet"));
-			else if ( state == gameState.END_BET) dispatcher(new ModelEvent("hide"));
-			else if ( state == gameState.START_OPEN) dispatcher(new ModelEvent("hide"));
-			else if ( state == gameState.END_ROUND)  dispatcher(new ModelEvent("hide"));
+			else if ( state == gameState.END_BET) dispatcher(new ModelEvent("stop_bet"));			
+			else if ( state == gameState.START_OPEN) dispatcher(new ModelEvent("open_card"));
+			else if ( state == gameState.END_ROUND)  dispatcher(new ModelEvent("settle"));
 		}
 	}
 

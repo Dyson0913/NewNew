@@ -72,13 +72,7 @@ package View.ViewComponent
 		public var _settle:Visual_Settle;	
 		
 		[Inject]
-		public var _btn:Visual_BtnHandle;		
-		
-		[Inject]
-		public var _text:Visual_Text;
-		
-		//[Inject]
-		//public var _betinfo:Visual_Betinfo;
+		public var _btn:Visual_BtnHandle;
 		
 		[Inject]
 		public var _debug:Visual_debugTool;
@@ -98,6 +92,8 @@ package View.ViewComponent
 		
 		public function init():void
 		{			
+			_model.putValue("test_init", false);
+			
 			_debug.init();
 			_betCommand.bet_init();
 			_model.putValue("result_Pai_list", []);
@@ -108,7 +104,7 @@ package View.ViewComponent
 			script_list.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);			
 			script_list.stop_Propagation = true;
 			script_list.mousedown = script_list_test;
-			script_list.CustomizedData = [{size:18},"下注腳本","開牌腳本","結算腳本","模擬封包"]
+			script_list.CustomizedData = [{size:18},"新局","開始下注", "停止下注","開牌", "結算"]
 			script_list.CustomizedFun = _text.textSetting;			
 			script_list.Create_by_list(script_list.CustomizedData.length -1, [ResName.TextInfo], 0, 0, script_list.CustomizedData.length-1, 100, 20, "Btn_");			
 			
@@ -118,92 +114,100 @@ package View.ViewComponent
 			
 		}				
 		
-		public function script_list_test(e:Event, idx:int):Boolean
+		public function view_init():void		
 		{
-			utilFun.Log("script_list_test=" + idx);
-			_model.putValue("Script_idx", idx);
+			if ( _model.getValue("test_init")) return;
+			changeBG(ResName.Bet_Scene);
 			
-			dispatcher(new TestEvent(_model.getValue("Script_idx").toString()));
+			//_ProbData.init();
+			//_progressbar.init();
+			//
+
+			//_settle_panel.init();				
+			//_coin_stack.init();
+			//_coin.init();			
+			//
+			//_settle.init();
+			//_sencer.init();	
+			//
+			//_btn.init();
 			
+			_HistoryRecoder.init();
+			_gameinfo.init();
+			//_settlePanel.init();
+			_paytable.init();
+			//
+			_timer.init();			
+		   _hint.init();
+			//
+		  //
+		  // _poker.init();
+			_betzone.init();
+			_coin_stack.init();
+			//
+			//
+			//_settle.init();
+			//_sencer.init();	
+			_coin.init();
+			//_btn.init();			
 			
-			return true;
+			//_progressbar.debug();
+			_model.putValue("test_init",true);
+		}
+		
+		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "0")]
+		public function newround():void
+		{
+			fake_hisotry();
+			
+			_model.putValue(modelName.PLAYER_POKER, []);				
+			
+			_model.putValue(modelName.EXTRA_POKER, ["3d"]);
+			
+			_model.putValue(modelName.GAMES_STATE,gameState.NEW_ROUND);			
+			dispatcher(new ModelEvent("update_state"));
+			
+			dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
+		}
+		
+		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "1")]
+		public function start_bet():void
+		{		
+			fake_hisotry();
+			_model.putValue(modelName.REMAIN_TIME, 20);
+			
+			_model.putValue(modelName.GAMES_STATE,gameState.START_BET);			
+			dispatcher(new ModelEvent("update_state"));
+			
+			//dispatcher(new StringObject("WSBWTwoPair", "winstr_hint"));
+		}	
+		
+		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "2")]
+		public function stop_bet():void
+		{
+			fake_hisotry();
+			_model.putValue(modelName.GAMES_STATE,gameState.END_BET);			
+			dispatcher(new ModelEvent("update_state"));
 		}
 		
 		
-		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "0")]
-		public function betScript():void
-		{
-			changeBG(ResName.Bet_Scene);
-			
-			//=============================================gameinfo			
-			_gameinfo.init();
-			
-			//=============================================btninfo
-			_btn.init();
-			
-			//=============================================paytable
-			fake_hisotry();
-			_paytable.init();			
-			
-			_HistoryRecoder.init();
-			
-			//================================================betzone
-			_betzone.init();			
-			_coin_stack.init();
-			_coin.init();
-			_sencer.init();
-			dispatcher(new ModelEvent("display"));
-			
-			//=============================================Hintmsg
-			_hint.init();
-			_hint.display();
-			
-			//================================================timer
-			
-			_model.putValue(modelName.REMAIN_TIME, 20);					
-			_timer.init();
-			_timer.display();
-			_timer.debug();
-			
-		}	
-		
-		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "1")]
+		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "3")]
 		public function opencardScript():void
 		{			
 			_model.putValue(modelName.PLAYER_POKER, []);				
 			_model.putValue(modelName.BANKER_POKER, []);					
 			_model.putValue("scirpt_pai", ["kd","4c","4s","7s","3s","1s","3d","3s","6c","6h"]);		
 			
-			changeBG(ResName.Bet_Scene);
-			
-			//=============================================gameinfo			
-			_gameinfo.init();
-			//_gameinfo.opencard_parse();
-			
-			//=============================================paytable			
-			_paytable.init();			
-			
-			//_betinfo.init();
-			
-			//=============================================Hintmsg
-			_hint.init();
-			_model.putValue(modelName.GAMES_STATE,gameState.END_BET);
-			_hint.timer_hide();			
-			
-			//================================================poker
-			_poker.init();
-			dispatcher(new ModelEvent("hide"));
-			_poker.debug();
-			//settle_table
-			
+			_model.putValue(modelName.GAMES_STATE,gameState.START_OPEN);			
+			dispatcher(new ModelEvent("update_state"));
 			//================================================settle info
 			//_settle.init();
-			
-			_model.putValue(modelName.EXTRA_POKER, ["kd"]);
-			dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
+			//
+			//_model.putValue(modelName.EXTRA_POKER, ["kd"]);
+			//dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
 			
 			//================================================ simu deal
-			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player" ];// , "Banker", "Player", "Banker"];
+			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player" , "Banker", "Player", "Banker"];
 			_regular.Call(this, { onUpdate:this.fackeDeal, onUpdateParams:[testpok] }, 30, 0, 10, "linear");						
 		}
 		
@@ -235,37 +239,22 @@ package View.ViewComponent
 		}
 		
 		
-		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "2")]
+		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "4")]
 		public function settleScript():void
 		{
 			_model.putValue(modelName.PLAYER_POKER, ["9d","4c","5s","7s","9s"]);				
 			_model.putValue(modelName.BANKER_POKER, ["1s","2d","3s","5c","6h"]);	
 			changeBG(ResName.Bet_Scene);
-			
-			//=============================================gameinfo			
-			_gameinfo.init();
-			//_gameinfo.settle_parse();
-			//
-			
-			
-			
-			//=============================================Hintmsg
-			//_hint.init();			
-			
-			//=============================================paytable			
-			fake_hisotry();
-			_paytable.init();		
-			//_paytable.update_history();
-			
+		
 				//================================================poker
-			_poker.init();
-			dispatcher(new ModelEvent("hide"));
-			dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
-			dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));							
-							
-			
+			//_poker.init();
+			//dispatcher(new ModelEvent("hide"));
+			//dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
+			//dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));							
+							//
+			//
 			//================================================settle info
-			_settle.init();			
+			//_settle.init();			
 			
 			//摸擬押注
 			//_betzone.init();			
@@ -274,43 +263,45 @@ package View.ViewComponent
 			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 1);
 			//_betinfo.init();
 			
-			_settlePanel.init();
-			_settlePanel.debug();
-			utilFun.Log("ok");		
-			
+			//_settlePanel.init();
+			//_settlePanel.debug();
+			//utilFun.Log("ok");		
+			//
 				
 			
 			//var fakePacket:Object = {"result_list": [{"bet_type": "BetPAAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 100}, {"bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0}, {"bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0}], "game_state": "EndRoundState", "game_result_id": "288778", "timestamp": 1443023641.580271, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 318, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "4f17fb12620b11e5bcebf23c9189e2a9"}
-			var fakePacket:Object = { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 2, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSPANormalWin", "bet_amount": 0 }, { "bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 11, "win_state": "WSWin", "bet_amount": 0 }, { "bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 } ], "game_state": "EndRoundState", "game_result_id": "289273", "timestamp": 1443063940.564476, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 785, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "2328f8ae626911e5bcebf23c9189e2a9" }									
-			_MsgModel.push(fakePacket);			
-			
+			//var fakePacket:Object = { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 2, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSPANormalWin", "bet_amount": 0 }, { "bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 11, "win_state": "WSWin", "bet_amount": 0 }, { "bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 } ], "game_state": "EndRoundState", "game_result_id": "289273", "timestamp": 1443063940.564476, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 785, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "2328f8ae626911e5bcebf23c9189e2a9" }									
+			//_MsgModel.push(fakePacket);			
+			//
 		}
 		
+		//{"winner": "BetPAAngel", "point": 1}
 		public function fake_hisotry():void
 		{
-			var arr:Array = _model.getValue("history_win_list");			
-			for ( var i:int = 0; i < 10; i++)
+			var arr:Array = [];		
+			for ( var i:int = 0; i < 60; i++)
 			{
-				var ran:int = utilFun.Random(4) +1;
-				var point:int = utilFun.Random(9);			
-				arr.push([ran, point]);				
+			var p:int = utilFun.Random(3);
+				var str:String = "";
+				if ( p == 0)  str = "BetPAAngel";
+				if ( p == 1)  str = "BetPAEvil";
+				if ( p == 2)  str = "None";
+				var ob:Object = { "winner":str, "point": utilFun.Random(10) };
+				arr.push(ob);				
 			}
-			_model.putValue("history_win_list", arr);
+			_model.putValue("history_list", arr);
 		}
 		
-		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "3")]
-		public function sim_package():void
+		public function script_list_test(e:Event, idx:int):Boolean
 		{
-			//fake hisoty			
-			//var evel_winstate:int = utilFun.Random(2);
-			//var angel_winstate:int = utilFun.Random(2);			
-			//var eviPoint:int = utilFun.Random(9);			
-			//var angPoint:int = utilFun.Random(9);				
-			//dispatcher(new ArrayObject([evel_winstate, angel_winstate,eviPoint,angPoint],"add_history" ) );	
-			//
-			//_HistoryRecoder.update_history();
+			utilFun.Log("script_list_test=" + idx);
+			_model.putValue("Script_idx", idx);		
+			view_init();
+			dispatcher(new TestEvent(_model.getValue("Script_idx").toString()));
+			return true;
 		}
-	
+		
+		
 	}
 
 }

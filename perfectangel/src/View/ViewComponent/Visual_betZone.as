@@ -1,25 +1,22 @@
 package View.ViewComponent 
-{
-	import flash.events.Event;
+{	
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
 	import util.*;
 	import Command.*;
 	
-	import View.Viewutil.*;
-	import Res.ResName;
+	import View.Viewutil.*;	
 	import caurina.transitions.Tweener;
+	import View.GameView.gameState;
 	
 	/**
 	 * betzone present way
-	 * @author ...
+	 * @author Dyson0913
 	 */
 	public class Visual_betZone  extends VisualHandler
 	{
-		
-		[Inject]
-		public var _betCommand:BetCommand;
+		public const bet_tableitem:String = "bet_table_item";
 		
 		private var _betzone:MultiObject;
 		
@@ -30,10 +27,10 @@ package View.ViewComponent
 		
 		public function init():void
 		{			
-			var tableitem:MultiObject = prepare("tableitem", new MultiObject() , GetSingleItem("_view").parent.parent);			
+			var tableitem:MultiObject = create("tableitem",[bet_tableitem]);			
 			tableitem.container.x = 193;
 			tableitem.container.y = 655;
-			tableitem.Create_by_list(1, [ResName.bet_tableitem], 0, 0, 1, 50, 0, "betzone_");	
+			tableitem.Create_(1, "tableitem");
 			
 			var zone_xy:Array = _model.getValue(modelName.AVALIBLE_ZONE_XY);
 			
@@ -46,42 +43,34 @@ package View.ViewComponent
 			_betzone.container.x = 1081;
 			_betzone.container.y = 657;
 			
-			//setFrame("betzone", 2);
-			
 			put_to_lsit(_betzone);
 			
+			state_parse([gameState.NEW_ROUND,gameState.START_BET]);
 		}		
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
-		public function display():void
-		{			
-			Get("tableitem").container.visible = true;			
+		override public function appear():void
+		{	
+			Get("tableitem").container.visible = true;
+			
+			var state:int = _model.getValue(modelName.GAMES_STATE);			
+			if ( state  == gameState.NEW_ROUND) return;
+			
+			_betzone.mousedown = empty_reaction;					
+			_betzone.rollout = empty_reaction;
+			_betzone.rollover = empty_reaction;
+			
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
-		public function start_bet():void
+		override public function disappear():void
 		{
-			_betzone.mousedown = _betCommand.empty_reaction;					
-			_betzone.rollout = _betCommand.empty_reaction;
-			_betzone.rollover = _betCommand.empty_reaction;			
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function timer_hide():void
-		{		
-			_betzone.mousedown = null;
-			_betzone.rollout = _betCommand.empty_reaction;
-			_betzone.rollover = _betCommand.empty_reaction;
-			
-			var frame:Array = [];
-			for ( var i:int = 0; i  <  _betzone.ItemList.length; i++) frame.push(1);
-			_betzone.CustomizedFun = _regular.FrameSetting;
-			_betzone.CustomizedData = frame;
-			_betzone.FlushObject();
-			
 			Get("tableitem").container.visible = false;
-		}
-		
+			
+			_betzone.mousedown = null;
+			_betzone.rollout = null;			
+			_betzone.rollover = null;			
+			
+			setFrame("betzone", 1);
+		}		
 		
 	}
 

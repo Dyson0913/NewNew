@@ -1,8 +1,6 @@
 package View.ViewComponent 
 {
-	import flash.display.MovieClip;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
+	import flash.display.MovieClip;	
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
@@ -12,6 +10,7 @@ package View.ViewComponent
 	import View.Viewutil.MultiObject;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
+	import View.GameView.gameState;
 	
 	/**
 	 * timer present way
@@ -19,8 +18,10 @@ package View.ViewComponent
 	 */
 	public class Visual_timer  extends VisualHandler
 	{
-		public var already_countDown:Boolean;
-		public var Waring_sec:int;
+		public const Timer:String = "countDowntimer";
+		public const timellight:String = "time_light";
+		
+		public var Waring_sec:int = 7;
 		
 		public function Visual_timer() 
 		{
@@ -29,88 +30,80 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var countDown:MultiObject = create(modelName.REMAIN_TIME, [ResName.Timer]);
-		   countDown.Create_(1, ResName.Timer.toString());
+			var countDown:MultiObject = create(Timer,[Timer]);
+		   countDown.Create_(1,Timer);
 		   countDown.container.x = 1183;
 		   countDown.container.y = 340;
 		   countDown.container.visible = false;
 		   
 		   
-		   	var timellight:MultiObject = create("timellight", ["time_light"] , countDown.container);
-		   timellight.Create_(1, "timellight");
-		   timellight.container.x = 75;
-		   timellight.container.y = 75;
-		   
-		   //TODO item test model put in here ?
-		   //_model.putValue(modelName.REMAIN_TIME, 10);
-		   
-			already_countDown = false;
-			Waring_sec = 7;
+		   	var light:MultiObject = create("timellight" , [timellight], countDown.container);
+		   light.Create_(1, timellight);		   
+		   light.container.x = 75;
+		   light.container.y = 75;		
 			
 			put_to_lsit(countDown);
-			put_to_lsit(timellight);
+			put_to_lsit(light);
+			
+			state_parse([gameState.START_BET]);
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
-		public function display():void
-		{			
-			Get(modelName.REMAIN_TIME).container.visible = true;			
+		override public function appear():void
+		{
+			Get(Timer).container.visible = true;	
 			var time:int = _model.getValue(modelName.REMAIN_TIME);
-			utilFun.SetText(GetSingleItem(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2) );
+			utilFun.SetText(GetSingleItem(Timer)["_Text"], utilFun.Format(time, 2) );
 			
-			if ( !already_countDown) 
-			{
-				already_countDown = true;
-				Tweener.addCaller(this, { time:time , count: time, onUpdate:TimeCount , transition:"linear" } );
-			}
+			Tweener.addCaller(this, { time:time , count: time, onUpdate:TimeCount , transition:"linear" } );			
+		}
+		
+		override public function disappear():void
+		{			
+			Get(Timer).container.visible = false;
+			
+			GetSingleItem(Timer)["_Text"].textColor = 0x0099CC;
+			GetSingleItem(Timer).gotoAndStop(1);
+			GetSingleItem("timellight").gotoAndStop(1);
+			Tweener.pauseTweens(this);
 		}
 		
 		private function TimeCount():void
 		{			
 			var time:int  = _opration.operator(modelName.REMAIN_TIME, DataOperation.sub, 1);
+			if ( time < 0) return;
+			if ( time <= Waring_sec ) dispatcher(new StringObject("sound_final", "sound" ) );
 			
-			if ( time <= 0) 
-			{
-				//may be the timer bug
-				//GetSingleItem(modelName.REMAIN_TIME).visible = false;				
-				//_regular.Call(Get(modelName.REMAIN_TIME).container, { onComplete:this.timer_hide }, 1, 1.5, 1, "linear")	
-				//return;
-			}
 			
+			Text_setting_way(time);
+		}
+		
+		public function Text_setting_way(time:int):void
+		{
 			var mc:MovieClip = GetSingleItem("timellight");
 			if ( time == Waring_sec ) 
 			{
-				GetSingleItem(modelName.REMAIN_TIME)["_Text"].textColor = 0xFF0000;
-				GetSingleItem(modelName.REMAIN_TIME).gotoAndStop(2);
+				GetSingleItem(Timer)["_Text"].textColor = 0xFF0000;
+				GetSingleItem(Timer).gotoAndStop(2);
 				mc.gotoAndStop(2);
-			}
+			}			
 			
-			if ( time <= Waring_sec ) dispatcher(new StringObject("sound_final","sound" ) );
-			
-			utilFun.SetText(GetSingleItem(modelName.REMAIN_TIME)["_Text"], utilFun.Format(time, 2) );			
-			
-			
-			Tweener.addCaller(mc, { time:1 , count: 36, onUpdate:TimeLight , onUpdateParams:[mc, 10 ], transition:"linear" } );			
+			utilFun.SetText(GetSingleItem(Timer)["_Text"], utilFun.Format(time, 2) );						
+			Tweener.addCaller(mc, { time:1 , count: 36, onUpdate:TimeLight , onUpdateParams:[mc, 10 ], transition:"linear" } );		
 		}
 		
 		private function TimeLight(mc:MovieClip,angel:int):void
 		{
 		   mc.rotation += angel;
+		}	
+		
+		public function frame_setting_way(time:int):void
+		{
+			var arr:Array = utilFun.arrFormat(time, 2);
+			if ( arr[0] == 0 ) arr[0] = 10;
+			if ( arr[1] == 0 ) arr[1] = 10;
+			GetSingleItem(Timer)["_num_0"].gotoAndStop(arr[0]);
+			GetSingleItem(Timer)["_num_1"].gotoAndStop(arr[1]);
 		}		
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function timer_hide():void
-		{			
-			Get(modelName.REMAIN_TIME).container.visible = false;
-			
-			GetSingleItem(modelName.REMAIN_TIME)["_Text"].textColor = 0x0099CC;
-			GetSingleItem(modelName.REMAIN_TIME).gotoAndStop(1);
-			GetSingleItem("timellight").gotoAndStop(1);
-			
-			already_countDown = false;
-		}
-		
-		
 	
 		
 	}

@@ -1,6 +1,5 @@
 package View.ViewComponent 
 {
-	import View.ViewBase.Visual_Text;
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
@@ -16,10 +15,7 @@ package View.ViewComponent
 	 * @author ...
 	 */
 	public class Visual_SettlePanel  extends VisualHandler
-	{	
-		[Inject]
-		public var _text:Visual_Text;
-		
+	{		
 		[Inject]
 		public var _betCommand:BetCommand;
 		

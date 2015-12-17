@@ -14,19 +14,20 @@ package View.ViewComponent
 	import View.Viewutil.*;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
-	
+	import View.GameView.gameState;
 	/**
 	 * betzone present way
 	 * @author ...
 	 */
 	public class Visual_HistoryRecoder  extends VisualHandler
 	{
+		public const historytable:String = "history_table";
+		public const historyball:String = "history_ball";
 		
 		[Inject]
 		public var _betCommand:BetCommand;
 		
-		[Inject]
-		public var _text:Visual_Text;;
+		
 		
 		public function Visual_HistoryRecoder() 
 		{
@@ -35,37 +36,35 @@ package View.ViewComponent
 		
 		public function init():void
 		{			
-			var historytable:MultiObject = create("Historytable", [ResName.historytable]);
+			var historytable:MultiObject = create("Historytable", [historytable]);
 			historytable.container.x = 1310;
 			historytable.container.y =  140;
 			historytable.Create_(1, "Historytable");
 			
 			//結果歷史記錄			
-			var historyball:MultiObject = create("historyball",[ResName.historyball] ,   historytable.container);
+			var historyball:MultiObject = create("historyball",[historyball] ,   historytable.container);
 			historyball.container.x = 6.35;
 			historyball.container.y = 8.85;
 			historyball.Posi_CustzmiedFun = _regular.Posi_Colum_first_Setting;
 			historyball.Post_CustomizedData = [6,38,38 ];
-			historyball.Create_(60, "historyball");
-			//historyball.container.visible = true;				
+			historyball.Create_(60, "historyball");			
 			
 			put_to_lsit(historytable);	
 			put_to_lsit(historyball);
+			
+			state_parse([gameState.NEW_ROUND, gameState.START_BET]);
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
-		public function display():void
+		override public function appear():void
 		{
-			Get("Historytable").container.visible = true;			
+			Get("Historytable").container.visible = true;
 			update_history();
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
-		public function star_bet():void
-		{			
-			Get("Historytable").container.visible = true;			
-			update_history();
-		}
+		override public function disappear():void
+		{
+			Get("Historytable").container.visible = false;	
+		}		
 		
 		public function update_history():void
 		{			
@@ -94,13 +93,6 @@ package View.ViewComponent
 			
 			if ( frame == 5) return;
 			mc["_Text"].text =  info.point;
-		}
-		
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function opencard_parse():void
-		{
-			Get("Historytable").container.visible = false;			
 		}
 		
 	}

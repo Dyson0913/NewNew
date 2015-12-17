@@ -26,9 +26,6 @@ package View.Viewutil
 	{		
 		private var  _list:Array = [];
 		
-		[Inject]
-		public var _text:Visual_Text;
-		
 		public var s_tool:AdjustTool;
 		
 		public var _select_idx:int = 0;		

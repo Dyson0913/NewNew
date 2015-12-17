@@ -9,13 +9,20 @@ package View.ViewComponent
 	import View.Viewutil.MultiObject;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
-	import View.GameView.*;
+	import View.GameView.gameState;
+	
 	/**
 	 * hintmsg present way
 	 * @author ...
 	 */
 	public class Visual_Hintmsg  extends VisualHandler
-	{	
+	{
+		public const Hint:String = "HintMsg";
+		
+		private var frame_start_bet:int = 2;
+		private var frame_stop_bet:int = 3;
+		private var frame_credit_not_enough:int = 4;
+		private var frame_open_card:int = 5;		
 		
 		public function Visual_Hintmsg() 
 		{
@@ -24,49 +31,43 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var hintmsg:MultiObject = prepare(modelName.HINT_MSG, new MultiObject()  , GetSingleItem("_view").parent.parent);
-			hintmsg.Create_by_list(1, [ResName.Hint], 0, 0, 1, 0, 0, "time_");
+			var hintmsg:MultiObject = create(modelName.HINT_MSG, [Hint]);
+			hintmsg.Create_(1, "hintmsg");
 			hintmsg.container.x = 960;
-			hintmsg.container.y =  410;
-			hintmsg.container.visible = false;
+			hintmsg.container.y = 410;
 			
-			//hintmsg.ItemList[0].gotoAndStop(2);	
-			//_tool.SetControlMc(playerzone.ItemList[0]);
-			//_tool.SetControlMc(hintmsg.container);
-			//add(_tool);
-		}		
+			state_parse([gameState.START_BET]);
+		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
-		public function display():void
+		override public function appear():void
 		{
-			Get(modelName.HINT_MSG).container.visible = true;
-			GetSingleItem(modelName.HINT_MSG).gotoAndStop(1);	
-			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
+			set_frame(frame_start_bet);
 			dispatcher(new StringObject("sound_start_bet","sound" ) );
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function timer_hide():void
-		{
-			Get(modelName.HINT_MSG).container.visible = true;
+		override public function disappear():void
+		{			
 			var state:int = _model.getValue(modelName.GAMES_STATE);
-			if( state == gameState.START_OPEN) GetSingleItem(modelName.HINT_MSG).gotoAndStop(4);
-			if( state == gameState.NEW_ROUND) GetSingleItem(modelName.HINT_MSG).gotoAndStop(1);
-			if ( state == gameState.END_BET) 
+			var frame:int = 1;
+			if ( state == gameState.END_BET)
 			{
-				GetSingleItem(modelName.HINT_MSG).gotoAndStop(2);
+				frame = frame_stop_bet;				
 				dispatcher(new StringObject("sound_stop_bet","sound" ) );
 			}
-			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
-			
+			if ( state == gameState.START_OPEN) frame = frame_open_card;
+			set_frame(frame);			
 		}
 		
 		[MessageHandler(type = "ConnectModule.websocket.WebSoketInternalMsg", selector = "CreditNotEnough")]
 		public function no_credit():void
 		{
-			Get(modelName.HINT_MSG).container.visible = true;
-			GetSingleItem(modelName.HINT_MSG).gotoAndStop(3);
-			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);	
+			set_frame(frame_credit_not_enough);	
+		}
+		
+		private function set_frame(frame:int):void
+		{
+			GetSingleItem(modelName.HINT_MSG).gotoAndStop(frame);
+			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);
 		}
 		
 	}

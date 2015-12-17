@@ -26,12 +26,17 @@ package View.ViewComponent
 	 */
 	public class Visual_Game_Info  extends VisualHandler
 	{
+		public const betlimit:String = "bet_limit";
+		public const betstaticarrow:String = "betstatic_arrow";
+		
+		public const realtimeinfo:String = "realtime_info";
+		public const betstaticarrow_right:String = "betstatic_arrow_right";
+		
+		public const lightqueue:String = "light_queue";
+		public const light_wintype:String = "lightqueue_wintype";
 		
 		[Inject]
-		public var _betCommand:BetCommand;	
-		
-		[Inject]
-		public var _text:Visual_Text;
+		public var _betCommand:BetCommand;
 		
 		public function Visual_Game_Info() 
 		{
@@ -58,7 +63,7 @@ package View.ViewComponent
 			game_info_data.container.x = 312;
 			game_info_data.container.y = 80;
 			
-			var betlimit:MultiObject = create("betlimit", [ResName.betlimit, ResName.betstaticarrow]);	
+			var betlimit:MultiObject = create("betlimit", [betlimit, betstaticarrow]);	
 			betlimit.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 0]);
 			betlimit.mousedown = local;
 			betlimit.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
@@ -67,7 +72,7 @@ package View.ViewComponent
 			betlimit.container.y = 120;	
 			betlimit.Create_(2, "betlimit");	
 			
-			var realtimeinfo:MultiObject = create("realtimeinfo", [ResName.realtimeinfo, ResName.betstaticarrow_right]);	
+			var realtimeinfo:MultiObject = create("realtimeinfo", [realtimeinfo, betstaticarrow_right]);	
 			realtimeinfo.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 0]);
 			realtimeinfo.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
 			realtimeinfo.Post_CustomizedData = [[0, 0], [7, 164]];
@@ -76,12 +81,12 @@ package View.ViewComponent
 			realtimeinfo.container.y = 120;	
 			realtimeinfo.Create_(2, "realtimeinfo");	
 			
-			var lightqueue:MultiObject = create("lightqueue", [ResName.lightqueue]);			
+			var lightqueue:MultiObject = create("lightqueue", [lightqueue]);			
 			lightqueue.container.x = 711.65;
 			lightqueue.container.y = 90.90;	
 			lightqueue.Create_(1, "lightqueue");	
 			
-			var light_wintype:MultiObject = create("lightqueue_wintype",  [ResName.light_wintype]);
+			var light_wintype:MultiObject = create("lightqueue_wintype",  [light_wintype]);
 			light_wintype.container.x = 208.45;
 			light_wintype.container.y = 403.95;
 			light_wintype.Create_(1,  "lightqueue_wintype");	
@@ -92,7 +97,32 @@ package View.ViewComponent
 			//put_to_lsit(lightqueue);
 			
 			utilFun.SetTime(triger, 2);
+			
+			state_parse([gameState.NEW_ROUND]);
 		}
+		
+		override public function appear():void
+		{
+			Get("betlimit").container.visible = true;
+			Get("realtimeinfo").container.visible = true;
+			
+			var round_code:int = _model.getValue("game_round");			
+			GetSingleItem("game_title_info_data", 0).getChildByName("Dy_Text").text = round_code.toString();
+			
+			//跑燈
+			GetSingleItem("lightqueue").gotoAndStop(1);			
+			GetSingleItem("lightqueue")["_light_" + _model.getValue("last_ligt_ball_idx")].gotoAndStop(1);
+			
+			//倍率跑馬
+			Tweener.pauseTweens(GetSingleItem("lightqueue_wintype"));
+			GetSingleItem("lightqueue_wintype").gotoAndStop(1);
+		}
+		
+		override public function disappear():void
+		{
+			Get("betlimit").container.visible = false;
+			Get("realtimeinfo").container.visible = false;			
+		}	
 		
 		private function triger():void
 		{
@@ -141,27 +171,6 @@ package View.ViewComponent
 		{
 			GetSingleItem("betlimit").visible = false;
 		}
-		
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
-		public function display():void
-		{
-			Get("betlimit").container.visible = true;
-			Get("realtimeinfo").container.visible = true;
-						
-			//round code
-			var round_code:int = _model.getValue("game_round");
-			GetSingleItem("game_title_info_data", 0).getChildByName("Dy_Text").text = round_code.toString();
-			
-			//跑燈
-			GetSingleItem("lightqueue").gotoAndStop(1);			
-			GetSingleItem("lightqueue")["_light_" + _model.getValue("last_ligt_ball_idx")].gotoAndStop(1);
-			
-			//倍率跑馬
-			Tweener.pauseTweens(GetSingleItem("lightqueue_wintype"));
-			GetSingleItem("lightqueue_wintype").gotoAndStop(1);
-			
-		}		
 		
 		public function light_queue_effect(stop_point:int):void
 		{			
@@ -253,15 +262,6 @@ package View.ViewComponent
 			}			
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function opencard_parse():void
-		{			
-			Get("betlimit").container.visible = false;
-			Get("realtimeinfo").container.visible = false;	
-			
-		}
-		
-		
 		[MessageHandler(type = "Model.ModelEvent", selector = "run_light")]
 		public function run():void
 		{
@@ -278,18 +278,7 @@ package View.ViewComponent
 				_model.putValue("effect_sound", 0);
 				lligth_start();
 				return;
-			}
-			//var state:int = _model.getValue(modelName.GAMES_STATE);		
-			//if ( state == gameState.START_OPEN)
-			//{			
-				//GetSingleItem("lightqueue").gotoAndStop(2);
-			//}
-			//else 
-			//{				
-				//GetSingleItem("lightqueue").gotoAndStop(2);			
-				//lligth_start();
-				//return;
-			//}
+			}		
 			
 			//跑馬effect 1~13
 			var rand:int = _model.getValue("light_idx");			

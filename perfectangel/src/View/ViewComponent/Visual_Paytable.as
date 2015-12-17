@@ -1,10 +1,6 @@
 package View.ViewComponent 
 {
-	import asunit.errors.AbstractError;
 	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import View.ViewBase.Visual_Text;
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
@@ -13,8 +9,7 @@ package View.ViewComponent
 	
 	import View.Viewutil.*;
 	import Res.ResName;
-	import caurina.transitions.Tweener;
-	
+	import caurina.transitions.Tweener;	
 	import View.GameView.gameState;
 	
 	/**
@@ -23,12 +18,8 @@ package View.ViewComponent
 	 */
 	public class Visual_Paytable  extends VisualHandler
 	{
-		
-		[Inject]
-		public var _betCommand:BetCommand;
-		
-		[Inject]
-		public var _text:Visual_Text;;
+		public const paytablemain:String = "paytable_main"		
+		public const paytable_baridx:String = "paytable_bar_idx";
 		
 		public function Visual_Paytable() 
 		{
@@ -38,25 +29,24 @@ package View.ViewComponent
 		public function init():void
 		{			
 			//賠率提示
-			var paytable:MultiObject = create("paytable", [ResName.paytablemain]);
+			var paytable:MultiObject = create("paytable", [paytablemain]);
 			paytable.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 1]);			
 			paytable.container.x = 251.8;
 			paytable.container.y =  126.35;
 			paytable.Create_(1, "paytable");
-		
-			var paytable_baridx:MultiObject = create("paytable_baridx",  [ResName.paytable_baridx]);
+			
+			var paytable_baridx:MultiObject = create("paytable_baridx",  [paytable_baridx]);
 			paytable_baridx.container.x = paytable.container.x;
 			paytable_baridx.container.y = paytable.container.y;
-			paytable_baridx.Create_(1,  "paytable_baridx");	
-			//paytable_baridx.ItemList[0].gotoAndStop(2);
+			paytable_baridx.Create_(1,  "paytable_baridx");				
 			
+			state_parse([gameState.NEW_ROUND]);
 		}
-	
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
-		public function display():void
-		{
+		
+		override public function appear():void
+		{			
 			GetSingleItem("paytable_baridx").gotoAndStop(1);
-		}
+		}		
 		
 		public function win_frame_hint(wintype:String):void
 		{
