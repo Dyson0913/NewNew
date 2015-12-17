@@ -217,7 +217,8 @@ package ConnectModule.websocket
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
 						
 						dispatcher( new ValueObject(result.result_list, modelName.ROUND_RESULT));
-						dispatcher(new ModelEvent("round_result"));						
+						//dispatcher(new ModelEvent("round_result"));
+						dispatcher(new ModelEvent("update_state"));
 					}
 					break;					
 				}

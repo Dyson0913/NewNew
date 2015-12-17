@@ -123,12 +123,9 @@ package View.ViewComponent
 			//_progressbar.init();
 			//
 
-			//_settle_panel.init();				
-			//_coin_stack.init();
-			//_coin.init();			
+			//_settle_panel.init();
 			//
-			//_settle.init();
-			//_sencer.init();	
+			//_settle.init();	
 			//
 			//_btn.init();
 			
@@ -141,13 +138,13 @@ package View.ViewComponent
 		   _hint.init();
 			//
 		  //
-		  // _poker.init();
+			_poker.init();
 			_betzone.init();
 			_coin_stack.init();
 			//
 			//
 			//_settle.init();
-			//_sencer.init();	
+			_sencer.init();	
 			_coin.init();
 			//_btn.init();			
 			
@@ -160,14 +157,10 @@ package View.ViewComponent
 		{
 			fake_hisotry();
 			
-			_model.putValue(modelName.PLAYER_POKER, []);				
-			
-			_model.putValue(modelName.EXTRA_POKER, ["3d"]);
+			_model.putValue(modelName.PLAYER_POKER, []);
 			
 			_model.putValue(modelName.GAMES_STATE,gameState.NEW_ROUND);			
-			dispatcher(new ModelEvent("update_state"));
-			
-			dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
+			dispatcher(new ModelEvent("update_state"));			
 		}
 		
 		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "1")]
@@ -200,11 +193,11 @@ package View.ViewComponent
 			
 			_model.putValue(modelName.GAMES_STATE,gameState.START_OPEN);			
 			dispatcher(new ModelEvent("update_state"));
+			
+			_model.putValue(modelName.EXTRA_POKER, ["3d"]);
+			dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
 			//================================================settle info
 			//_settle.init();
-			//
-			//_model.putValue(modelName.EXTRA_POKER, ["kd"]);
-			//dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
 			
 			//================================================ simu deal
 			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player" , "Banker", "Player", "Banker"];

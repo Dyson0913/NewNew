@@ -12,24 +12,8 @@ package Res
 		
 		
 		
-		//swc res		
-		public static const Poker:String = "poker";
-		public static const poker_back:String = "pokerback"
-		public static const flippoker:String = "flip_poker"
-		public static const flippoker_long:String = "flip_poker_long"
-		public static const flippoker_easy:String = "flip_poker_easy"
-		
-		public static const pokermask:String = "poker_mask"
-		
-		
-				
-		
-		
-		
-		
-		
+		//swc res	
 		public static const TextInfo:String = "Text_Info";	
-		
 		
 		public static const emptymc:String = "Emptymc";
 		public static const settletable:String = "settle_table";

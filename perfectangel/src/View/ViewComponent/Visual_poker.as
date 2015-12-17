@@ -11,6 +11,7 @@ package View.ViewComponent
 	import Res.ResName;
 	import caurina.transitions.Tweener;
 	import Command.*;
+	import View.GameView.gameState;
 	
 	/**
 	 * poker present way
@@ -23,8 +24,12 @@ package View.ViewComponent
 		public const opentable_angel:String = "open_table_angel";
 		public const opentable_evil:String = "open_table_evil";
 		
-		public const just_turnpoker:String = "just_turn_poker"
-		public const Mipoker_zone:String = "Mi_poker_zone"
+		public const just_turnpoker:String = "just_turn_poker";
+		public const Mipoker_zone:String = "Mi_poker_zone";
+		
+		public const Poker:String = "poker";
+		public const poker_back:String = "pokerback";		
+		public const pokermask:String = "poker_mask";
 		
 		//down 3 up2
 		private var newnew_position:Array = [ [140, 80], [280, 80], [420, 80], [210, -130], [350, -130]];
@@ -35,9 +40,7 @@ package View.ViewComponent
 		}
 		
 		public function init():void
-		{
-			
-			
+		{			
 			var playerCon:MultiObject = create(modelName.PLAYER_POKER, [just_turnpoker]);
 			playerCon.CustomizedFun = myscale;
 			playerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
@@ -86,11 +89,23 @@ package View.ViewComponent
 			put_to_lsit(side_symble);
 			
 			//no clean ,half in init ,cant cleanr model
+			state_parse([gameState.END_BET,gameState.START_OPEN,gameState.END_ROUND]);
+		}		
+		
+		override public function appear():void
+		{
+			var playerCon:MultiObject = Get(modelName.PLAYER_POKER);			
+			_regular.FadeIn(playerCon.container, 1, 1,null);
+			
+			var bankerCon:MultiObject = Get(modelName.BANKER_POKER);
+			_regular.FadeIn(bankerCon.container, 1, 1,null);		
+			
+			Get("table_hint").container.visible = true;
+			Get("side_symble").container.visible = true;
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
-		public function Clean_poker():void
-		{		
+		override public function disappear():void
+		{			
 			var ppoker:MultiObject = Get(modelName.PLAYER_POKER);
 			ppoker.CleanList();
 			ppoker.CustomizedFun = myscale;		
@@ -116,28 +131,10 @@ package View.ViewComponent
 			_model.putValue(modelName.PLAYER_POKER, []);
 			
 			Get("table_hint").container.visible = false;
+			
+			//TODO 結算不用再出現
 			Get("side_symble").container.visible = false;
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function poker_display():void
-		{
-			
-			var playerCon:MultiObject = Get(modelName.PLAYER_POKER);			
-			_regular.FadeIn(playerCon.container, 1, 1,null);
-			
-			var bankerCon:MultiObject = Get(modelName.BANKER_POKER);
-			_regular.FadeIn(bankerCon.container, 1, 1,null);		
-			
-			Get("table_hint").container.visible = true;
-			Get("side_symble").container.visible = true;
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
-		public function resut():void
-		{
-			Get("side_symble").container.visible = false;
-		}
+		}		
 		
 		public function myscale(mc:MovieClip, idx:int, coinstack:Array):void
 		{
@@ -193,9 +190,9 @@ package View.ViewComponent
 				
 				var mipoker:MultiObject = Get("mipoker");
 				var mc:MovieClip = mipoker.ItemList[0];
-				var pokerf:MovieClip = utilFun.GetClassByString(ResName.Poker);
-				var pokerb:MovieClip = utilFun.GetClassByString(ResName.poker_back);
-				var pokerm:MovieClip = utilFun.GetClassByString(ResName.pokermask);
+				var pokerf:MovieClip = utilFun.GetClassByString(Poker);
+				var pokerb:MovieClip = utilFun.GetClassByString(poker_back);
+				var pokerm:MovieClip = utilFun.GetClassByString(pokermask);
 				pokerb.x  = 40;
 				pokerb.y  = 24;
 				pokerf.x = pokerb.x;
