@@ -45,21 +45,21 @@ package View.ViewComponent
 		
 		public function init():void
 		{			
-			var bet:MultiObject = prepare("game_title_info", new MultiObject() , GetSingleItem("_view").parent.parent);
+			var bet:MultiObject = create("game_title_info",[ResName.TextInfo]);
 			bet.CustomizedFun = _text.textSetting;
 			bet.CustomizedData = [{size:18}, "局號:"];
 			bet.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
 			bet.Post_CustomizedData = [[0,0],[1020,0],[1130,0],[1300,0]];
-			bet.Create_by_list(bet.CustomizedData.length-1, [ResName.TextInfo], 0, 0, bet.CustomizedData.length-1, 200, 0, "info_");			
+			bet.Create_(bet.CustomizedData.length-1);			
 			bet.container.x = 240;
 			bet.container.y = 80;
-							
-			var game_info_data:MultiObject = prepare("game_title_info_data", new MultiObject() , GetSingleItem("_view").parent.parent);			
+			
+			var game_info_data:MultiObject = create("game_title_info_data",  [ResName.TextInfo]);			
 			game_info_data.CustomizedFun = _text.textSetting;
 			game_info_data.CustomizedData = [{size:18} ,_model.getValue("game_round").toString()];
 			game_info_data.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
 			game_info_data.Post_CustomizedData = [[0,0],[310,0],[1230,0],[1400,0]];
-			game_info_data.Create_by_list(game_info_data.CustomizedData.length-1, [ResName.TextInfo], 0, 0, game_info_data.CustomizedData.length-1, 200, 0, "info_");
+			game_info_data.Create_(game_info_data.CustomizedData.length-1);
 			game_info_data.container.x = 312;
 			game_info_data.container.y = 80;
 			
@@ -70,7 +70,7 @@ package View.ViewComponent
 			betlimit.Post_CustomizedData = [[0,0],[194,164]];
 			betlimit.container.x = -12;
 			betlimit.container.y = 120;	
-			betlimit.Create_(2, "betlimit");	
+			betlimit.Create_(2);	
 			
 			var realtimeinfo:MultiObject = create("realtimeinfo", [realtimeinfo, betstaticarrow_right]);	
 			realtimeinfo.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 0]);
@@ -79,17 +79,17 @@ package View.ViewComponent
 			realtimeinfo.mousedown = local_reverse;
 			realtimeinfo.container.x = 1719;
 			realtimeinfo.container.y = 120;	
-			realtimeinfo.Create_(2, "realtimeinfo");	
+			realtimeinfo.Create_(2);	
 			
 			var lightqueue:MultiObject = create("lightqueue", [lightqueue]);			
 			lightqueue.container.x = 711.65;
 			lightqueue.container.y = 90.90;	
-			lightqueue.Create_(1, "lightqueue");	
+			lightqueue.Create_(1);	
 			
 			var light_wintype:MultiObject = create("lightqueue_wintype",  [light_wintype]);
 			light_wintype.container.x = 208.45;
 			light_wintype.container.y = 403.95;
-			light_wintype.Create_(1,  "lightqueue_wintype");	
+			light_wintype.Create_(1);	
 			
 			
 			put_to_lsit(betlimit);

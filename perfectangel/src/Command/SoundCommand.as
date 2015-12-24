@@ -105,6 +105,12 @@ package Command
 			SoundAS.playFx(sound.Value);
 		}
 		
+		[MessageHandler(type="Model.valueObject.StringObject",selector="loop_sound")]
+		public function loop_sound(sound:StringObject):void
+		{
+			if ( _mute == true ) return;
+			SoundAS.playLoop(sound.Value);
+		}
 	}
 
 }

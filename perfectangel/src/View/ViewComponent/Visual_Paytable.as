@@ -33,12 +33,12 @@ package View.ViewComponent
 			paytable.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 1]);			
 			paytable.container.x = 251.8;
 			paytable.container.y =  126.35;
-			paytable.Create_(1, "paytable");
+			paytable.Create_(1);
 			
 			var paytable_baridx:MultiObject = create("paytable_baridx",  [paytable_baridx]);
 			paytable_baridx.container.x = paytable.container.x;
 			paytable_baridx.container.y = paytable.container.y;
-			paytable_baridx.Create_(1,  "paytable_baridx");				
+			paytable_baridx.Create_(1);				
 			
 			state_parse([gameState.NEW_ROUND]);
 		}

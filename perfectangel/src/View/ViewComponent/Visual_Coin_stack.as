@@ -1,5 +1,5 @@
 package View.ViewComponent 
-{
+{	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import View.ViewBase.VisualHandler;
@@ -27,11 +27,14 @@ package View.ViewComponent
 		[Inject]
 		public var _Actionmodel:ActionQueue;	
 		
+		//sound name
+		public const soundcoin:String = "sound_coin";
+		
 		//coin seperate to N stack
 		private var _stack_num:int = 1;		
 		
 		public const Betcoin:String = "Bet_coin";
-		public const Wincoin:String = "Win_coin";	
+		public const Wincoin:String = "Win_coin";
 		
 		public function Visual_Coin_stack() 
 		{
@@ -40,19 +43,18 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var avaliblezone:Array = _model.getValue(modelName.AVALIBLE_ZONE);
-			//stick cotainer  			
+			var avaliblezone:Array = _model.getValue(modelName.AVALIBLE_ZONE);						
 			var coin_xy:Array = _model.getValue(modelName.COIN_STACK_XY);
-			var coinstack:MultiObject = create("coinstakeZone",  [ResName.emptymc]);
+			var coinstack:MultiObject = create("coinstakeZone", [ResName.emptymc]);
 			coinstack.container.x = 1081 ;
 			coinstack.container.y = 657 ;
 			coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			coinstack.Post_CustomizedData = coin_xy ;
-			coinstack.Create_(avaliblezone.length, "coinstakeZone");	
+			coinstack.Post_CustomizedData =  coin_xy;
+			coinstack.Create_(avaliblezone.length);
 			
-			put_to_lsit(coinstack);
 			
 			state_parse([gameState.START_BET]);
+			
 		}
 		
 		override public function appear():void
@@ -63,9 +65,10 @@ package View.ViewComponent
 		override public function disappear():void
 		{			
 			Get("coinstakeZone").container.visible = false;
+			
+			Clean_poker();
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
 		public function Clean_poker():void
 		{
 			//TODO why not 
@@ -74,10 +77,13 @@ package View.ViewComponent
 			for ( var i:int = 0; i <  a.ItemList.length; i++)
 			{
 				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",i));
-			}
+			}		
 			
+			a.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			a.Post_CustomizedData =  _model.getValue(modelName.COIN_STACK_XY);
+			a.customized();
 		}
-		
+				
 		[MessageHandler(type = "Model.ModelEvent", selector = "updateCoin")]
 		public function updateCredit():void
 		{					
@@ -87,11 +93,11 @@ package View.ViewComponent
 			//TODO  一次一次pop
 			_betCommand.re_bet();
 			
-			dispatcher(new StringObject("sound_coin","sound" ) );
+			play_sound(soundcoin);		
 			
 			//coin動畫
 			stack(_betCommand.Bet_type_betlist(bet_ob["betType"]), GetSingleItem("coinstakeZone",bet_ob["betType"] ),bet_ob["betType"]);	
-		}
+		}		
 		
 		public function stack(Allcoin:Array,contain:DisplayObjectContainer,bettype:int):void
 		{			

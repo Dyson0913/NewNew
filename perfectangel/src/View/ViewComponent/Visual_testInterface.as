@@ -81,6 +81,9 @@ package View.ViewComponent
 		public var _settlePanel:Visual_SettlePanel;
 		
 		[Inject]
+		public var _fileStream:fileStream;
+		
+		[Inject]
 		public var _HistoryRecoder:Visual_HistoryRecoder;
 		
 		private var _script_item:MultiObject;
@@ -99,14 +102,27 @@ package View.ViewComponent
 			_model.putValue("result_Pai_list", []);
 			_model.putValue("game_round", 1);			
 			
+			var script:DI = new DI();
+			script.putValue("新局",0);
+			script.putValue("開始下注",1);
+			script.putValue("停止下注",2);
+			script.putValue("開牌",3);
+			script.putValue("結算",4);
+			script.putValue("封包",5);
+			script.putValue("單一功能測試",6);
+			
+			_model.putValue("name_map", script);
+			
 			//腳本
-			var script_list:MultiObject = prepare("script_list", new MultiObject() ,GetSingleItem("_view").parent.parent );			
+			var script_list:MultiObject = create("script_list", [ResName.TextInfo]);			
 			script_list.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);			
 			script_list.stop_Propagation = true;
 			script_list.mousedown = script_list_test;
-			script_list.CustomizedData = [{size:18},"新局","開始下注", "停止下注","開牌", "結算"]
-			script_list.CustomizedFun = _text.textSetting;			
-			script_list.Create_by_list(script_list.CustomizedData.length -1, [ResName.TextInfo], 0, 0, script_list.CustomizedData.length-1, 100, 20, "Btn_");			
+			script_list.CustomizedData = [{size:18},"新局","開始下注", "停止下注","開牌", "結算","封包","單一功能測試"]
+			script_list.CustomizedFun = _text.textSetting;
+			script_list.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
+			script_list.Post_CustomizedData = [6, 100, 50];	
+			script_list.Create_(script_list.CustomizedData.length -1);			
 			
 		
 			_model.putValue("Script_idx", 0);
@@ -118,8 +134,7 @@ package View.ViewComponent
 		{
 			if ( _model.getValue("test_init")) return;
 			changeBG(ResName.Bet_Scene);
-			
-			//_ProbData.init();
+						
 			//_progressbar.init();
 			//
 
@@ -136,8 +151,7 @@ package View.ViewComponent
 			//
 			_timer.init();			
 		   _hint.init();
-			//
-		  //
+		   
 			_poker.init();
 			_betzone.init();
 			_coin_stack.init();
@@ -146,7 +160,7 @@ package View.ViewComponent
 			//_settle.init();
 			_sencer.init();	
 			_coin.init();
-			//_btn.init();			
+			_btn.init();			
 			
 			//_progressbar.debug();
 			_model.putValue("test_init",true);
@@ -155,8 +169,7 @@ package View.ViewComponent
 		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "0")]
 		public function newround():void
 		{
-			fake_hisotry();
-			
+			fake_hisotry();			
 			_model.putValue(modelName.PLAYER_POKER, []);
 			
 			_model.putValue(modelName.GAMES_STATE,gameState.NEW_ROUND);			
@@ -238,15 +251,6 @@ package View.ViewComponent
 			_model.putValue(modelName.PLAYER_POKER, ["9d","4c","5s","7s","9s"]);				
 			_model.putValue(modelName.BANKER_POKER, ["1s","2d","3s","5c","6h"]);	
 			changeBG(ResName.Bet_Scene);
-		
-				//================================================poker
-			//_poker.init();
-			//dispatcher(new ModelEvent("hide"));
-			//dispatcher(new Intobject(modelName.PLAYER_POKER, "poker_No_mi"));
-			//dispatcher(new Intobject(modelName.BANKER_POKER, "poker_No_mi"));							
-							//
-			//
-			//================================================settle info
 			//_settle.init();			
 			
 			//摸擬押注
@@ -285,12 +289,29 @@ package View.ViewComponent
 			_model.putValue("history_list", arr);
 		}
 		
+		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "5")]
+		public function pack_sim():void
+		{
+			_fileStream.load();
+		}
+		
 		public function script_list_test(e:Event, idx:int):Boolean
 		{
-			utilFun.Log("script_list_test=" + idx);
-			_model.putValue("Script_idx", idx);		
+			var clickname:String = GetSingleItem("script_list", idx).getChildByName("Dy_Text").text;
+			var idx:int = _opration.getMappingValue("name_map",clickname);
+			if (clickname == "封包") 
+			{
+				view_init();
+				_model.putValue(modelName.GAMES_STATE,gameState.NEW_ROUND);			
+				dispatcher(new ModelEvent("update_state"));
+			
+				dispatcher(new TestEvent(idx.toString()));
+				return true;
+			}
+			
+			
 			view_init();
-			dispatcher(new TestEvent(_model.getValue("Script_idx").toString()));
+			dispatcher(new TestEvent(idx.toString()));
 			return true;
 		}
 		

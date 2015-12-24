@@ -39,7 +39,7 @@ package View.ViewComponent
 			var historytable:MultiObject = create("Historytable", [historytable]);
 			historytable.container.x = 1310;
 			historytable.container.y =  140;
-			historytable.Create_(1, "Historytable");
+			historytable.Create_(1);
 			
 			//結果歷史記錄			
 			var historyball:MultiObject = create("historyball",[historyball] ,   historytable.container);
@@ -47,7 +47,7 @@ package View.ViewComponent
 			historyball.container.y = 8.85;
 			historyball.Posi_CustzmiedFun = _regular.Posi_Colum_first_Setting;
 			historyball.Post_CustomizedData = [6,38,38 ];
-			historyball.Create_(60, "historyball");			
+			historyball.Create_(60);			
 			
 			put_to_lsit(historytable);	
 			put_to_lsit(historyball);

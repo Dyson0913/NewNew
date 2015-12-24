@@ -31,14 +31,14 @@ package View.ViewComponent
 		public function init():void
 		{
 			var countDown:MultiObject = create(Timer,[Timer]);
-		   countDown.Create_(1,Timer);
+		   countDown.Create_(1);
 		   countDown.container.x = 1183;
 		   countDown.container.y = 340;
 		   countDown.container.visible = false;
 		   
 		   
 		   	var light:MultiObject = create("timellight" , [timellight], countDown.container);
-		   light.Create_(1, timellight);		   
+		   light.Create_(1);		   
 		   light.container.x = 75;
 		   light.container.y = 75;		
 			

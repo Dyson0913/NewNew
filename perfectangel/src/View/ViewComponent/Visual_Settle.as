@@ -45,7 +45,7 @@ package View.ViewComponent
 			zone.container.y = 486;			
 			zone.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			zone.Post_CustomizedData = [2, -850, 0];
-			zone.Create_(2,"zone");
+			zone.Create_(2);
 			
 			put_to_lsit(zone);
 		}

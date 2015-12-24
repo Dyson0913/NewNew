@@ -32,7 +32,7 @@ package View.ViewComponent
 		public function init():void
 		{
 			var hintmsg:MultiObject = create(modelName.HINT_MSG, [Hint]);
-			hintmsg.Create_(1, "hintmsg");
+			hintmsg.Create_(1);
 			hintmsg.container.x = 960;
 			hintmsg.container.y = 410;
 			

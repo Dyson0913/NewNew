@@ -1,7 +1,10 @@
 package Model 
 {	
+	import flash.events.*;
 	import flash.net.FileReference;
+	import flash.net.FileFilter;
 	import com.adobe.serialization.json.JSON	
+	import flash.utils.ByteArray;
 	import Model.valueObject.ArrayObject;
 	import util.utilFun;
 	
@@ -11,9 +14,17 @@ package Model
 	 */
 	public class fileStream 
 	{
+		[MessageDispatcher]
+        public var dispatcher:Function;
+		
 		private var _recodeData:Array = [];
 		
 		public var _start:Boolean = false;
+		
+		private var _openfile:FileReference = new FileReference();
+		
+		[Inject]
+		public var _MsgModel:MsgQueue;
 		
 		public function fileStream() 
 		{
@@ -21,22 +32,13 @@ package Model
 		}
 		
 		//start recoding
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
+		[MessageHandler(type = "Model.ModelEvent", selector = "new_round")]
 		public function recoding():void
 		{
-			
-			if ( CONFIG::release ) 
-			{
-				
-				return;
-			}
+			if ( CONFIG::release ) return;
 			
 			write();
-			if ( !_start) 
-			{
-				
-				switch_recode(true);
-			}
+			if( !_start) switch_recode(true);
 		}
 		
 		[MessageHandler(type="Model.valueObject.ArrayObject",selector="pack_recoder")]
@@ -50,12 +52,8 @@ package Model
 		
 		public function write():void
 		{
-			if ( !_start ) 
-			{
-				
-				return;
-			}
-						
+			if ( !_start ) return;
+			
 			var file:FileReference = new FileReference();
 			
 			//var myob:Object = { size:1, aaa:3 };
@@ -68,10 +66,38 @@ package Model
 				var jsonString:String = JSON.encode(_recodeData[i]);				
 				arr.push(jsonString);
 			}			
+			_recodeData.length = 0;
 			
-			file.save(arr.join("\n"), "pack_.txt");
-			
+			var packhead:String = "{\"packlist\":[\n" + arr.join(",\n") +"]}";			
+			file.save(packhead, "pack_.txt");
 		}
+		
+		public function load():void
+		{			
+			_openfile.addEventListener(Event.SELECT, onFileSelected); 
+			   var textTypeFilter:FileFilter = new FileFilter("Text Files (*.txt, *.rtf)", 
+                        "*.txt;*.rtf"); 
+            _openfile.browse([textTypeFilter]); 
+		}
+		
+		public function onFileSelected(evt:Event):void 
+        {            
+            _openfile.addEventListener(Event.COMPLETE, onComplete); 
+            _openfile.load(); 
+        } 
+		
+		public function onComplete(evt:Event):void 
+        { 			
+            //utilFun.Log("File was successfully loaded."); 
+			var ba:ByteArray = ByteArray(_openfile.data); 
+			var utf8Str:String = ba.readMultiByte(ba.length, 'utf8');
+			//utilFun.Log("data = "+utf8Str); 
+			var result:Object  = JSON.decode(utf8Str);
+			
+			//create package interface
+			dispatcher( new ArrayObject( result.packlist, "replay_pack"));
+			
+        }
 		
 		public function switch_recode(recode:Boolean):void
 		{
@@ -79,7 +105,8 @@ package Model
 		}
 		
 		public function recode(ob:Object):void
-		{			
+		{
+			utilFun.Log("recoe !");
 			_recodeData.push(ob);			
 		}
 	

@@ -45,7 +45,7 @@ package View.ViewComponent
 			playerCon.CustomizedFun = myscale;
 			playerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			playerCon.Post_CustomizedData = [5, 140, 0];
-			playerCon.Create_(5, "playerpoker");
+			playerCon.Create_(5);
 			playerCon.container.x = 190;
 			playerCon.container.y = 680;
 			playerCon.container.alpha = 0;
@@ -54,7 +54,7 @@ package View.ViewComponent
 			bankerCon.CustomizedFun = myscale;
 			bankerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			bankerCon.Post_CustomizedData = [5, 140, 0];
-			bankerCon.Create_(5, "bankerpoker");
+			bankerCon.Create_(5);
 			bankerCon.container.x = 1040;
 			bankerCon.container.y = 680;
 			bankerCon.container.alpha = 0;
@@ -63,7 +63,7 @@ package View.ViewComponent
 			var table_hint:MultiObject = create("table_hint", [open_tableitem]);
 			table_hint.autoClean = true;
 			table_hint.CleanList();
-			table_hint.Create_(1, "table_hint");
+			table_hint.Create_(1);
 			table_hint.container.x = 450;
 			table_hint.container.y = 590;	
 			table_hint.container.visible = false;
@@ -71,13 +71,13 @@ package View.ViewComponent
 			var side_symble:MultiObject = create("side_symble", [opentable_angel, opentable_evil]);
 			side_symble.CustomizedFun = _regular.Posi_Row_first_Setting;
 			side_symble.CustomizedData = [2, 850, 0];
-			side_symble.Create_(2, "side_symble");
+			side_symble.Create_(2);
 			side_symble.container.x = 454;
 			side_symble.container.y = 950;	
 			side_symble.container.visible = false;
 			
 			var mipoker:MultiObject =  create("mipoker",  [Mipoker_zone]);		
-			mipoker.Create_(1, "mipoker");
+			mipoker.Create_(1);
 			mipoker.container.x = 740;
 			mipoker.container.y = 570;
 			mipoker.container.alpha = 0;

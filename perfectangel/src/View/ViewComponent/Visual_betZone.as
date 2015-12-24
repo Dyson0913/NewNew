@@ -30,7 +30,7 @@ package View.ViewComponent
 			var tableitem:MultiObject = create("tableitem",[bet_tableitem]);			
 			tableitem.container.x = 193;
 			tableitem.container.y = 655;
-			tableitem.Create_(1, "tableitem");
+			tableitem.Create_(1);
 			
 			var zone_xy:Array = _model.getValue(modelName.AVALIBLE_ZONE_XY);
 			
@@ -39,7 +39,7 @@ package View.ViewComponent
 			_betzone.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
 			_betzone.Post_CustomizedData = zone_xy;
 			_betzone.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,2,0]);			
-			_betzone.Create_(avaliblezone.length, "betzone");
+			_betzone.Create_(avaliblezone.length);
 			_betzone.container.x = 1081;
 			_betzone.container.y = 657;
 			
