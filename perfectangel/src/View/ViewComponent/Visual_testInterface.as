@@ -11,6 +11,7 @@ package View.ViewComponent
 	import flash.text.TextField;
 	import util.math.Path_Generator;
 	import View.ViewBase.Visual_Text;
+	import View.ViewBase.Visual_Version;
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
@@ -83,6 +84,9 @@ package View.ViewComponent
 		[Inject]
 		public var _HistoryRecoder:Visual_HistoryRecoder;
 		
+		[Inject]
+		public var _Version:Visual_Version;
+		
 		private var _script_item:MultiObject;
 		
 		public function Visual_testInterface() 
@@ -132,6 +136,7 @@ package View.ViewComponent
 			if ( _model.getValue("test_init")) return;
 			changeBG(ResName.Bet_Scene);
 			
+			_Version.init();
 			_btn.init();			
 			_HistoryRecoder.init();
 			_gameinfo.init();

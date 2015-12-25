@@ -11,6 +11,7 @@ package View.GameView
 	import Model.*;
 	import Res.ResName;
 	import util.DI;	
+	import View.ViewBase.Visual_Version;
 	import View.ViewComponent.*;
 	import View.Viewutil.*;
 	import View.ViewBase.ViewBase;
@@ -73,6 +74,9 @@ package View.GameView
 		[Inject]
 		public var _settlePanel:Visual_SettlePanel;
 		
+		[Inject]
+		public var _Version:Visual_Version;
+		
 		public function betView()  
 		{
 			utilFun.Log("betView");
@@ -91,6 +95,7 @@ package View.GameView
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
 			
+			_Version.init();
 			_HistoryRecoder.init();
 			_gameinfo.init();
 			_settlePanel.init();

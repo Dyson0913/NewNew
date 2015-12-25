@@ -56,6 +56,11 @@ package View.ViewComponent
 		override public function disappear():void
 		{			
 			setFrame("zone", 1);
+			
+			var zone:MultiObject = Get("zone");
+			zone.CustomizedFun = _regular.FrameSetting;
+			zone.CustomizedData = [1, 1];
+			zone.FlushChild("ani");			
 		}
 		
 		[MessageHandler(type="Model.valueObject.Intobject",selector="settle_step")]

@@ -85,6 +85,7 @@ package Command
 			_model.putValue(modelName.COIN_STACK_XY,   [ [140, 210], [-483, 210],  [408, 80], [-760, 94], [451, 264], [-800, 267] ,[-174,238],[-174,68]]);
 			
 			var poermapping:DI = new DI();
+			poermapping.putValue("WSWin", 1);
 			poermapping.putValue("WSPAFourOfAKindWin", 2);
 			poermapping.putValue("WSPAExFourOfAKindWin", 2);
 			poermapping.putValue("WSPAFiveWawaWin", 3);
@@ -94,7 +95,7 @@ package Command
 			poermapping.putValue("WSPAExBigAngelWin", 5);
 			poermapping.putValue("WSPAExBigEvilWin", 5);
 			poermapping.putValue("WSPANormalWin", 6);
-			poermapping.putValue("WSPAExSmallWin", 6);
+			poermapping.putValue("WSPAExSmallWin", 6);			
 			_model.putValue(modelName.BIG_POKER_MSG , poermapping);
 			
 			
@@ -335,9 +336,8 @@ package Command
 		}	
 		
 		public function check_wintype(resultob:Object):void
-		{
-			//大獎	
-			if ( resultob.bet_type == "BetPAEvil" ||  resultob.bet_type == "BetPAAngel" )
+		{			
+			if ( resultob.bet_type == "BetPAEvil" ||  resultob.bet_type == "BetPAAngel" || resultob.bet_type == "BetPABothNone")
 			{
 				var frame:Array = _model.getValue("settle_frame");
 				var idx:int = _opration.getMappingValue("Bet_name_to_idx", resultob.bet_type);
@@ -349,8 +349,10 @@ package Command
 					_model.putValue("winstr", wintype);
 					_model.putValue("win_odd", resultob.odds);
 					
-					frame[idx] = wintype;
+					//雙邊無懶
+					if (idx == 7) return;
 					
+					frame[idx] = wintype;
 					var win:Array = _model.getValue("settle_win");
 					win[idx] = 1;
 				}
