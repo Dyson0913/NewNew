@@ -19,8 +19,6 @@ package View.ViewComponent
 		[Inject]
 		public var _betCommand:BetCommand;
 		
-		public const extrapay:String = "extra_pay";	
-		
 		public function Visual_SettlePanel() 
 		{
 			
@@ -73,112 +71,72 @@ package View.ViewComponent
 			settletable_zone_settle.CustomizedFun = _text.colortextSetting;
 			settletable_zone_settle.CustomizedData = [{size:22,align:_text.align_right}, "0","0","1000","0","0","100000","10000","0"];
 			settletable_zone_settle.Create_(settletable_zone_settle.CustomizedData.length-1);	
-			settletable_zone_settle.container.visible = false;
-			//
-			//var extrapay:MultiObject = create("extrapay", [extrapay], settletable.container);
-			//extrapay.Create_(1, "extrapay");		
-			//extrapay.container.x = 484;
-			//extrapay.container.y = 58;
-			//35
+			settletable_zone_settle.container.visible = false;			
 			
 			put_to_lsit(settletable);
 			put_to_lsit(settletable_title);
 			put_to_lsit(settletable_zone);
 			put_to_lsit(settletable_zone_bet);
-			put_to_lsit(settletable_zone_settle);
-			//put_to_lsit(extrapay);
+			put_to_lsit(settletable_zone_settle);			
 			
-		}		
+			state_parse([gameState.END_BET,gameState.START_OPEN,gameState.END_ROUND]);
+		}	
 		
-		public function sprite_idx_setting_player(mc:*, idx:int, data:Array):void
-		{			
-			var code:int  = pokerUtil.pokerTrans_s(data[idx]);			
-			mc.x += 25;			
-			//押暗
-			//if ( history_win[Math.floor(idx / 5)] != ResName.angelball) mc.alpha =  0.5;			
-			mc.drawTile(code);	
-			//utilFun.scaleXY(mc, 2, 2);
-		
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
-		public function display():void
-		{				
-			Get("settletable").container.visible = false;
-			GetSingleItem("settletable_title", 2).visible = false;
-			Get("settletable_zone_settle").container.visible = false;
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
-		public function opencard_parse():void
+		override public function appear():void
 		{
-			Get("settletable").container.visible = true;			
+			Get("settletable").container.visible = true;
+			
+			//得分 列先hide
 			GetSingleItem("settletable_title", 2).visible = false;
 			Get("settletable_zone_settle").container.visible = false;
 			
-			var mylist:Array = [];// ["0", "0", "0", "0", "0", "0", "0", "0"];
-			var zone:Array = _model.getValue(modelName.AVALIBLE_ZONE_IDX);
-			var maping:DI = _model.getValue("idx_to_result_idx");
-			for ( var i:int = 0; i < zone.length; i++)
-			{				
-				var map:int = maping.getValue(zone[i]);				 
-				mylist.splice(map, 0,_betCommand.get_total_bet(zone[i]));
-			}
 			
-			mylist.push(_betCommand.all_betzone_totoal());
-			
+			var mylist:Array = _betCommand.bet_zone_amount();
 			var font:Array = [{size:24,align:_text.align_right,color:0xFF0000}];
 			font = font.concat(mylist);
-			utilFun.Log("mylist = "+mylist);
-			Get("settletable_zone_bet").CustomizedData = font;
-			Get("settletable_zone_bet").Create_by_list(mylist.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");	
-			
-			
+			var zone_bet:MultiObject = Get("settletable_zone_bet");
+			zone_bet.CleanList();
+			zone_bet.CustomizedData = font;
+			zone_bet.Create_(mylist.length);
+		}
+		
+		override public function disappear():void
+		{			
+			Get("settletable").container.visible = false;			
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "show_settle_table")]
 		public function show_settle():void
 		{
-			utilFun.Log("show_settle");			
+			utilFun.Log("show_settle");
 			Get("settletable").container.visible = true;			
 			GetSingleItem("settletable_title", 2).visible = true;
 			Get("settletable_zone_settle").container.visible = true;
 			
 			//押注
 			var zone_amount:Array = _model.getValue("result_zonebet_amount");			
-			var font:Array = [ { size:22, align:_text.align_right,color:0xFF0000} ];
-			zone_amount.push(_betCommand.all_betzone_totoal());
-			font = font.concat(zone_amount);			
-			Get("settletable_zone_bet").CustomizedFun = _text.textSetting;
-			Get("settletable_zone_bet").CustomizedData = font;
-			Get("settletable_zone_bet").Create_by_list(zone_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");		
+			var font:Array = [ { size:22, align:_text.align_right, color:0xFF0000 } ];			
+			font = font.concat(zone_amount);
+			var zone_bet:MultiObject = Get("settletable_zone_bet");
+			zone_bet.CleanList();
+			zone_bet.CustomizedData = font;
+			zone_bet.Create_(zone_amount.length);
 			
 			//總結
 			var settle_amount:Array = _model.getValue("result_settle_amount");			
-			settle_amount.push( _model.getValue("result_total"));
-			var font2:Array = [{size:22,align:_text.align_right}];
-			font2 = font2.concat(settle_amount);		
-			font2 = font2.concat( _model.getValue("result_total"));			
-			Get("settletable_zone_settle").CustomizedFun = _text.colortextSetting;
-			Get("settletable_zone_settle").CustomizedData = font2;
-			Get("settletable_zone_settle").Create_by_list(settle_amount.length, [ResName.TextInfo], 0 , 0, 1, 0, 35, "Bet_");
-			
-			
-			//外贈結果
-			//var point:int = _model.getValue("light_idx");
-			//if ( point <= 12)
-			//{
-				//angel extra string 
-				//
-				//_model.putValue("eviPoint", eviPoint);
-				//_model.putValue("angPoint", angPoint);
-			//}			
-			//var wintype:String = _model.getValue("wintype");
-			
+			var font2:Array = [ { size:22, align:_text.align_right } ];			
+			font2 = font2.concat(settle_amount);			
+			utilFun.Log("font2 = " + font2);
+			var zone_settle:MultiObject = Get("settletable_zone_settle");
+			zone_settle.CleanList();
+			zone_settle.CustomizedFun = _text.colortextSetting;
+			zone_settle.CustomizedData = font2;
+			zone_settle.Create_(settle_amount.length);
 			
 			if ( _betCommand.all_betzone_totoal() == 0) return;
 			
-			dispatcher(new StringObject("sound_get_point","sound" ) );
+			dispatcher(new StringObject("sound_get_point", "sound" ) );
+			
 			//小牌結果
 			//var historystr_model:Array = _model.getValue("result_str_list");
 			//var add_parse:String = historystr_model.join("、");

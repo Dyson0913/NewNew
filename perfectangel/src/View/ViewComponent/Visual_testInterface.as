@@ -142,11 +142,11 @@ package View.ViewComponent
 			//
 			//_settle.init();	
 			//
-			//_btn.init();
+			_btn.init();
 			
 			_HistoryRecoder.init();
 			_gameinfo.init();
-			//_settlePanel.init();
+			_settlePanel.init();
 			_paytable.init();
 			//
 			_timer.init();			
@@ -184,8 +184,6 @@ package View.ViewComponent
 			
 			_model.putValue(modelName.GAMES_STATE,gameState.START_BET);			
 			dispatcher(new ModelEvent("update_state"));
-			
-			//dispatcher(new StringObject("WSBWTwoPair", "winstr_hint"));
 		}	
 		
 		[MessageHandler(type = "View.Viewutil.TestEvent", selector = "2")]
@@ -209,8 +207,6 @@ package View.ViewComponent
 			
 			_model.putValue(modelName.EXTRA_POKER, ["3d"]);
 			dispatcher(new Intobject(modelName.EXTRA_POKER, "Extra_poker"));
-			//================================================settle info
-			//_settle.init();
 			
 			//================================================ simu deal
 			var testpok:Array = ["Player", "Banker", "Player", "Banker", "Player" , "Banker", "Player" , "Banker", "Player", "Banker"];

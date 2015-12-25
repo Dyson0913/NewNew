@@ -109,19 +109,19 @@ package View.ViewComponent
 			var ppoker:MultiObject = Get(modelName.PLAYER_POKER);
 			ppoker.CleanList();
 			ppoker.CustomizedFun = myscale;		
-			ppoker.Create_by_list(5, [just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
+			ppoker.Create_(5);
 			Tweener.pauseTweens(ppoker.container);
 			ppoker.container.alpha = 0;			
 			
 			var bpoker:MultiObject = Get(modelName.BANKER_POKER);
 			bpoker.CleanList();
 			bpoker.CustomizedFun = myscale;
-			bpoker.Create_by_list(5, [just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
+			bpoker.Create_(5);
 			Tweener.pauseTweens(bpoker.container);
 			bpoker.container.alpha = 0;
 			
 			Get("mipoker").CleanList();		
-			Get("mipoker").Create_by_list(1, [Mipoker_zone], 0 , 0, 1, 130, 0, "Bet_");			
+			Get("mipoker").(1);			
 			Get("mipoker").container.alpha = 0;
 			
 			_model.putValue("playerNew", false);

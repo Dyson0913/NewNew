@@ -226,6 +226,27 @@ package Command
 			return arr;
 		}
 		
+		public function bet_zone_amount():Array
+		{
+			var zone:Array = _model.getValue(modelName.AVALIBLE_ZONE_IDX);
+			var mylist:Array = [];
+			for ( var i:int = 0; i < zone.length; i++)
+			{
+				mylist.push(0);
+			}
+			
+			var total:int = 0;
+			for (  i = 0; i < zone.length; i++)
+			{				
+				var map:int = _opration.getMappingValue("idx_to_result_idx", zone[i]);
+				var amount:int = get_total_bet(zone[i]);
+				mylist.splice(map, 1, amount);
+				total += amount;
+			}
+			mylist.push(total);
+			return mylist;
+		}
+		
 		public function get_my_betlist():Array
 		{		
 			return _Bet_info.getValue("self");		
