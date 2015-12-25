@@ -28,20 +28,6 @@ package Res
 		public static const bothNone:String = "both_None";
 		
 		
-		public static const rebet_btn:String = "btn_rebet";
-		public static const betcancel_btn:String = "btn_betcancel";
-		public static const paytable_btn:String = "btn_paytable";
-		public static const ruletable:String = "rule_table";
-		
-		//
-		public static const state_angel:String = "angel_state"
-		public static const state_evil:String = "evil_state"
-		
-		
-
-		
-		
-		
 		public function ResName() 
 		{
 			

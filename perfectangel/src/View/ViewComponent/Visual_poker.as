@@ -43,6 +43,7 @@ package View.ViewComponent
 		{			
 			var playerCon:MultiObject = create(modelName.PLAYER_POKER, [just_turnpoker]);
 			playerCon.CustomizedFun = myscale;
+			playerCon.CustomizedData =  [];
 			playerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			playerCon.Post_CustomizedData = [5, 140, 0];
 			playerCon.Create_(5);
@@ -52,6 +53,7 @@ package View.ViewComponent
 			//
 			var bankerCon:MultiObject =  create(modelName.BANKER_POKER, [just_turnpoker]);
 			bankerCon.CustomizedFun = myscale;
+			bankerCon.CustomizedData =  [];			
 			bankerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			bankerCon.Post_CustomizedData = [5, 140, 0];
 			bankerCon.Create_(5);
@@ -120,9 +122,10 @@ package View.ViewComponent
 			Tweener.pauseTweens(bpoker.container);
 			bpoker.container.alpha = 0;
 			
-			Get("mipoker").CleanList();		
-			Get("mipoker").(1);			
-			Get("mipoker").container.alpha = 0;
+			var mipoker:MultiObject = Get("mipoker")
+			mipoker.CleanList();		
+			mipoker.Create_(1);
+			mipoker.container.alpha = 0;
 			
 			_model.putValue("playerNew", false);
 			_model.putValue("bankerNew", false);

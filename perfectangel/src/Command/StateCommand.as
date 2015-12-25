@@ -27,11 +27,7 @@ package Command
 		public function state_update():void
 		{
 			var state:int = _model.getValue(modelName.GAMES_STATE);			
-			if ( state  == gameState.NEW_ROUND)
-			{				
-				dispatcher(new ModelEvent("clearn"));
-				dispatcher(new ModelEvent("new_round"));
-			}
+			if ( state  == gameState.NEW_ROUND) dispatcher(new ModelEvent("new_round"));			
 			else if ( state == gameState.START_BET) dispatcher(new ModelEvent("start_bet"));
 			else if ( state == gameState.END_BET) dispatcher(new ModelEvent("stop_bet"));			
 			else if ( state == gameState.START_OPEN) dispatcher(new ModelEvent("open_card"));

@@ -36,9 +36,6 @@ package View.ViewComponent
 		public var _betCommand:BetCommand;
 		
 		[Inject]
-		public var _path:Path_Generator;
-		
-		[Inject]
 		public var _MsgModel:MsgQueue;		
 		
 		[Inject]
@@ -134,35 +131,26 @@ package View.ViewComponent
 		{
 			if ( _model.getValue("test_init")) return;
 			changeBG(ResName.Bet_Scene);
-						
-			//_progressbar.init();
-			//
-
-			//_settle_panel.init();
-			//
-			//_settle.init();	
-			//
-			_btn.init();
 			
+			_btn.init();			
 			_HistoryRecoder.init();
 			_gameinfo.init();
 			_settlePanel.init();
 			_paytable.init();
-			//
+			
 			_timer.init();			
 		   _hint.init();
 		   
 			_poker.init();
 			_betzone.init();
 			_coin_stack.init();
-			//
-			//
-			//_settle.init();
+			
+			_settle.init();
 			_sencer.init();	
 			_coin.init();
 			_btn.init();			
 			
-			//_progressbar.debug();
+			
 			_model.putValue("test_init",true);
 		}
 		
@@ -246,26 +234,9 @@ package View.ViewComponent
 		{
 			_model.putValue(modelName.PLAYER_POKER, ["9d","4c","5s","7s","9s"]);				
 			_model.putValue(modelName.BANKER_POKER, ["1s","2d","3s","5c","6h"]);	
-			changeBG(ResName.Bet_Scene);
-			//_settle.init();			
 			
-			//摸擬押注
-			//_betzone.init();			
-			//_coin_stack.init();
-			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 0);
-			//_betCommand.bet_local(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false), 1);
-			//_betinfo.init();
-			
-			//_settlePanel.init();
-			//_settlePanel.debug();
-			//utilFun.Log("ok");		
-			//
-				
-			
-			//var fakePacket:Object = {"result_list": [{"bet_type": "BetPAAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 100}, {"bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0}, {"bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 200}, {"bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0}], "game_state": "EndRoundState", "game_result_id": "288778", "timestamp": 1443023641.580271, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 318, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "4f17fb12620b11e5bcebf23c9189e2a9"}
-			//var fakePacket:Object = { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 2, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSPANormalWin", "bet_amount": 0 }, { "bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 11, "win_state": "WSWin", "bet_amount": 0 }, { "bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 } ], "game_state": "EndRoundState", "game_result_id": "289273", "timestamp": 1443063940.564476, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 785, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "2328f8ae626911e5bcebf23c9189e2a9" }									
-			//_MsgModel.push(fakePacket);			
-			//
+			var fakePacket:Object = { "result_list": [ { "bet_type": "BetPAAngel", "settle_amount": 0, "odds": 2, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAEvil", "settle_amount": 0, "odds": 0, "win_state": "WSPANormalWin", "bet_amount": 0 }, { "bet_type": "BetPABigAngel", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPABigEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 }, { "bet_type": "BetPAPerfectAngel", "settle_amount": 0, "odds": 11, "win_state": "WSWin", "bet_amount": 0 }, { "bet_type": "BetPAUnbeatenEvil", "settle_amount": 0, "odds": 0, "win_state": "WSLost", "bet_amount": 0 } ], "game_state": "EndRoundState", "game_result_id": "289273", "timestamp": 1443063940.564476, "remain_time": 9, "game_type": "PerfectAngel", "game_round": 785, "game_id": "PerfectAngel-1", "message_type": "MsgBPEndRound", "id": "2328f8ae626911e5bcebf23c9189e2a9" }									
+			_MsgModel.push(fakePacket);
 		}
 		
 		//{"winner": "BetPAAngel", "point": 1}
@@ -300,7 +271,7 @@ package View.ViewComponent
 				view_init();
 				_model.putValue(modelName.GAMES_STATE,gameState.NEW_ROUND);			
 				dispatcher(new ModelEvent("update_state"));
-			
+				
 				dispatcher(new TestEvent(idx.toString()));
 				return true;
 			}

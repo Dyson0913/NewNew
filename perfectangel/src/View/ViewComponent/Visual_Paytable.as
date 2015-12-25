@@ -29,13 +29,13 @@ package View.ViewComponent
 		public function init():void
 		{			
 			//賠率提示
-			var paytable:MultiObject = create("paytable", [paytablemain]);
+			var paytable:MultiObject = create(paytablemain, [paytablemain]);
 			paytable.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [0, 0, 2, 1]);			
 			paytable.container.x = 251.8;
 			paytable.container.y =  126.35;
 			paytable.Create_(1);
 			
-			var paytable_baridx:MultiObject = create("paytable_baridx",  [paytable_baridx]);
+			var paytable_baridx:MultiObject = create(paytable_baridx,  [paytable_baridx]);
 			paytable_baridx.container.x = paytable.container.x;
 			paytable_baridx.container.y = paytable.container.y;
 			paytable_baridx.Create_(1);				
@@ -45,21 +45,15 @@ package View.ViewComponent
 		
 		override public function appear():void
 		{			
-			GetSingleItem("paytable_baridx").gotoAndStop(1);
-		}		
+			GetSingleItem(paytable_baridx).gotoAndStop(1);
+			Tweener.pauseTweens( GetSingleItem(paytable_baridx) );
+		}	
 		
-		public function win_frame_hint(wintype:String):void
+		[MessageHandler(type = "Model.valueObject.StringObject",selector="winstr_hint")]
+		public function win_frame_hint():void
 		{
-			if ( wintype == "") return ;
-			
-			var frame:int = 1;
-			if (wintype ==  "WSWin" || wintype == "WSPANormalWin" || wintype == "WSPAExSmallWin") frame = 6
-			else if ( wintype == "WSPAExSmallWin" ||  wintype == "WSPAExBigAngelWin" || wintype == "WSPAExBigEvilWin") frame = 5
-			else if ( wintype == "WSPAExPerfectAngelWin" || wintype == "WSPAExUnbeatenEvilWin")	frame = 4
-			else if ( wintype == "WSPAFourOfAKindWin" || wintype == "WSPAExFourOfAKindWin") frame = 2
-			else if ( wintype == "WSPAFiveWawaWin" || wintype == "WSPAExFiveWawaWin") frame = 3;
-			
-			GetSingleItem("paytable_baridx").gotoAndStop(frame);			
+			var wintype:int = _model.getValue("winstr");
+			_regular.Twinkle_by_JumpFrame(GetSingleItem(paytable_baridx), 25, 60, 1, wintype);
 		}
 		
 		

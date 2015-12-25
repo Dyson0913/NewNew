@@ -231,6 +231,19 @@ package View.Viewutil
 			}
 		}
 		
+		public function FlushChild(childname:String):void
+		{
+			var ItemNum:int = ItemList.length;
+			for (var i:int = 0 ; i < ItemNum; i++)
+			{			
+				if (CustomizedFun != null)
+				{
+					CustomizedFun(ItemList[i][childname], i,CustomizedData);
+				}
+			}
+		}
+		
+		
 		public function exclusive(idx:int,gotoFrame:int):void
 		{
 			for (var i:int = 0; i < _ItemList.length; i++)

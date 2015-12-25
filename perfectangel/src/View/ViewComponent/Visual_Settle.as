@@ -14,6 +14,7 @@ package View.ViewComponent
 	import View.Viewutil.MultiObject;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
+	import View.GameView.gameState;
 	
 	/**
 	 * hintmsg present way
@@ -28,10 +29,10 @@ package View.ViewComponent
 		public var _coin_stack:Visual_Coin_stack;
 		
 		[Inject]
-		public var _betCommand:BetCommand;
+		public var _betCommand:BetCommand;		
 		
-		[Inject]
-		public var _paytable:Visual_Paytable;
+		public const state_angel:String = "angel_state"
+		public const state_evil:String = "evil_state"
 		
 		public function Visual_Settle() 
 		{
@@ -40,7 +41,7 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var zone:MultiObject = create("zone",  [ResName.state_evil, ResName.state_angel]);	
+			var zone:MultiObject = create("zone",  [state_evil, state_angel]);	
 			zone.container.x = 1391;
 			zone.container.y = 486;			
 			zone.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
@@ -48,204 +49,59 @@ package View.ViewComponent
 			zone.Create_(2);
 			
 			put_to_lsit(zone);
+			
+			state_parse([gameState.END_ROUND]);
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
-		public function Clean():void
-		{		
-			setFrame("zone", 1);			
+		override public function disappear():void
+		{			
+			setFrame("zone", 1);
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
-		public function round_result_data_process():void
+		[MessageHandler(type="Model.valueObject.Intobject",selector="settle_step")]
+		public function settles(v:Intobject):void
+		{			
+			dispatcher(new Intobject(1, "show_who_win"));
+			
+			_regular.Call(this, { onComplete:this.showAni}, 1, 0, 1, "linear");	
+		}
+		
+		public function showAni():void
 		{
-			utilFun.Log("round_result_data_process");
-			var result_list:Array = _model.getValue(modelName.ROUND_RESULT);
-			var num:int = result_list.length;
-			
-			var name_to_idx:DI = _model.getValue("Bet_name_to_idx");
-			var idx_to_name:DI = _model.getValue("Bet_idx_to_name");
-			var idx_to_result_idx:DI = _model.getValue("idx_to_result_idx");			
-			var settle_amount:Array = [0, 0, 0, 0, 0, 0, 0];
-			var zonebet_amount:Array = [0, 0, 0, 0, 0, 0, 0];
-			var total:int = 0;
-			var winst:String = "";
-			
-			var clean:Array = [];
-			var result_str:Array = [];
-			var resultframe:int = 0;
-			var angelFrame:int = 1;
-			var evillFrame:int = 1;
-			var angel_winstate:int = 0;
-			var evel_winstate:int = 0;
-			var evil_winstr:String = "";
-			var ang_winstr:String = "";
-			var angPoint:int = pokerUtil.ca_point(_model.getValue(modelName.PLAYER_POKER));
-			var eviPoint:int = pokerUtil.ca_point(_model.getValue(modelName.BANKER_POKER));
-			for ( var i:int = 0; i < num; i++)
+			var settle_win:Array = _model.getValue("settle_win");
+			var idx:int = settle_win.indexOf(1);
+			if ( idx != -1) 	
 			{
-				var resultob:Object = result_list[i];		
-				
-				//coin 清除區
-				if ( resultob.win_state == "WSLost")
-				{
-					if ( resultob.bet_type == "BetPAAngel" )
-					{
-						
-						angelFrame = 2;
-					}
-					
-					if ( resultob.bet_type == "BetPAEvil" )
-					{						
-						evillFrame = 2;
-					}
-					
-					clean.push (name_to_idx.getValue(resultob.bet_type));
-				}
-				else
-				{
-					
-					if ( resultob.bet_type == "BetPAAngel" ) 
-					{
-						//point
-						angelFrame = 4;
-						angel_winstate = 1;						
-						ang_winstr = "天使" + angPoint.toString() +"點";
-						winst = resultob.win_state;						
-					}
-					else if ( resultob.bet_type == "BetPAEvil") 
-					{
-						//point
-						evillFrame = 4;
-						evel_winstate = 1;						
-						winst = resultob.win_state;
-							
-						evil_winstr = "惡魔" +  eviPoint.toString() +"點";
-					}
-					else if ( resultob.bet_type == "BetPABigEvil")
-					{
-						//point
-						evillFrame = 5;
-						evil_winstr = "大惡魔" + eviPoint.toString() +"點";
-					}
-					else if ( resultob.bet_type == "BetPABigAngel")
-					{
-						//point
-						angelFrame = 5;
-						ang_winstr = "大天使" + angPoint.toString() +"點";
-					}
-					else if ( resultob.bet_type == "BetPAUnbeatenEvil")
-					{
-						evillFrame = 6;
-						evil_winstr = "闇黑惡魔";
-					}
-					else if ( resultob.bet_type == "BetPAPerfectAngel")
-					{
-						angelFrame = 6;
-						ang_winstr = "完美天使";
-						
-					}
-					
-				}
-				
-				
-				settle_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type) )] =  resultob.settle_amount;
-				zonebet_amount[ idx_to_result_idx.getValue( name_to_idx.getValue(resultob.bet_type)) ]  = resultob.bet_amount;
-				total += resultob.settle_amount;
+				_regular.Call(this, { onComplete:this.angel_show, onCompleteParams:[idx] }, 1, 2, 1, "linear");
+				play_sound("sound_angel_win");
 			}
-			
-			utilFun.Log("evillFrame = "+ evillFrame +" angelFrame "+angelFrame);
-			utilFun.Log("angPoint = "+ angPoint +" eviPoint "+eviPoint);
-			utilFun.Log("evel_winstate = "+ evel_winstate +" angel_winstate "+angel_winstate);
-			
-			
-			_paytable.win_frame_hint(winst);
-			
-			GetSingleItem("zone", 0).gotoAndStop(evillFrame);
-			if ( evillFrame == 2 && eviPoint != -1) 
-			{
-				GetSingleItem("zone", 0).gotoAndStop(4);
-				GetSingleItem("zone", 0)["_point"].gotoAndStop(eviPoint);
-			}
-			if ( evillFrame == 6) 
-			{
-				GetSingleItem("zone", 0)["_wing"].rotationY = -180;					
-				
-			}
-			if (evillFrame == 5)
-			{
-				GetSingleItem("zone", 0)["_point"].gotoAndStop(eviPoint);				
-			}
-			if ( evillFrame == 4 )
-			{
-				GetSingleItem("zone", 0)["_point"].gotoAndStop(eviPoint);
-				
-			}
-			
-			
-			GetSingleItem("zone", 1).gotoAndStop(angelFrame);	
-			if ( angelFrame == 2 && angPoint != -1)
-			{
-				GetSingleItem("zone", 1).gotoAndStop(4);				
-				GetSingleItem("zone", 1)["_point"].gotoAndStop(angPoint);
-			}
-			if ( angelFrame == 6) 
-			{
-				GetSingleItem("zone", 1)["_wing"].rotationY = -180;			
-			}
-				if ( angelFrame == 5)
-			{
-				GetSingleItem("zone", 1)["_point"].gotoAndStop(angPoint);				
-			}
-			if ( angelFrame == 4)
-			{
-				GetSingleItem("zone", 1)["_point"].gotoAndStop(angPoint);
-				
-			}
-		
-			if ( evel_winstate == 1 ) 
-			{				
-				result_str.push(evil_winstr+ "贏");
-			}
-			if ( angel_winstate == 1 )
-			{
-				result_str.push(ang_winstr+"贏");
-			}
-			//特殊條件
-			if (angelFrame == 2 && evillFrame == 2)
-			{
-				result_str.push("天使，惡魔無賴");
-			}
-			
-			//押注及得分
-			_model.putValue("result_settle_amount",settle_amount);
-			_model.putValue("result_zonebet_amount",zonebet_amount);
-			_model.putValue("result_total", total);
-			_model.putValue("result_str_list", result_str);
-			
-			_regular.Call(this, { onComplete:this.showAni,onCompleteParams:[evel_winstate,angel_winstate] }, 1, 0, 1, "linear");
-			
-		}
-		
-		public function showAni(evel_winstate:int,angel_winstate:int):void
-		{
-			if( evel_winstate ==1)
-			{
-				_regular.Call(this, { onComplete:this.angel_show,onCompleteParams:[0] }, 1, 2, 1, "linear");				
-				dispatcher(new StringObject("sound_angel_win","sound" ) );
-			}			
-			else if ( angel_winstate == 1)
-			{
-				_regular.Call(this, { onComplete:this.angel_show,onCompleteParams:[1] }, 1, 2, 1, "linear");				
-				dispatcher(new StringObject("sound_angel_win","sound" ) );
-			}
-			else if ( angel_winstate == 0 && evel_winstate== 0)
-			{
-				dispatcher(new StringObject("sound_None_win","sound" ) );
-				
-			}
+			else play_sound("sound_None_win");
 			
 			_regular.Call(this, { onComplete:this.show_ok }, 1, 2, 1, "linear");
+		}
+		
+		[MessageHandler(type = "Model.valueObject.Intobject", selector = "show_who_win")]
+		public function show_who_win():void
+		{
+			var angPoint:int = pokerUtil.ca_point(_model.getValue(modelName.PLAYER_POKER));
+			var eviPoint:int = pokerUtil.ca_point(_model.getValue(modelName.BANKER_POKER));
+			
+			var zone_frame:Array = _model.getValue("settle_frame");
+			
+			var zone:MultiObject = Get("zone");
+			zone.CustomizedFun = _regular.FrameSetting;
+			zone.CustomizedData = zone_frame;			
+			zone.FlushObject();
+			
+			zone.CustomizedFun = frame_filter;
+			zone.CustomizedData = [eviPoint, angPoint];			
+			zone.FlushChild("_point");
+			
+		}
+		
+		public function frame_filter(mc:MovieClip, idx:int, data:Array):void
+		{
+			if ( mc.currentFrame == 4 || mc.currentFrame == 5) mc.gotoAndStop(data[idx]);
 		}
 		
 		private function angel_show(type:int):void
@@ -255,11 +111,10 @@ package View.ViewComponent
 		
 		public function show_ok():void
 		{
-			utilFun.Log("show_ok");
 			dispatcher(new ModelEvent("show_settle_table"));
 		}
 		
-		
+		//--------------------------------coin ani TODO
 		
 		private function start_settle():void
 		{
