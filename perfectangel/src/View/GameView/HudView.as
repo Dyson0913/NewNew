@@ -34,7 +34,12 @@ package View.GameView
 			back_btn.mousedown = LeaveGame;
 			back_btn.container.x = 1840;
 			
-	
+			var hint:MultiObject = prepare("leavehint",new MultiObject() , this);
+			hint.Create_by_list(1, ["LeaveHint"], 0, 0, 1, 0, 0, "a");
+			hint.container.visible = false;			
+			hint.container.x = 520;
+			hint.container.y = 390;
+			
 			// 1ob ,inside ob
 			//var back_game:SingleObject  = prepare("back_game", new SingleObject());
 			//back_game.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);

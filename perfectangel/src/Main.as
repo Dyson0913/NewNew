@@ -55,7 +55,6 @@ package
 				Debug.monitor(stage);
 				utilFun.Log("welcome to perfect alcon");
 			}
-			
 			//no thing ,ok
 			_context  = ActionScriptContextBuilder.build(appConfig);
 			

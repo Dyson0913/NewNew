@@ -12,17 +12,19 @@ package View.ViewComponent
 	import View.Viewutil.*;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
-	import View.GameView.gameState;
 	
 	/**
 	 * betzone present way
-	 * @author Dyson0913
+	 * @author ...
 	 */
 	public class Visual_betZone_Sence  extends VisualHandler
 	{		
 		
 		[Inject]
 		public var _betCommand:BetCommand;	
+		
+		[Inject]
+		public var _betTimer:Visual_betTimer;
 		
 		public function Visual_betZone_Sence() 
 		{
@@ -31,31 +33,87 @@ package View.ViewComponent
 		
 		public function init():void
 		{			
-			var zone_xy:Array = _model.getValue(modelName.AVALIBLE_ZONE_XY);
-			var avaliblezone_s:Array = _model.getValue(modelName.AVALIBLE_ZONE_SENCE);			
+			var zone_xy:Array = _model.getValue(modelName.AVALIBLE_ZONE_XY);			
 			
-			var playerzone_s:MultiObject = create("betzone_s", avaliblezone_s);
+			//感應區
+			var avaliblezone_s:Array = _model.getValue(modelName.AVALIBLE_ZONE_SENCE);
+			var playerzone_s:MultiObject = prepare("betzone_s", new MultiObject() , GetSingleItem("_view").parent.parent);
 			playerzone_s.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,1,2,1]);
 			playerzone_s.container.x = 1081;
 			playerzone_s.container.y = 657;
 			playerzone_s.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			playerzone_s.Post_CustomizedData = zone_xy;			
-			playerzone_s.Create_(avaliblezone_s.length);
+			playerzone_s.Post_CustomizedData = zone_xy;
 			
-			state_parse([gameState.START_BET]);
+			playerzone_s.Create_by_list(avaliblezone_s.length, avaliblezone_s, 0, 0, avaliblezone_s.length, 0, 0, "bet_sence");
+			
 		}		
 		
-		override public function appear():void
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "start_bet")]
+		public function start_bet():void
 		{
-			var betzone:MultiObject = Get("betzone_s");			
+			var betzone:MultiObject = Get("betzone_s");
 			betzone.mousedown = bet_sencer;
-			betzone.mouseup = bet_sencer;
-			betzone.rollout = bet_sencer;
-			betzone.rollover = bet_sencer;	
+			betzone.mouseup = bet_sencer_up;	
+			betzone.rollout = bet_sencer_rollout;	
+			betzone.rollover = bet_sencer_rollover;	
 		}
 		
-		override public function disappear():void
+		public function bet_sencer_rollout(e:Event,idx:int):Boolean
+		{				
+			var betzone:MultiObject = Get("betzone");			
+			var mc:MovieClip = betzone.ItemList[idx];
+			mc.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT, true, false));			
+			
+			return true;
+		}
+		
+		public function bet_sencer_rollover(e:Event,idx:int):Boolean
 		{			
+			var betzone:MultiObject = Get("betzone");			
+			var mc:MovieClip = betzone.ItemList[idx];
+			mc.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER, true, false));			
+			
+			return true;
+		}
+		
+		public function bet_sencer(e:Event,idx:int):Boolean
+		{			
+			//玩家手動第一次下注,取消上一局的betinfo
+			//utilFun.Log("bet_sencer = "+_betCommand.need_rebet());
+			if ( _betCommand.need_rebet() )
+			{
+				_betCommand.clean_hisotry_bet();
+			}
+			
+			if ( CONFIG::debug ) 
+			{
+				_betCommand.bet_local(e, idx);
+			}		
+			else
+			{				
+				_betCommand.betTypeMain(e, idx);
+			}
+			
+			var betzone:MultiObject = Get("betzone");			
+			var mc:MovieClip = betzone.ItemList[idx];
+			mc.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false));			
+			
+			return true;
+		}
+		
+		public function bet_sencer_up(e:Event, idx:int):Boolean
+		{			
+			var betzone:MultiObject = Get("betzone");			
+			var mc:MovieClip = betzone.ItemList[idx];
+			mc.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, true, false));			
+			
+			return true;
+		}	
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
+		public function timer_hide():void
+		{
 			var betzone:MultiObject = Get("betzone_s");
 			betzone.mousedown = null;
 			betzone.mouseup = null;
@@ -63,34 +121,6 @@ package View.ViewComponent
 			betzone.rollover = null;
 		}
 		
-		public function bet_sencer(e:Event,idx:int):Boolean
-		{			
-			//玩家手動第一次下注,取消上一局的betinfo			
-			if ( e.type == MouseEvent.MOUSE_DOWN)
-			{
-				//玩家手動第一次下注,取消上一局的betinfo
-				utilFun.Log("bet_sencer = "+_betCommand.need_rebet());
-				if ( _betCommand.need_rebet() )
-				{
-					_betCommand.clean_hisotry_bet();
-				}
-				
-				if ( CONFIG::debug ) 
-				{				
-					_betCommand.betTypeMain(e, idx);
-				}		
-				else
-				{				
-					_betCommand.betTypeMain(e, idx);
-				}
-			}
-			
-			var betzone:MultiObject = Get("betzone");
-			var mc:MovieClip = betzone.ItemList[idx];
-			mc.dispatchEvent(new MouseEvent(e.type, true, false));			
-			
-			return true;			
-		}
 		
 	}
 

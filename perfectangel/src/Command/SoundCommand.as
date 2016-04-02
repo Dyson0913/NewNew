@@ -74,11 +74,25 @@ package Command
 			if ( CMD[0] == "MUTE")
 			{
 				_mute = true;
+				dispatcher(new ModelEvent("MUTE"));
 			}
 			
 			if ( CMD[0] == "RESUME")
 			{
 				_mute = false;
+				dispatcher(new ModelEvent("RESUME"));
+			}
+			
+			if ( CMD[0] == "UPDATE_CREDIT")
+			{
+				var  credit:int = CMD[1]	;
+				_model.putValue(modelName.CREDIT, credit);
+			}
+			
+			if ( CMD[0] == "LOBBY_DISCONNET")
+			{
+				
+				_model.putValue("lobby_disconnect", true);				
 			}
 		}
 		
@@ -105,12 +119,6 @@ package Command
 			SoundAS.playFx(sound.Value);
 		}
 		
-		[MessageHandler(type="Model.valueObject.StringObject",selector="loop_sound")]
-		public function loop_sound(sound:StringObject):void
-		{
-			if ( _mute == true ) return;
-			SoundAS.playLoop(sound.Value);
-		}
 	}
 
 }

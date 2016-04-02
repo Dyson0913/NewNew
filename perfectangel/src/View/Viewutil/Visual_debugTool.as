@@ -79,7 +79,7 @@ package View.Viewutil
 			debug_list.CustomizedData = font;	
 			debug_list.Posi_CustzmiedFun = _regular.Posi_Colum_first_Setting;	
 			debug_list.Post_CustomizedData = [name.length,50,25];				
-			debug_list.Create_(name.length);
+			debug_list.Create_(name.length,"debugItem");
 			debug_list.container.x = 372;
 			debug_list.container.y = 90;
 			
@@ -121,7 +121,7 @@ package View.Viewutil
 			game_info_data.CustomizedData = font;	
 			game_info_data.Posi_CustzmiedFun = _regular.Posi_Colum_first_Setting;	
 			game_info_data.Post_CustomizedData = [10,50,50];				
-			game_info_data.Create_( item.ItemList.length);
+			game_info_data.Create_( item.ItemList.length,"debugItem");
 			game_info_data.container.x = debug_list.container.x + 100;			
 			
 			s_tool.SetControlMc(item.container);

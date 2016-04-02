@@ -1,11 +1,14 @@
 package View.ViewComponent 
 {
+	import flash.display.MovieClip;
+	import flash.events.Event;
 	import flash.display.Sprite;
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
 	import util.*;
 	import Command.*;
+	import View.Viewutil.*;
 	
 	import View.Viewutil.MultiObject;
 	import Res.ResName;
@@ -52,34 +55,68 @@ package View.ViewComponent
 			_model.putValue("stream_ID", new DI());
 			_model.putValue("stream_name", new DI());			
 			_model.putValue("size", new DI());
+			
+			var btn_change:MultiObject = create("btn_change", ["btn_stream"]);
+			btn_change.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1,2,3,1]);
+			btn_change.mousedown = null;
+			btn_change.mouseup = changeSteam;
+			btn_change.rollout = null;
+			btn_change.rollover = null;
+			btn_change.container.x = 730;
+			btn_change.container.y = 175;
+			btn_change.CustomizedFun = changeBtnSetting;
+			btn_change.CustomizedData = [];
+			btn_change.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			btn_change.Post_CustomizedData = [[0, 0], [390, 0],[440,0]];
+			btn_change.Create_(3,"btn_change");		
 		}
 		
+		private function changeBtnSetting(mc:*, idx:int, data:Array):void
+		{
+			mc.gotoAndStop(idx+1);
+		}
+		
+		private function changeSteam(e:Event, idx:int):Boolean
+		{
+			var ani_dealer:MultiObject = Get("dealer");
+			if ( idx == 0) 
+			{
+				ani_dealer.container.visible = true;
+				return false;
+			}
+			else ani_dealer.container.visible = false;
+			
+			disconnect();
+			hide();
+			dispatcher(new StringObject("live" + idx, "stream_connect"));
+			return true;
+		}
 		
 		[MessageHandler(type="Model.valueObject.ArrayObject",selector="urlLoader_complete")]
 		public function config_Setting(token:ArrayObject):void
 		{
-			if ( token.Value[0] == _miss_id[0])
-			{
+			//if ( token.Value[0] == _miss_id[0])
+			//{
 				var object:Object =  token.Value[1];
 				var config:Array = object.development.stream_link;
 				
 				for ( var i:int = 0; i < config.length ; i++)
 				{
-					var idx:int = _model.getValue("stream_Serial");					
+					var idx:int = _model.getValue("stream_Serial");				
 					_model.getValue("stream_url").putValue(idx, config[i].strem_url);
-					_model.getValue("stream_ID").putValue(idx, config[i].channel_ID);
+					_model.getValue("stream_ID").putValue(idx,config[i].channel_ID);
 					//for mapping					
-					_model.getValue("stream_name").putValue(config[i].stream_name,idx);
-					_model.getValue("stream_container").putValue(idx,new Sprite());
+					_model.getValue("stream_name").putValue(config[i].stream_name, idx);				
+					_model.getValue("stream_container").putValue(idx, new stream_mask());
 					
 					var ob:Object = { "width":config[i].size.itemwidth, "height":config[i].size.itemheight };					
 					_model.getValue("size").putValue(idx, ob);
 					_model.putValue("stream_Serial", idx +1);
 				}
-			}
+			//}
 			
 			//nexi mission
-			_miss_id.shift();			
+			//_miss_id.shift();			
 		}
 		
 		
@@ -87,20 +124,19 @@ package View.ViewComponent
 		public function display(streamname:StringObject):void
 		{
 			var idx:int = _model.getValue("stream_name").getValue(streamname.Value);			
-			var link:String = _model.getValue("stream_url").getValue(idx.toString());			
+			var link:String = _model.getValue("stream_url").getValue(idx.toString());
+			var size:Object = _model.getValue("size").getValue(idx);
 			_model.putValue("current_Serial", idx);			
 			
 			vid = new Video(); 
-            vid.width = 320;
-			vid.height = 460;
+            vid.width = size.itemwidth;
+			vid.height = size.itemheight;			
             nc = new NetConnection();
 			nc.client = {onBWDone:onNetConnectionBWDone}; 
 			
             nc.addEventListener(NetStatusEvent.NET_STATUS, onConnectionStatus);
             nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler);
-            nc.connect(link);          
-			
-			
+            nc.connect("rtmp://"+link);          
 			
 		}
 		
@@ -108,19 +144,35 @@ package View.ViewComponent
 		public function disconnect():void
 		{				
 			netStreamObj.close();			
+			vid.clear();
 			clearInterval(intervalID);
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "stream_play")]
+		//[MessageHandler(type = "Model.ModelEvent", selector = "stream_play")]
+		[MessageHandler(type = "Model.ModelEvent", selector = "RESUME")]
 		public function play():void
 		{						
 			netStreamObj.resume();			
+			var idx:int = _model.getValue("current_Serial");
+			var sp:Sprite = _model.getValue("stream_container").getValue(idx.toString());
+			sp.visible = true;
+			utilFun.Log("stream resume pa");
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "stream_pause")]
 		public function pause():void
 		{				
 			netStreamObj.pause();			
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "MUTE")]
+		public function hide():void
+		{
+			pause();
+			var idx:int = _model.getValue("current_Serial");
+			var sp:Sprite = _model.getValue("stream_container").getValue(idx.toString());
+			sp.visible = false;
+			utilFun.Log("stream mute pa");
 		}
 		
 		public function onNetConnectionBWDone():void{}
@@ -143,14 +195,28 @@ package View.ViewComponent
 				var ID:String =  _model.getValue("stream_ID").getValue(idx.toString());
 				utilFun.Log("ID = " + ID);
 				
-                netStreamObj.play(ID);
+                netStreamObj.play(ID);				
                 vid.attachNetStream(netStreamObj);
 				
-				var sp:Sprite = _model.getValue("stream_container").getValue(idx.toString());
-				sp.addChild(vid);
-				add(sp);				
+				var size:Object = _model.getValue("size").getValue(idx);
+				var sp:stream_mask = _model.getValue("stream_container").getValue(idx.toString());
+				sp.x = 705;
+				sp.y = 168;
+			
+				vid.width =  size.width;
+                vid.height = size.height;
+				
+				sp.addChild(vid);				
+				add(sp);
+				sp.visible = true;
+				
+				GetSingleItem("_view").parent.parent.setChildIndex(sp, 1);
                 intervalID = setInterval(playback, 1000);
 				
+				//_tool.SetControlMc(sp);
+				//_tool.x = 100;
+				//_tool.y = 500;
+				//add(_tool);
             }
 			else
 			{
@@ -160,7 +226,12 @@ package View.ViewComponent
 		
 		private function playback():void
 		{
-			utilFun.Log((++counter) + " Buffer length: " + netStreamObj.bufferLength);
+			//utilFun.Log((++counter) + " Buffer length: " + netStreamObj.bufferLength);
+			
+				var idx:int = _model.getValue("current_Serial");
+			var sp:Sprite = _model.getValue("stream_container").getValue(idx.toString());
+			//GetSingleItem("_view").parent.parent.setChildIndex(sp, 1);
+			//utilFun.Log("sp order = " + GetSingleItem("_view").parent.parent.getChildIndex(sp));
 		}
 
 		public function asyncErrorHandler(event:AsyncErrorEvent):void
@@ -179,6 +250,13 @@ package View.ViewComponent
 
 		public function received_Meta (data:Object):void
 		{
+			utilFun.Log("hello high=" + data.height);
+			utilFun.Log("hello width="+ data.width);
+			
+			utilFun.Log("hello vid width=" + vid.width );
+			utilFun.Log("hello vid high="+ vid.height );
+			
+			//vid.height = size.itemheight;		
 			//var _stageW:int = stage.stageWidth;
 			//var _stageH:int = stage.stageHeight;
 			//var _aspectH:int;
@@ -193,10 +271,10 @@ package View.ViewComponent
 			//_videoH = _videoW * relationship;
 			//_aspectH = (_stageH - _videoH) / 2;
 
-			vid.x = 0;
-			vid.y = 100; //_aspectH;
-			vid.width = 320;  //_videoW;
-			vid.height = 240; //_videoH;
+		//	vid.x = 0;
+		//	vid.y = 100; //_aspectH;
+			//vid.width = 320;  //_videoW;
+			//vid.height = 240; //_videoH;
 		}	
 		
 		

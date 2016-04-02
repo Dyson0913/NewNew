@@ -1,9 +1,6 @@
 package View.GameView
 {	
-	import Command.BetCommand;
-	import Command.DataOperation;
-	import Command.RegularSetting;
-	import Command.SoundCommand;
+	import Command.*;
 	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -11,7 +8,7 @@ package View.GameView
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.ui.Multitouch;
+	import flash.ui.Multitouch;	
 	import Model.ModelEvent;
 	import Model.valueObject.*;	
 	import Res.ResName;
@@ -43,9 +40,6 @@ package View.GameView
 		
 		[Inject]
 		public var _betCommand:BetCommand;
-		
-		[Inject]
-		public var _visual_stream:Visual_stream;
 		
 		[Inject]
 		public var _test:Visual_testInterface;		
@@ -80,7 +74,8 @@ package View.GameView
 			
 			
 			_model.putValue("light_idx", 0);
-			_model.putValue("last_ligt_ball_idx", 0);			
+			_model.putValue("last_ligt_ball_idx", 0);
+			_model.putValue("lobby_disconnect", false);
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));			
 		}
@@ -95,16 +90,21 @@ package View.GameView
 			view.Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "a_");
 			_tool = new AdjustTool();
 			
-			//utilFun.SetTime(connet, 0.1);
-			_test.init();
+			if ( CONFIG::debug ) 
+			{
+				_test.init();
+			}else {
+				utilFun.SetTime(connet, 0.1);
+			}
 			
 			//utilFun.SetTime(stre, 2);
-			//_visual_stream.init();
+			
 			//_loader.init();
 			//
 			//_visual_stream._miss_id.push(_loader.getToken());		
 			//dispatcher(new ArrayObject([_visual_stream._miss_id[0],"stream_setting.txt"], "binary_file_loading"));
 			//
+		
 		}
 		
 		

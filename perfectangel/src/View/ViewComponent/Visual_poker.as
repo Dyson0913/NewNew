@@ -11,7 +11,6 @@ package View.ViewComponent
 	import Res.ResName;
 	import caurina.transitions.Tweener;
 	import Command.*;
-	import View.GameView.gameState;
 	
 	/**
 	 * poker present way
@@ -24,12 +23,8 @@ package View.ViewComponent
 		public const opentable_angel:String = "open_table_angel";
 		public const opentable_evil:String = "open_table_evil";
 		
-		public const just_turnpoker:String = "just_turn_poker";
-		public const Mipoker_zone:String = "Mi_poker_zone";
-		
-		public const Poker:String = "poker";
-		public const poker_back:String = "pokerback";		
-		public const pokermask:String = "poker_mask";
+		public const just_turnpoker:String = "just_turn_poker"
+		public const Mipoker_zone:String = "Mi_poker_zone"
 		
 		//down 3 up2
 		private var newnew_position:Array = [ [140, 80], [280, 80], [420, 80], [210, -130], [350, -130]];
@@ -40,32 +35,33 @@ package View.ViewComponent
 		}
 		
 		public function init():void
-		{			
+		{
+			
+			
 			var playerCon:MultiObject = create(modelName.PLAYER_POKER, [just_turnpoker]);
 			playerCon.CustomizedFun = myscale;
-			playerCon.CustomizedData =  [];
 			playerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			playerCon.Post_CustomizedData = [5, 140, 0];
-			playerCon.Create_(5);
+			playerCon.Create_(5, "playerpoker");
 			playerCon.container.x = 190;
-			playerCon.container.y = 680;
+			playerCon.container.y = 700;
 			playerCon.container.alpha = 0;
+			
 			//
 			var bankerCon:MultiObject =  create(modelName.BANKER_POKER, [just_turnpoker]);
 			bankerCon.CustomizedFun = myscale;
-			bankerCon.CustomizedData =  [];			
 			bankerCon.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			bankerCon.Post_CustomizedData = [5, 140, 0];
-			bankerCon.Create_(5);
+			bankerCon.Create_(5, "bankerpoker");
 			bankerCon.container.x = 1040;
-			bankerCon.container.y = 680;
+			bankerCon.container.y = 700;
 			bankerCon.container.alpha = 0;
 			
 			//桌面物件
 			var table_hint:MultiObject = create("table_hint", [open_tableitem]);
 			table_hint.autoClean = true;
 			table_hint.CleanList();
-			table_hint.Create_(1);
+			table_hint.Create_(1, "table_hint");
 			table_hint.container.x = 450;
 			table_hint.container.y = 590;	
 			table_hint.container.visible = false;
@@ -73,13 +69,13 @@ package View.ViewComponent
 			var side_symble:MultiObject = create("side_symble", [opentable_angel, opentable_evil]);
 			side_symble.CustomizedFun = _regular.Posi_Row_first_Setting;
 			side_symble.CustomizedData = [2, 850, 0];
-			side_symble.Create_(2);
+			side_symble.Create_(2, "side_symble");
 			side_symble.container.x = 454;
 			side_symble.container.y = 950;	
 			side_symble.container.visible = false;
 			
 			var mipoker:MultiObject =  create("mipoker",  [Mipoker_zone]);		
-			mipoker.Create_(1);
+			mipoker.Create_(1, "mipoker");
 			mipoker.container.x = 740;
 			mipoker.container.y = 570;
 			mipoker.container.alpha = 0;
@@ -91,11 +87,43 @@ package View.ViewComponent
 			put_to_lsit(side_symble);
 			
 			//no clean ,half in init ,cant cleanr model
-			state_parse([gameState.END_BET,gameState.START_OPEN,gameState.END_ROUND]);
-		}		
+		}
 		
-		override public function appear():void
+		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
+		public function Clean_poker():void
+		{		
+			var ppoker:MultiObject = Get(modelName.PLAYER_POKER);
+			ppoker.CleanList();
+			ppoker.CustomizedFun = myscale;		
+			ppoker.Create_by_list(5, [just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
+			Tweener.pauseTweens(ppoker.container);
+			ppoker.container.alpha = 0;			
+			
+			var bpoker:MultiObject = Get(modelName.BANKER_POKER);
+			bpoker.CleanList();
+			bpoker.CustomizedFun = myscale;
+			bpoker.Create_by_list(5, [just_turnpoker], 0 , 0, 5, 140, 0, "Bet_");
+			Tweener.pauseTweens(bpoker.container);
+			bpoker.container.alpha = 0;
+			
+			Get("mipoker").CleanList();		
+			Get("mipoker").Create_by_list(1, [Mipoker_zone], 0 , 0, 1, 130, 0, "Bet_");			
+			Get("mipoker").container.alpha = 0;
+			
+			_model.putValue("playerNew", false);
+			_model.putValue("bankerNew", false);
+			
+			_model.putValue(modelName.BANKER_POKER,[]);
+			_model.putValue(modelName.PLAYER_POKER, []);
+			
+			Get("table_hint").container.visible = false;
+			Get("side_symble").container.visible = false;
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
+		public function poker_display():void
 		{
+			
 			var playerCon:MultiObject = Get(modelName.PLAYER_POKER);			
 			_regular.FadeIn(playerCon.container, 1, 1,null);
 			
@@ -106,38 +134,11 @@ package View.ViewComponent
 			Get("side_symble").container.visible = true;
 		}
 		
-		override public function disappear():void
-		{			
-			var ppoker:MultiObject = Get(modelName.PLAYER_POKER);
-			ppoker.CleanList();
-			ppoker.CustomizedFun = myscale;		
-			ppoker.Create_(5);
-			Tweener.pauseTweens(ppoker.container);
-			ppoker.container.alpha = 0;			
-			
-			var bpoker:MultiObject = Get(modelName.BANKER_POKER);
-			bpoker.CleanList();
-			bpoker.CustomizedFun = myscale;
-			bpoker.Create_(5);
-			Tweener.pauseTweens(bpoker.container);
-			bpoker.container.alpha = 0;
-			
-			var mipoker:MultiObject = Get("mipoker")
-			mipoker.CleanList();		
-			mipoker.Create_(1);
-			mipoker.container.alpha = 0;
-			
-			_model.putValue("playerNew", false);
-			_model.putValue("bankerNew", false);
-			
-			_model.putValue(modelName.BANKER_POKER,[]);
-			_model.putValue(modelName.PLAYER_POKER, []);
-			
-			Get("table_hint").container.visible = false;
-			
-			//TODO 結算不用再出現
+		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
+		public function resut():void
+		{
 			Get("side_symble").container.visible = false;
-		}		
+		}
 		
 		public function myscale(mc:MovieClip, idx:int, coinstack:Array):void
 		{
@@ -193,9 +194,9 @@ package View.ViewComponent
 				
 				var mipoker:MultiObject = Get("mipoker");
 				var mc:MovieClip = mipoker.ItemList[0];
-				var pokerf:MovieClip = utilFun.GetClassByString(Poker);
-				var pokerb:MovieClip = utilFun.GetClassByString(poker_back);
-				var pokerm:MovieClip = utilFun.GetClassByString(pokermask);
+				var pokerf:MovieClip = utilFun.GetClassByString(ResName.Poker);
+				var pokerb:MovieClip = utilFun.GetClassByString(ResName.poker_back);
+				var pokerm:MovieClip = utilFun.GetClassByString(ResName.pokermask);
 				pokerb.x  = 40;
 				pokerb.y  = 24;
 				pokerf.x = pokerb.x;

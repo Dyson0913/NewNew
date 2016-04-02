@@ -1,11 +1,8 @@
 package View.ViewBase 
 {
 	import flash.display.MovieClip;		
-	import View.ViewBase.*
-	import Model.valueObject.*;
 	import Model.*;
 	import util.*;	
-	import Command.*;	
 	
 	import View.Viewutil.*;
 	import Res.ResName;	
@@ -19,7 +16,7 @@ package View.ViewBase
 	public class Visual_Version  extends VisualHandler
 	{	
 		//res		
-		public const version_text:String = "Emptymc";		
+		public const version_text:String = ResName.emptymc;	
 		
 		//tag
 		private const version_texts:int = 0;	
@@ -36,9 +33,7 @@ package View.ViewBase
 			version_container.CustomizedData = [];
 			version_container.container.x = 1780;
 			version_container.container.y = 1060;
-			version_container.Create_(1);
-			
-			put_to_lsit(version_container);
+			version_container.Create_(1, "version_");
 		}
 		
 		public function version_init(mc:MovieClip, idx:int, data:Array):void
@@ -51,16 +46,13 @@ package View.ViewBase
 			var ob_cotainer:MultiObject = create(name + idx, component , mc);			
 			ob_cotainer.CustomizedFun =  _text.textSetting;
 			ob_cotainer.CustomizedData = font;
-			//ob_cotainer.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			//ob_cotainer.Post_CustomizedData = [[0, 0], [650, 630],[860, 630], [1340, 120]];			
-			ob_cotainer.Create_(component.length);
+			ob_cotainer.Create_(component.length, "version_");
 		
 			//default setting
 		
 			//specialize setting
 			//var mc:MovieClip = GetSingleItem(name + idx, version_texts);			
 			
-			put_to_lsit(ob_cotainer);	
 		}		
 		
 		private function major_minor_build():String

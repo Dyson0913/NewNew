@@ -1,5 +1,5 @@
 package View.ViewComponent 
-{	
+{
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import View.ViewBase.VisualHandler;
@@ -27,14 +27,11 @@ package View.ViewComponent
 		[Inject]
 		public var _Actionmodel:ActionQueue;	
 		
-		//sound name
-		public const soundcoin:String = "sound_coin";
+		[Inject]
+		public var _betTimer:Visual_betTimer;
 		
 		//coin seperate to N stack
 		private var _stack_num:int = 1;		
-		
-		public const Betcoin:String = "Bet_coin";
-		public const Wincoin:String = "Win_coin";
 		
 		public function Visual_Coin_stack() 
 		{
@@ -43,32 +40,21 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var avaliblezone:Array = _model.getValue(modelName.AVALIBLE_ZONE);						
+			var avaliblezone:Array = _model.getValue(modelName.AVALIBLE_ZONE);
+			//stick cotainer  			
 			var coin_xy:Array = _model.getValue(modelName.COIN_STACK_XY);
-			var coinstack:MultiObject = create("coinstakeZone", [ResName.emptymc]);
+			var coinstack:MultiObject = create("coinstakeZone",  [ResName.emptymc]);
 			coinstack.container.x = 1081 ;
 			coinstack.container.y = 657 ;
 			coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			coinstack.Post_CustomizedData =  coin_xy;
-			coinstack.Create_(avaliblezone.length);
+			coinstack.Post_CustomizedData = coin_xy ;
+			coinstack.Create_(avaliblezone.length, "coinstakeZone");	
 			
-			
-			state_parse([gameState.START_BET]);
+			put_to_lsit(coinstack);
 			
 		}
 		
-		override public function appear():void
-		{
-			Get("coinstakeZone").container.visible = true;
-		}
-		
-		override public function disappear():void
-		{			
-			Get("coinstakeZone").container.visible = false;
-			
-			Clean_poker();
-		}
-		
+		[MessageHandler(type = "Model.ModelEvent", selector = "clearn")]
 		public function Clean_poker():void
 		{
 			//TODO why not 
@@ -77,13 +63,24 @@ package View.ViewComponent
 			for ( var i:int = 0; i <  a.ItemList.length; i++)
 			{
 				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",i));
-			}		
+			}
 			
-			a.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			a.Post_CustomizedData =  _model.getValue(modelName.COIN_STACK_XY);
-			a.customized();
 		}
-				
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
+		public function display():void
+		{					
+			Get("coinstakeZone").container.visible = true;			
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "hide")]
+		public function timer_hide():void
+		{					
+			Get("coinstakeZone").container.visible = false;
+		}
+		
+		
+		
 		[MessageHandler(type = "Model.ModelEvent", selector = "updateCoin")]
 		public function updateCredit():void
 		{					
@@ -91,13 +88,35 @@ package View.ViewComponent
 			_Actionmodel.dropMsg();
 			
 			//TODO  一次一次pop
-			_betCommand.re_bet();
+			//_betCommand.re_bet();
 			
-			play_sound(soundcoin);		
+			//顯示下注倒數
+			_betTimer.TimerStart(bet_ob["betType"]);
+			
+			dispatcher(new StringObject("sound_coin","sound" ) );
 			
 			//coin動畫
 			stack(_betCommand.Bet_type_betlist(bet_ob["betType"]), GetSingleItem("coinstakeZone",bet_ob["betType"] ),bet_ob["betType"]);	
-		}		
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "refreshCoin")]
+		public function refreshCoin(msg:ModelEvent):void
+		{
+			var betType:int = msg.Value;
+			
+			//coin動畫
+			stack(_betCommand.Bet_type_betlist(betType), GetSingleItem("coinstakeZone",betType ),betType);	
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "refreshMutiCoin")]
+		public function refreshMutiCoin(msg:ModelEvent):void
+		{
+			var betTypes:Array = msg.Value[0];
+			for each(var betType:int in betTypes) {
+				//coin動畫
+				stack(_betCommand.Bet_type_betlist(betType), GetSingleItem("coinstakeZone",betType ),betType);	
+			}
+		}
 		
 		public function stack(Allcoin:Array,contain:DisplayObjectContainer,bettype:int):void
 		{			
@@ -107,11 +126,33 @@ package View.ViewComponent
 			var shX:int = 0;
 			var coinshY:int = -5;		
 			
+			var allCoin:Array = getAllcoinData(bettype);
 			for (var i:int = 0; i < _stack_num ; i++)
 			{				
 				//每疊coin 的multiobject
-				createcoin(i, Allcoin.concat(), contain,shY,shX,coinshY,bettype);
+				//createcoin(i, Allcoin.concat(), contain,shY,shX,coinshY,bettype);
+				createcoin(i, allCoin, contain,shY,shX,coinshY,bettype);
 			}			
+		}
+		
+		//籌碼面額換算
+		public function getAllcoinData(betType:int):Array {
+			var total:int = _betCommand.get_total_bet(betType);			
+			var allcoinData:Array = [];
+			var coin:Array = _model.getValue("coin_list").concat();
+			//由大到小
+			coin.reverse();
+			
+			for each(var chipValue:int in coin){
+				var coinNum:int = total / chipValue;
+				for (var i:int = 0; i < coinNum; i++ ) {
+					allcoinData.push(chipValue);
+				}
+				
+				total = total % chipValue;
+			}
+			
+			return allcoinData;
 		}
 		
 		public function createcoin(cointype:int, Allcoin:Array, contain:DisplayObjectContainer ,shY:int,shX:int,coinshY:int,bettype:int):void
@@ -136,7 +177,7 @@ package View.ViewComponent
 			secoin.CustomizedFun = coinput;
 			secoin.CustomizedData = Allcoin;
 			secoin.setContainer(contain);
-			secoin.Create_by_list( Allcoin.length-1, [Betcoin] , 0 +shiftx+ (cointype * shX) , 0+shifty +shY, 1, 0, coinshY, "Bet_1");			
+			secoin.Create_by_list( Allcoin.length-1, [ResName.Betcoin] , 0 +shiftx+ (cointype * shX) , 0+shifty +shY, 1, 0, coinshY, "Bet_1");			
 		}
 		
 		public function coinput(mc:MovieClip, idx:int, betlist_with_type_in_first:Array):void
@@ -171,7 +212,7 @@ package View.ViewComponent
 			secoin.container.x = path[0];
 			secoin.container.y = path[1];
 			contain.addChild(secoin.container);
-			secoin.Create_by_list( Allcoin.length - 1, [Wincoin] , 0  , 0, 1, 0, -5, "Bet_"+bettype);			
+			secoin.Create_by_list( Allcoin.length - 1, [ResName.Wincoin] , 0  , 0, 1, 0, -5, "Bet_"+bettype);			
 			
 			return secoin;
 		}	
@@ -187,7 +228,7 @@ package View.ViewComponent
 			secoin.container.x = path[0];
 			secoin.container.y = path[1];
 			contain.addChild(secoin.container);
-			secoin.Create_by_list( 1, [Wincoin] , 0  , 0, 1, 0, -5, "Bet_");			
+			secoin.Create_by_list( 1, [ResName.Wincoin] , 0  , 0, 1, 0, -5, "Bet_");			
 			
 			return secoin;
 		}	

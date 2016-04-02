@@ -11,11 +11,11 @@ package View.GameView
 	import Model.*;
 	import Res.ResName;
 	import util.DI;	
-	import View.ViewBase.Visual_Version;
 	import View.ViewComponent.*;
 	import View.Viewutil.*;
 	import View.ViewBase.ViewBase;
-
+	import View.ViewBase.Visual_Version;
+	
 	import util.*;
 	import Command.*;
 	import caurina.transitions.Tweener;
@@ -39,10 +39,10 @@ package View.GameView
 		public var _btn:Visual_BtnHandle;
 		
 		[Inject]
-		public var _poker:Visual_poker;
+		public var _pokerhandler:Visual_poker;
 		
 		[Inject]
-		public var _timer:Visual_timer;
+		public var _time:Visual_timer;
 		
 		[Inject]
 		public var _hint:Visual_Hintmsg;
@@ -75,6 +75,15 @@ package View.GameView
 		public var _settlePanel:Visual_SettlePanel;
 		
 		[Inject]
+		public var _visual_stream:Visual_stream;
+		
+		[Inject]
+		public var _bg:Visual_bg;
+		
+		[Inject]
+		public var _betTimer:Visual_betTimer;
+		
+		[Inject]
 		public var _Version:Visual_Version;
 		
 		public function betView()  
@@ -95,17 +104,17 @@ package View.GameView
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Bet_Scene], 0, 0, 1, 0, 0, "a_");
 			
-			_Version.init();
+			_bg.init();
 			_HistoryRecoder.init();
 			_gameinfo.init();
 			_settlePanel.init();
 			_paytable.init();
 			
-			_timer.init();			
+			_time.init();			
 		   _hint.init();
 			
 		  
-		   _poker.init();
+		   _pokerhandler.init();
 			_betzone.init();
 			_coin_stack.init();
 			
@@ -114,6 +123,30 @@ package View.GameView
 			_sencer.init();	
 			_coin.init();
 			_btn.init();			
+			
+			_betTimer.init();
+			
+			_Version.init();
+			
+			_visual_stream.init();
+			
+				var jsonob:Object = {
+												  "online":{
+															 "stream_link":[{"stream_name":"pa_stream","strem_url":"192.168.1.136/live/","channel_ID":"livestream","size":{"itemwidth":320,"itemheight":240}}]
+														   },
+												 "development":{
+															 "stream_link":[ 
+															                         { "stream_name":"pa_stream", "strem_url":"52.69.102.66/live/", "channel_ID":"livestream", "size": { "itemwidth":1920, "itemheight":1080 }},
+																					 {"stream_name":"test2", "strem_url":"cp67126.edgefcs.net/ondemand/", "channel_ID":"mp4:mediapm/ovp/content/test/video/spacealonehd_sounas_640_300.mp4", "size": { "itemwidth":320, "itemheight":240 }},
+																					{"stream_name":"test", "strem_url":"184.72.239.149/vod", "channel_ID":"BigBuckBunny_115k.mov", "size": { "itemwidth":800, "itemheight":600 }},
+																					{"stream_name":"live1", "strem_url":"52.69.102.66/live", "channel_ID":" /livestream", "size": { "itemwidth":800, "itemheight":600 }},
+																					{"stream_name":"live2", "strem_url":"52.69.102.66/live", "channel_ID":" /lw2", "size": { "itemwidth":800, "itemheight":600 }}
+															                         ]
+															
+															   }
+												}
+			dispatcher(new ArrayObject([1, jsonob], "urlLoader_complete"));
+			dispatcher(new StringObject("live1","stream_connect"));
 			
 			
 			//dispatcher(new StringObject("Soun_Bet_BGM","Music" ) );

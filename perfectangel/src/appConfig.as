@@ -9,9 +9,11 @@ package
 	import View.ViewBase.ViewBase;
 	import ConnectModule.websocket.WebSoketComponent;
 	import View.ViewBase.Visual_Text;
-	import View.ViewBase.*;
+	import View.ViewBase.VisualHandler;
+	import View.ViewBase.Visual_Version;
 	import View.ViewComponent.*;
-	import View.Viewutil.*;
+	import View.Viewutil.Visual_debugTool;
+	import View.Viewutil.Visual_package_replayer;
 	
 	import View.GameView.*;
 	import util.math.*;
@@ -46,15 +48,12 @@ package
 		public var _regular:RegularSetting = new RegularSetting();
 		public var _sound:SoundCommand = new SoundCommand();
 		
-		//util
-		public var _path:Path_Generator = new Path_Generator();
+		public var _text:Visual_Text = new Visual_Text();
 		public var _debug:Visual_debugTool = new Visual_debugTool();
-		public var _Version:Visual_Version = new Visual_Version();
-		public var _replayer:Visual_package_replayer = new Visual_package_replayer();
 		
-		//visual		
-	
-		public var _strem:Visual_stream = new Visual_stream();
+		
+		//visual
+		public var _bg:Visual_bg = new Visual_bg();
 		public var _pokerhandler:Visual_poker = new Visual_poker();
 		public var _timer:Visual_timer = new Visual_timer();
 		public var _hint:Visual_Hintmsg = new Visual_Hintmsg();		
@@ -62,17 +61,21 @@ package
 		public var _coin_stack:Visual_Coin_stack = new Visual_Coin_stack();
 		public var _betzone:Visual_betZone = new Visual_betZone();
 		public var _btn:Visual_BtnHandle = new Visual_BtnHandle();
+		public var _strem:Visual_stream = new Visual_stream();
+		public var _loader:Visual_Loder = new Visual_Loder();
 		public var _settle:Visual_Settle = new Visual_Settle();
 		public var _sencer:Visual_betZone_Sence = new Visual_betZone_Sence();		
 		public var _HistoryRecoder:Visual_HistoryRecoder = new Visual_HistoryRecoder();
-		public var _text:Visual_Text = new Visual_Text();
 		public var _paytable:Visual_Paytable = new Visual_Paytable();		
 		public var _gameinfo:Visual_Game_Info = new Visual_Game_Info();		
 		public var _settlePanel:Visual_SettlePanel = new Visual_SettlePanel();
+		public var _betTimer:Visual_betTimer = new Visual_betTimer();
 		
-		
+		//util
+		public var _path:Path_Generator = new Path_Generator();
+		public var _replayer:Visual_package_replayer = new Visual_package_replayer();
 		public var _test:Visual_testInterface = new Visual_testInterface();
-		
+		public var _Version:Visual_Version = new Visual_Version();
 		
 		public function appConfig() 
 		{

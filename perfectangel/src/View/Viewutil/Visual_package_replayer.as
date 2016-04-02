@@ -48,7 +48,7 @@ package View.Viewutil
 			script_list.CustomizedFun = _text.textSetting;			
 			script_list.Posi_CustzmiedFun = _regular.Posi_Row_first_Setting;
 			script_list.Post_CustomizedData = [data.length, 50, 100];	
-			script_list.Create_(data.length);	
+			script_list.Create_(data.length,"replay_interface");	
 			script_list.container.x = 600;
 			
 			_packlist.length = 0;

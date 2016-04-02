@@ -43,6 +43,9 @@ package ConnectModule.websocket
 		[Inject]
 		public var _model:Model;		
 		
+		[Inject]
+		public var _betCommand:BetCommand;
+		
 		private var websocket:WebSocket;
 		
 		public function WebSoketComponent() 
@@ -70,8 +73,19 @@ package ConnectModule.websocket
 			}
 			else if ( event.type == WebSocketEvent.CLOSED)
 			{
-				utilFun.Log("Connected close pa="+ event.type );
+				utilFun.Log("Connected close by lobby =" + _model.getValue("lobby_disconnect"));
+				utilFun.Log("Connected close pa=" + event.type );
+				
+				if (_model.getValue("lobby_disconnect") ==  false) {
+					//通知大廳遊戲斷線
+					var lobbyevent:Function =  _model.getValue(modelName.HandShake_chanel);			
+					if ( lobbyevent != null)
+					{
+						lobbyevent(_model.getValue(modelName.Client_ID), ["GameDisconnect"]);			
+					}		
+				}
 			}
+			
 		}
 		
 		private function handleConnectionFail(event:WebSocketErrorEvent):void 
@@ -98,6 +112,9 @@ package ConnectModule.websocket
 			   var result:Object  = _msgModel.getMsg();	
 			   
 			   	if ( result.game_type != _model.getValue(modelName.Game_Name) ) return;
+				
+				dispatcher(new ArrayObject([result], "pack_recoder"));
+				
 				switch(result.message_type)
 				{				
 					case Message.MSG_TYPE_INTO_GAME:
@@ -179,13 +196,12 @@ package ConnectModule.websocket
 					{
 						if (result.result == 0)
 						{
-							dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));							
-							dispatcher(new ModelEvent("updateCoin"));
+							
 						}
 						else
 						{
-							_actionqueue.dropMsg();
-							//error handle
+							//下注失敗處理
+							_betCommand.cleanBetUUID(result.id);
 						}
 					}
 					break;
@@ -215,16 +231,13 @@ package ConnectModule.websocket
 					case Message.MSG_TYPE_ROUND_INFO:
 					{							
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
-						dispatcher(new ModelEvent("update_state"));
 						
 						dispatcher( new ValueObject(result.result_list, modelName.ROUND_RESULT));
-						dispatcher(new ModelEvent("round_result"));
-						
+						dispatcher(new ModelEvent("round_result"));						
 					}
 					break;					
 				}
 				
-				dispatcher(new ArrayObject([result], "pack_recoder"));
 		}
 		
 		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="Bet")]
@@ -251,6 +264,7 @@ package ConnectModule.websocket
 		{
 			dispatcher(new ArrayObject([msg], "pack_recoder"));
 			var jsonString:String = JSON.encode(msg);			
+			utilFun.Log(jsonString);
 			websocket.sendUTF(jsonString);
 		}
 		
