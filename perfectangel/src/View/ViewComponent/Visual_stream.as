@@ -57,7 +57,7 @@ package View.ViewComponent
 			_model.putValue("size", new DI());
 			
 			var btn_change:MultiObject = create("btn_change", ["btn_stream"]);
-			btn_change.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1,2,3,1]);
+			//btn_change.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1,2,3,1]);
 			btn_change.mousedown = null;
 			btn_change.mouseup = changeSteam;
 			btn_change.rollout = null;

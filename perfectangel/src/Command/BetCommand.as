@@ -122,7 +122,8 @@ package Command
 				}		
 				else
 				{				
-					_socket.SendMsg(bet_msg);
+					//_socket.SendMsg(bet_msg);
+					_socket.send_to_lobby(bet_msg);
 				}
 			
 		}

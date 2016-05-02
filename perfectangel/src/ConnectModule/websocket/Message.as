@@ -7,7 +7,7 @@ package ConnectModule.websocket
 	public final class Message
 	{
 		//S->C
-		public static const MSG_TYPE_INTO_GAME:String = "MsgBPInitialInfo";
+		public static const MSG_TYPE_INTO_GAME:String = "MsgPlayerEnterGame";
 		public static const MSG_TYPE_GAME_OPEN_INFO:String =  "MsgBPOpenCard";
 		public static const MSG_TYPE_BET_INFO:String = "MsgPlayerBet";
 		public static const MSG_TYPE_ROUND_INFO:String = "MsgBPEndRound";

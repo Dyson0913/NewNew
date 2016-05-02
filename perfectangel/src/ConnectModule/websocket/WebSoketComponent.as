@@ -106,6 +106,13 @@ package ConnectModule.websocket
 			_msgModel.push(result);
 		}
 		
+		[MessageHandler(type = "Model.ModelEvent", selector = "package_from_lobby")]
+		public function package_from():void
+		{			
+			var result:Object = _model.getValue("package_from_lobby");		
+			_msgModel.push(result);
+		}		
+		
 		[MessageHandler(type = "Model.ModelEvent", selector = "popmsg")]
 		public function msghandler():void
 		{			
@@ -118,27 +125,34 @@ package ConnectModule.websocket
 				switch(result.message_type)
 				{				
 					case Message.MSG_TYPE_INTO_GAME:
-					{						
-						if( _model.getValue(modelName.HandShake_chanel) == null )  dispatcher(new ValueObject( result.inside_game_info.player_info.credit, modelName.CREDIT) );					
-						
-						
+					{
 						dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );
-						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.NEW_ROUND)
+						//credit update in loading
+						
+						var state:int = _opration.getMappingValue("state_mapping", result.game_state)
+						if ( state == gameState.NEW_ROUND || state == gameState.START_BET)
 						{
 						    dispatcher(new ValueObject(  result.record_list, "history_list") );
-						}
-						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.START_BET) 
-						{
-							dispatcher(new ValueObject(  result.record_list, "history_list") );							
-						}
+						}						
 						
-						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
+						dispatcher(new ValueObject(  state , modelName.GAMES_STATE) );
 						
 						dispatcher(new ValueObject(  result.game_round, "game_round") );
-						dispatcher(new ValueObject(  result.game_id, "game_id") );
+						dispatcher(new ValueObject(  result.game_id, "game_id") );						
 						
-						//dispatcher( new ValueObject(result.cards_info["player_card_list"], modelName.PLAYER_POKER) );
-						//dispatcher( new ValueObject(result.cards_info["banker_card_list"], modelName.BANKER_POKER) );                        
+						
+						var bet_type:Array  = [];
+						var bet_amount:Array = [];
+						for (var id:String in result.bet_list)
+                       {
+							var value:int = result.bet_list[id];
+							bet_type.push(id);
+							bet_amount.push(value);
+                       }
+					   
+						_model.putValue("half_in_bet_type", bet_type);
+						_model.putValue("half_in_bet_amount",bet_amount);
+						
 						_model.putValue(modelName.PLAYER_POKER, result.cards_info["player_card_list"]);
 						_model.putValue(modelName.BANKER_POKER, result.cards_info["banker_card_list"]);
 						_model.putValue(modelName.EXTRA_POKER, result.cards_info["extra_card_list"]);
@@ -196,7 +210,10 @@ package ConnectModule.websocket
 					{
 						if (result.result == 0)
 						{
-							
+							//credit 更新回大廳							
+							utilFun.Log("pa  bet ok = " + result.player_update_credit);
+							_model.putValue(modelName.CREDIT, result.player_update_credit);
+							send_credit_to_lobby(result.player_update_credit);
 						}
 						else
 						{
@@ -211,19 +228,13 @@ package ConnectModule.websocket
 						
 						dispatcher(new ValueObject(  result.game_round, "game_round") );
 						
-						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.NEW_ROUND)
-						{
-						    dispatcher(new ValueObject(  result.record_list, "history_list") );
-						}
+						state = _opration.getMappingValue("state_mapping", result.game_state);
+						if ( state == gameState.NEW_ROUND)   dispatcher(new ValueObject(  result.record_list, "history_list") );
 						
-						if ( _opration.getMappingValue("state_mapping", result.game_state) == gameState.START_BET ) 
-						{
-							//收到startBet 再更新時間							
-							dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );							
-						}
+						//收到startBet 再更新時間
+						if (  state == gameState.START_BET ) dispatcher(new ValueObject(  result.remain_time, modelName.REMAIN_TIME) );							
 						
-						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );								
-							
+						dispatcher(new ValueObject(  state, modelName.GAMES_STATE) );							
 						dispatcher(new ModelEvent("update_state"));					
 					}
 					break;
@@ -231,6 +242,12 @@ package ConnectModule.websocket
 					case Message.MSG_TYPE_ROUND_INFO:
 					{							
 						dispatcher(new ValueObject(  _opration.getMappingValue("state_mapping", result.game_state) , modelName.GAMES_STATE) );
+						
+						//TODO player_win_credit realy win amount						
+						//credit 更新回大廳							
+						utilFun.Log("pa  retulst credit update = " + result.player_update_credit);
+						_model.putValue(modelName.CREDIT, result.player_update_credit);
+						send_credit_to_lobby(result.player_update_credit);
 						
 						dispatcher( new ValueObject(result.result_list, modelName.ROUND_RESULT));
 						dispatcher(new ModelEvent("round_result"));						
@@ -257,7 +274,27 @@ package ConnectModule.websocket
 											"total_bet_amount":ob["total_bet_amount"]
 											};
 										   
-			SendMsg(bet);
+			//SendMsg(bet);
+			send_to_lobby(bet);
+		}
+		
+		public function send_to_lobby(msg:Object):void 
+		{
+			var lobbyevent:Function =  _model.getValue(modelName.HandShake_chanel);			
+			if ( lobbyevent != null)
+			{
+				lobbyevent(_model.getValue(modelName.Client_ID), ["game_credit_update",msg]);			
+			}		
+		}
+		
+		public function send_credit_to_lobby(new_credit:Number):void 
+		{
+			var lobbyevent:Function =  _model.getValue(modelName.HandShake_chanel);			
+			if ( lobbyevent != null)
+			{
+				lobbyevent(_model.getValue(modelName.Client_ID), ["HandShake_updateCredit",new_credit,_model.getValue(modelName.Game_Name)]);			
+			}		
+			
 		}
 		
 		public function SendMsg(msg:Object):void 

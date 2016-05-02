@@ -86,18 +86,17 @@ package View.GameView
 			if (View.Value != modelName.Loading) return;
 			super.EnterView(View);
 			utilFun.Log("loading view enter");
+			
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
-			view.Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "a_");
-			_tool = new AdjustTool();
+			view.Create_by_list(1, [ResName.emptymc], 0, 0, 1, 0, 0, "a_");			
 			
 			if ( CONFIG::debug ) 
 			{
 				_test.init();
 			}else {
-				utilFun.SetTime(connet, 0.1);
+				//utilFun.SetTime(connet, 0.1);
+				join_game();
 			}
-			
-			//utilFun.SetTime(stre, 2);
 			
 			//_loader.init();
 			//
@@ -107,11 +106,14 @@ package View.GameView
 		
 		}
 		
-		
-		
-		private function stre():void
+		private function join_game():void
 		{
-			dispatcher(new StringObject("spider_baccarat","stream_connect"));
+			//通知大廳加入遊戲
+			var lobbyevent:Function =  _model.getValue(modelName.HandShake_chanel);			
+			if ( lobbyevent != null)
+			{
+				lobbyevent(_model.getValue(modelName.Client_ID), ["GameJoin",_model.getValue(modelName.Game_Name)]);			
+			}		
 		}
 		
 		private function connet():void
